@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Obat;
+use App\Models\TemplateChat;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class ObatController extends Controller
+class TemplateChatController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +15,12 @@ class ObatController extends Controller
     {
         //
         if (request()->ajax()) {
-            return DataTables::of(Obat::all())
+            return DataTables::of(TemplateChat::all())
                 ->addIndexColumn()
                 ->addColumn('action', 'layout.button.edit')
                 ->make(true);
         }
-        return view('master.obat');
+        return view('master.template-chat');
     }
 
     /**
@@ -38,61 +38,64 @@ class ObatController extends Controller
     {
         //
         $validatedData = $request->validate([
-            'nama_obat' => 'required',
+            'text' => 'required',
         ]);
-        try {
-            //code...
-            $obat = Obat::create($validatedData);
-        } catch (\Throwable $th) {
-            //throw $th;
-            return back()->with(['error' => 'Terjadi Kesalahan']);
-        }
-        // Lakukan tindakan lain setelah penyimpanan obat
-        
+    
+        $templateChat = new TemplateChat();
+        $templateChat->text = $validatedData['text'];
+        $templateChat->save();
         return back()->with(['success' => 'Obat berhasil disimpan']);
-   
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($obat)
+    public function show($id)
     {
         //
-        $obat = Obat::find($obat);
-        return  response()->json($obat, 200);
+        $templateChat = TemplateChat::find($id);
+        if (!$templateChat) {
+            return response()->json(['message' => 'TemplateChat not found'], 404);
+        }
+    
+        return response()->json($templateChat, 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Obat $obat)
+    public function edit( $templateChat)
     {
         //
+    
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $obat)
+    public function update(Request $request,  $id)
     {
+        //
         $validatedData = $request->validate([
-            'nama_obat' => 'required',
+            'text' => 'required',
         ]);
+    
+        $templateChat = TemplateChat::find($id);
+        if (!$templateChat) {
+            return response()->json(['message' => 'TemplateChat not found'], 404);
+        }
+    
+        $templateChat->text = $validatedData['text'];
+        $templateChat->save();
+        return back()->with(['success' => 'Obat berhasil disimpan']);
 
-        $obat = Obat::findOrFail($obat);
-        $obat->nama_obat = $validatedData['nama_obat'];
-        $obat->save();
-
-        // Lakukan tindakan lain setelah pembaruan obat
-
-        return back()->with(['success' => 'Obat berhasil diperbarui']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Obat $obat)
+    public function destroy(TemplateChat $templateChat)
     {
         //
     }

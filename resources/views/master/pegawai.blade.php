@@ -1,6 +1,6 @@
 @extends('layout.main')
 @section('content')
-    <h4 class="fw-bold py-3 mb-4">Data Member</h4>
+    <h4 class="fw-bold py-3 mb-4">Data Pegawai</h4>
     <div class="card px-4 pb-4 pt-2">
         <div class="d-flex justify-content-end mb-3">
             <div class="demo-inline-spacing">
@@ -14,11 +14,8 @@
             <thead>
                 <tr>
                     <th style="max-width: 50px;">No</th>
-                    <th>Nama Member</th>
-                    <th>Alamat Member</th>
-                    <th>No Telpon Member</th>
                     <th>Nama Pegawai</th>
-                    <th style="max-width: 100px;">Action</th>
+                    <th style="max-width: 100px;">Detail</th>
                 </tr>
             </thead>
             <tbody>

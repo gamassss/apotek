@@ -44,7 +44,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('js/config.js') }}"></script>
-    
+
     <script src="{{ asset('vendor/libs/jquery/jquery.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet"
@@ -149,43 +149,78 @@
                 <div class="menu-inner-shadow"></div>
 
                 <ul class="menu-inner py-1">
-                    <li class="menu-item{{ Request::is('admin') ? 'active' : '' }}">
+                    <li class="menu-item {{ Request::is('admin') ? 'active' : '' }}">
                         <a href="/admin" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
                             <div data-i18n="Analytics">Dashboard</div>
                         </a>
                     </li>
-                    {{-- @if (Auth::user()->role=='cs') --}}
-                        
-                    <!-- Dashboard -->
 
-                    <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span></li>
-                    <!-- Forms -->
-                    <!-- Tables -->
-                    <li class="menu-item {{ Request::is('admin/data/*') ? 'active' : '' }}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-table"></i>
-                            <div data-i18n="Form Layouts">Data Master</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="#" class="menu-link">
-                                    <div data-i18n="Horizontal Form">Pegawai</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ Request::is('admin/data/member') ? 'active' : '' }}">
-                                <a href="{{ route('member.index') }}" class="menu-link">
-                                    <div data-i18n="Horizontal Form">Member</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ Request::is('admin/data/obat') ? 'active' : '' }}">
-                                <a href="{{ route('obat.index') }}" class="menu-link">
-                                    <div data-i18n="Horizontal Form">Obat</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    <!-- Dashboard -->
+                    @if (Auth::user()->jabatan == 'Manajemen')
+                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span>
+                        </li>
+                        <!-- Forms -->
+                        <!-- Tables -->
+                        <li class="menu-item {{ Request::is('admin/data/*') ? 'active' : '' }}">
+                            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bx-table"></i>
+                                <div data-i18n="Form Layouts">Data Management</div>
+                            </a>
+                            <ul class="menu-sub">
+
+
+                                <li class="menu-item {{ Request::is('admin/data/pegawai') ? 'active' : '' }}">
+                                    <a href="{{ route('pegawai.index') }}" class="menu-link">
+                                        <div data-i18n="Horizontal Form">Pegawai</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item {{ Request::is('admin/data/member') ? 'active' : '' }}">
+                                    <a href="{{ route('member.index') }}" class="menu-link">
+                                        <div data-i18n="Horizontal Form">Member</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item {{ Request::is('admin/data/obat') ? 'active' : '' }}">
+                                    <a href="{{ route('obat.index') }}" class="menu-link">
+                                        <div data-i18n="Horizontal Form">Obat</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item {{ Request::is('admin/data/template-chat') ? 'active' : '' }}">
+                                    <a href="{{ route('template-chat.index') }}" class="menu-link">
+                                        <div data-i18n="Horizontal Form">Template Chat</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+                    @if (Auth::user()->jabatan == 'Pegawai')
+                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span>
+                        </li>
+                        <!-- Forms -->
+                        <!-- Tables -->
+                        <li class="menu-item {{ Request::is('admin/data/*') ? 'active' : '' }}">
+                            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bx-table"></i>
+                                <div data-i18n="Form Layouts">Data Management</div>
+                            </a>
+                            <ul class="menu-sub">
+                             
+                                <li class="menu-item {{ Request::is('admin/data/member') ? 'active' : '' }}">
+                                    <a href="{{ route('member.index') }}" class="menu-link">
+                                        <div data-i18n="Horizontal Form">Member</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item {{ Request::is('admin/data/obat') ? 'active' : '' }}">
+                                    <a href="{{ route('obat.index') }}" class="menu-link">
+                                        <div data-i18n="Horizontal Form">Obat</div>
+                                    </a>
+                                </li>
+                               
+                            </ul>
+                        </li>
+                    @endif
                 </ul>
+
             </aside>
             <!-- / Menu -->
             <div class="layout-page">
@@ -293,7 +328,11 @@
         <!-- Page JS -->
         <script src="{{ asset('js/dashboards-analytics.js') }}"></script>
         <script src="{{ asset('js/dtables.js') }}"></script>
-
+        <script>
+            $(".select2").select2({
+                theme: "bootstrap-5",
+            });
+        </script>
         <!-- datepicker -->
         {{-- <script src="{{ asset('js/air-datepicker.js') }}"></script>
         <script src="{{ asset('js/datepicker-pemesanan.js') }}"></script> --}}
