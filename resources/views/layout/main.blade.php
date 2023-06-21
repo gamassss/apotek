@@ -44,6 +44,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('js/config.js') }}"></script>
+    
     <script src="{{ asset('vendor/libs/jquery/jquery.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet"
@@ -148,7 +149,7 @@
                 <div class="menu-inner-shadow"></div>
 
                 <ul class="menu-inner py-1">
-                    <li class="menu-item active">
+                    <li class="menu-item{{ Request::is('admin') ? 'active' : '' }}">
                         <a href="/admin" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
                             <div data-i18n="Analytics">Dashboard</div>
@@ -177,8 +178,8 @@
                                     <div data-i18n="Horizontal Form">Member</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a href="#" class="menu-link">
+                            <li class="menu-item {{ Request::is('admin/data/obat') ? 'active' : '' }}">
+                                <a href="{{ route('obat.index') }}" class="menu-link">
                                     <div data-i18n="Horizontal Form">Obat</div>
                                 </a>
                             </li>
@@ -296,6 +297,7 @@
         <!-- datepicker -->
         {{-- <script src="{{ asset('js/air-datepicker.js') }}"></script>
         <script src="{{ asset('js/datepicker-pemesanan.js') }}"></script> --}}
+        @stack('script')
 </body>
 
 </html>

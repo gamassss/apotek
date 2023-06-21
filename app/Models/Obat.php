@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Obat extends Model
 {
+    protected $guarded = ['id'];
     use HasFactory;
     /**
      * The transaksis that belong to the Obat
