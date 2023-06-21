@@ -173,8 +173,8 @@
                                     <div data-i18n="Horizontal Form">Pegawai</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a href="#" class="menu-link">
+                            <li class="menu-item {{ Request::is('admin/data/member') ? 'active' : '' }}">
+                                <a href="{{ route('member.index') }}" class="menu-link">
                                     <div data-i18n="Horizontal Form">Member</div>
                                 </a>
                             </li>

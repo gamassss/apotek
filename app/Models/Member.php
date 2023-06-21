@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Member extends Model
 {
     use HasFactory;
+    protected $guarded = ['id'];
     /**
      * Get the user that owns the Member
      *
