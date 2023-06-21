@@ -71,7 +71,6 @@ app.post("/webhook", function (req, res) {
     });
 
     con.end();
-
     res.end();
 });
 

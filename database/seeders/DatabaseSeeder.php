@@ -15,17 +15,19 @@ class DatabaseSeeder extends Seeder
     {
         //User::factory(10)->create();
 
-       User::create([
-            'name' => 'Pegawai',
-            'username' => 'pegawai1',
+        User::create([
+            'name' => 'pegawai',
+            'username' => 'pegawai',
             'password' => bcrypt('123'),
-            'jabatan' => 'Pegawai'
+            'jabatan' => 'pegawai',
+            'no_telpon' => '082232763556'
         ]);
-       User::create([
-            'name' => 'Manajemen',
-            'username' => 'Manajemen',
+        User::create([
+            'name' => 'manajemen',
+            'username' => 'manajemen',
             'password' => bcrypt('123'),
-            'jabatan' => 'Manajemen'
+            'jabatan' => 'manajemen',
+            'no_telpon' => '085790824615'
         ]);
     }
 }
