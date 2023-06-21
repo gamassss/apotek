@@ -1,0 +1,7 @@
+{
+    "apiUrls": {
+        "sendMessage": "https://api.fonnte.com/send",
+        "checkMessageStatus": "https://api.fonnte.com/status"
+    },
+    "token": "QI7VDZtc64p4Dg6_EjpX"
+}

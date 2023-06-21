@@ -1,9 +1,11 @@
+const config = require('../config.json');
+
 async function sendMessage(data) {
-    const url = "https://api.fonnte.com/send";
+    const url = config.apiUrls.sendMessage;
 
     const customHeaders = {
         "Content-Type": "application/json",
-        Authorization: "QI7VDZtc64p4Dg6_EjpX",
+        Authorization: config.token,
     };
 
     const response = await fetch(url, {
