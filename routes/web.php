@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\TemplateChatController;
 use App\Http\Controllers\AuthenticationController;
 
@@ -21,13 +22,24 @@ Route::get('/', function() {
     return view('login');
 });
 
+// pegawai
+Route::group(['middleware' => ['auth','checkRole:Pegawai'], 'prefix' => '/admin'],function () {
+
+});
+// bersama
 Route::group(['middleware' => ['auth'], 'prefix' => '/admin'],function () {
     Route::get('/',function () {
         return view('layout.main');
-    });
+    })->name('home');
     Route::prefix('/data')->group(function () {
         Route::resource('/obat', ObatController::class);
         Route::resource('/member', MemberController::class);
+    });
+});
+// manajemen
+Route::group(['middleware' => ['auth','checkRole:Manajemen'], 'prefix' => '/admin'],function () {
+    Route::prefix('/data')->group(function () {
+        Route::resource('/pegawai', PegawaiController::class);
         Route::resource('/template-chat', TemplateChatController::class);
     });
 });

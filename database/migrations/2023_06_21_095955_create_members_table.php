@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable();
             $table->string('nama_member');
             $table->string('alamat_member');
-            $table->string('no_telpon');
+            $table->string('no_telpon')->unique();
             $table->timestamps();
         });
     }

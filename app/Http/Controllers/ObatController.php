@@ -40,9 +40,13 @@ class ObatController extends Controller
         $validatedData = $request->validate([
             'nama_obat' => 'required',
         ]);
-
-        $obat = Obat::create($validatedData);
-
+        try {
+            //code...
+            $obat = Obat::create($validatedData);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with(['error' => 'Terjadi Kesalahan']);
+        }
         // Lakukan tindakan lain setelah penyimpanan obat
         
         return back()->with(['success' => 'Obat berhasil disimpan']);
