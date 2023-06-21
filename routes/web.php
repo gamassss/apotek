@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PegawaiController;
@@ -35,6 +36,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => '/admin'],function () {
         Route::resource('/obat', ObatController::class);
         Route::resource('/member', MemberController::class);
     });
+    Route::get('/chats', [ChatController::class, 'index']);
 });
 // manajemen
 Route::group(['middleware' => ['auth','checkRole:Manajemen'], 'prefix' => '/admin'],function () {

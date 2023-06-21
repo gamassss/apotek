@@ -4,9 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\User;
+use App\Models\Member;
+use Illuminate\Database\Seeder;
 use Database\Seeders\ObatSeeder;
 use Database\Seeders\TemplateChatSeeder;
-use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -30,6 +31,18 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123'),
             'jabatan' => 'manajemen',
             'no_telpon' => '085790824615',
+        ]);
+        Member::create([
+            'user_id' => 1,
+            'nama_member' => 'gamas',
+            'alamat_member' => 'mulyorejo',
+            'no_telpon' => '6282232763556',
+        ]);
+        Member::create([
+            'user_id' => 1,
+            'nama_member' => 'yuuji',
+            'alamat_member' => 'jember',
+            'no_telpon' => '62822327635567',
         ]);
         $this->call(ObatSeeder::class);
         $this->call(TemplateChatSeeder::class);
