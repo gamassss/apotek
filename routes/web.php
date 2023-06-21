@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\TemplateChatController;
 use App\Http\Controllers\AuthenticationController;
 
 /*
@@ -27,7 +28,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => '/admin'],function () {
     Route::prefix('/data')->group(function () {
         Route::resource('/obat', ObatController::class);
         Route::resource('/member', MemberController::class);
-
+        Route::resource('/template-chat', TemplateChatController::class);
     });
 });
 

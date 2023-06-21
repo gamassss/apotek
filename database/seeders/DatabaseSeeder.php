@@ -5,6 +5,8 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Database\Seeders\ObatSeeder;
+use Database\Seeders\TemplateChatSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,7 +18,7 @@ class DatabaseSeeder extends Seeder
         //User::factory(10)->create();
 
        User::create([
-            'name' => 'Pegawai',
+            'name' => 'Andi',
             'username' => 'pegawai1',
             'password' => bcrypt('123'),
             'jabatan' => 'Pegawai'
@@ -27,5 +29,8 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123'),
             'jabatan' => 'Manajemen'
         ]);
+        $this->call(ObatSeeder::class);
+        $this->call(TemplateChatSeeder::class);
+
     }
 }

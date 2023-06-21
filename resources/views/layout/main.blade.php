@@ -44,7 +44,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('js/config.js') }}"></script>
-    
+
     <script src="{{ asset('vendor/libs/jquery/jquery.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet"
@@ -155,8 +155,8 @@
                             <div data-i18n="Analytics">Dashboard</div>
                         </a>
                     </li>
-                    {{-- @if (Auth::user()->role=='cs') --}}
-                        
+                    {{-- @if (Auth::user()->role == 'cs') --}}
+
                     <!-- Dashboard -->
 
                     <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span></li>
@@ -183,6 +183,13 @@
                                     <div data-i18n="Horizontal Form">Obat</div>
                                 </a>
                             </li>
+                            @if (Auth::user()->jabatan=='Manajemen')
+                            <li class="menu-item {{ Request::is('admin/data/template-chat') ? 'active' : '' }}">
+                                <a href="{{ route('template-chat.index') }}" class="menu-link">
+                                    <div data-i18n="Horizontal Form">Template Chat</div>
+                                </a>
+                            </li>
+                            @endif
                         </ul>
                     </li>
                 </ul>
@@ -293,7 +300,11 @@
         <!-- Page JS -->
         <script src="{{ asset('js/dashboards-analytics.js') }}"></script>
         <script src="{{ asset('js/dtables.js') }}"></script>
-
+        <script>
+            $(".select2").select2({
+                theme: "bootstrap-5",
+            });
+        </script>
         <!-- datepicker -->
         {{-- <script src="{{ asset('js/air-datepicker.js') }}"></script>
         <script src="{{ asset('js/datepicker-pemesanan.js') }}"></script> --}}

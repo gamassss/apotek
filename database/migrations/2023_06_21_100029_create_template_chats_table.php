@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('template_chats', function (Blueprint $table) {
             $table->id();
+            $table->text('text');
             $table->timestamps();
         });
     }
