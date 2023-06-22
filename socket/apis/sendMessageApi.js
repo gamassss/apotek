@@ -13,7 +13,8 @@ async function sendMessage(data) {
         headers: customHeaders,
         body: JSON.stringify(data),
     });
-    console.log(await response.json());
+    // console.log(await response.json());
+    return await response.json();
 }
 
 module.exports = {

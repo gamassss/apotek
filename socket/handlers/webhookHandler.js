@@ -3,21 +3,28 @@ const { createConnection } = require('../database');
 
 const con = createConnection();
 
-const handleWebhook = (req, res) => {
+const handleWebhook = async (req, res) => {
     console.log(req.body);
-
+    let res_detail;
     if (req.body.message == "test") {
         const data = {
             target: req.body.sender,
             message: "working great!",
         };
-        sendMessage(data);
+        let json_res = await sendMessage(data);
+        // console.log(await json_res);
+        res_detail = JSON.stringify(json_res);
+        console.log('res_detail ' + res_detail)
     } else {
         const data = {
             target: req.body.sender,
             message: "this is default reply from fonnte",
         };
-        sendMessage(data);
+        // sendMessage(data);
+        let json_res = await sendMessage(data);
+        // console.log(await json_res);
+        res_detail = JSON.stringify(json_res);
+        console.log('res_detail ' + res_detail)
     }
 
     const dataToInsert = req.body;
@@ -29,15 +36,15 @@ const handleWebhook = (req, res) => {
     let sender = dataToInsert.sender;
 
     const query =
-        "INSERT INTO chats (text, penerima, pengirim, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())";
-    const values = [pesan, device, sender];
+        "INSERT INTO chats (text, pengirim, penerima, res_detail, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())";
+    const values = [pesan, sender, device, res_detail];
 
     con.query(query, values, (error, results, fields) => {
         if (error) {
             console.error("Gagal melakukan operasi INSERT: ", error);
             return;
         }
-        console.log("Data berhasil diinsert");
+        console.log("Chat berhasil diinsert");
     });
 
     res.end();
