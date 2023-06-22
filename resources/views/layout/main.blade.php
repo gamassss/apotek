@@ -54,6 +54,17 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="{{ asset('css/air-datepicker.css') }}">
     <script src="{{ asset('js/sweetalert.all.js') }}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css"
+        integrity="sha512-Z1+R2OfJ0a9kp/21IZNhJ5YEOCVRQh/nYktwmhkPF0FoDQH0Ov2wOOwDrlylzJckX6wSJ5VivCURL+JFfLf/xA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
     <style>
         /* div.dataTables_processing div {
             display: none;
@@ -119,6 +130,23 @@
         table.dataTable thead>tr>th.sorting_disabled.sorting_asc:before,
         table.dataTable thead>tr>th.sorting_disabled.sorting_asc:after {
             content: none;
+        }
+
+        #chat2 .form-control {
+            border-color: transparent;
+        }
+
+        #chat2 .form-control:focus {
+            border-color: transparent;
+            box-shadow: inset 0px 0px 0px 1px transparent;
+        }
+
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
         }
     </style>
 </head>
@@ -204,7 +232,6 @@
                                 <div data-i18n="Form Layouts">Data Management</div>
                             </a>
                             <ul class="menu-sub">
-                             
                                 <li class="menu-item {{ Request::is('admin/data/member') ? 'active' : '' }}">
                                     <a href="{{ route('member.index') }}" class="menu-link">
                                         <div data-i18n="Horizontal Form">Member</div>
@@ -215,7 +242,6 @@
                                         <div data-i18n="Horizontal Form">Obat</div>
                                     </a>
                                 </li>
-                               
                             </ul>
                         </li>
                     @endif
@@ -223,7 +249,7 @@
 
             </aside>
             <!-- / Menu -->
-            <div class="layout-page">
+            <div class="layout-page" style="{{ Request::is('admin/chats') ? 'max-height: 100vh;' : '' }}">
                 <!-- Navbar -->
 
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
@@ -307,6 +333,7 @@
                 }
             });
         </script>
+
         <!-- Core JS -->
         <!-- build:js assets/vendor/js/core.js -->
         <script src="{{ asset('vendor/libs/popper/popper.js') }}"></script>
@@ -316,7 +343,7 @@
 
         <script src="{{ asset('vendor/js/menu.js') }}"></script>
         <!-- endbuild -->
-
+        <script src="{{ asset('js/extended-ui-perfect-scrollbar.js') }}"></script>
         <!-- Vendors JS -->
         <script src="{{ asset('vendor/libs/apex-charts/apexcharts.js') }}"></script>
 

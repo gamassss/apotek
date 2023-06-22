@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => 1,
             'nama_member' => 'yuuji',
             'alamat_member' => 'jember',
-            'no_telpon' => '62822327635567',
+            'no_telpon' => '6287822771121',
         ]);
         $this->call(ObatSeeder::class);
         $this->call(TemplateChatSeeder::class);
