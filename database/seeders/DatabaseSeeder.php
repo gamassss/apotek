@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Member;
 use Illuminate\Database\Seeder;
 use Database\Seeders\ObatSeeder;
+use Database\Seeders\MemberSeeder;
 use Database\Seeders\TemplateChatSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -57,6 +58,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->call(ObatSeeder::class);
         $this->call(TemplateChatSeeder::class);
+        $this->call(MemberSeeder::class);
 
     }
 }
