@@ -21,8 +21,8 @@ class ChatController extends Controller
             where pengirim = ' . $member->no_telpon . '
             order by created_at desc limit 1');
             $member['latest_chat'] = $latest_chat;
-            // dd($member->latest_chat[0]->text);
         }
+
         // foreach ($members_pegawai as $member) {
         //     echo $member->nama_member . " " . $member->no_telpon . "<br>";
         //     $chats = Chat::where('pengirim', $member->no_telpon)->get();

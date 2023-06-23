@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Member;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -18,35 +18,28 @@ class MemberController extends Controller
         // dd(Member::all());
         if (request()->ajax()) {
             $member;
-            if(Auth::user()->jabatan=='pegawai'){
-<<<<<<< HEAD
-                $member = Member::where('user_id',Auth::user()->id)->get();
+            if (Auth::user()->jabatan == 'pegawai') {
+                $member = Member::where('user_id', Auth::user()->id)->get();
             }
-            if (Auth::user()->jabatan=='manajemen') {
-=======
-              $member = Member::where('user_id',Auth::user()->id)->get();
-            }
-            if (Auth::user()->jabatan=='manajemen') {
+            if (Auth::user()->jabatan == 'manajemen') {
                 # code...
->>>>>>> 9c4360a71cd1f2f3577d08f93acde992aa1fd70f
                 $member = Member::all();
             }
             return DataTables::of($member)
                 ->addIndexColumn()
-                ->addColumn('name',function ($member) {
-                    if(isset($member->user->name)){
+                ->addColumn('name', function ($member) {
+                    if (isset($member->user->name)) {
                         return $member->user->name;
-                    }else{
+                    } else {
                         return 'Belum Dipasangkan';
                     }
                 })
                 ->addColumn('action', 'layout.button.edit')
                 ->make(true);
         }
-        $pegawai = User::where('jabatan','pegawai')->get();
-        return view('master.member',compact('pegawai'));
+        $pegawai = User::where('jabatan', 'pegawai')->get();
+        return view('master.member', compact('pegawai'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -67,11 +60,11 @@ class MemberController extends Controller
             'alamat_member' => 'required',
             'no_telpon' => 'required|numeric',
         ]);
-        if(Auth::user()->jabatan=='pegawai'){
-            $validatedData['user_id']=Auth::user()->id;
-        }else{
+        if (Auth::user()->jabatan == 'pegawai') {
+            $validatedData['user_id'] = Auth::user()->id;
+        } else {
             if (isset($request->nama_pegawai)) {
-                $validatedData['user_id']=$request->nama_pegawai;
+                $validatedData['user_id'] = $request->nama_pegawai;
             }
         }
         try {
@@ -81,7 +74,7 @@ class MemberController extends Controller
             //throw $th;
             return back()->with(['error' => 'Terjadi Kesalahan']);
         }
-        
+
         // Lakukan tindakan lain setelah penyimpanan member
 
         return back()->with(['success' => 'Member berhasil disimpan']);
@@ -94,7 +87,7 @@ class MemberController extends Controller
     {
         $member = Member::with('user')->findOrFail($id);
         return response()->json($member);
-        
+
     }
 
     /**
@@ -108,15 +101,15 @@ class MemberController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  $id)
+    public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
             'nama_member' => 'required',
             'alamat_member' => 'required',
             'no_telpon' => 'required|numeric',
-            'user_id'=>'required|numeric'
+            'user_id' => 'required|numeric',
         ]);
-    
+
         try {
             $member = Member::findOrFail($id);
             $member->update($validatedData);

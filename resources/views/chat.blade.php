@@ -12,23 +12,33 @@
                     <div class="col-lg-12">
                         <div class="demo-inline-spacing">
                             <div class="list-group">
-                                @foreach ($members_pegawai as $member)
-                                    @php
-                                        $date = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $member->latest_chat[0]->created_at, 'Asia/Jakarta');
-                                        $date->setTimeZone('Asia/Jakarta');
-                                    @endphp
-                                    <a href="javascript:void(0);"
-                                        class="list-group-item list-group-item-action flex-column align-items-start list-chat-member"
-                                        style="border: none;">
-                                        <div class="d-flex justify-content-between w-100">
-                                            <h6>{{ $member->no_telpon }}</h6>
-                                            <small class="text-muted">{{ $date->diffForHumans() }}</small>
-                                        </div>
-                                        <p class="mb-1">
-                                            {{ $member->latest_chat[0]->text }}
-                                        </p>
-                                    </a>
-                                @endforeach
+                                @if (isset($members_pegawai))
+                                    @foreach ($members_pegawai as $member)
+                                        @php
+                                            // $latest_chat_time = !isset($member->latest_chat[0]->created_at) ? $member->latest_chat[0]->created_at : Carbon\Carbon::now()->timestamp;
+                                            // $latest_chat_text = isset($member->latest_chat[0]->text) ? $member->latest_chat[0]->text : Carbon\Carbon::now()->timestamp;
+                                            $latest_chat_text = isset($member->latest_chat[0]->text) ? $member->latest_chat[0]->text : '';
+                                            // dd($latest_chat_text);
+                                            $latest_chat_time = isset($member->latest_chat[0]->created_at) ? $member->latest_chat[0]->created_at : Carbon\Carbon::now();
+                                            $date = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $latest_chat_time, 'Asia/Jakarta');
+                                            $date->setTimeZone('Asia/Jakarta');
+                                            // dd($date);   
+                                        @endphp
+                                        <a href="javascript:void(0);"
+                                            class="list-group-item list-group-item-action flex-column align-items-start list-chat-member"
+                                            style="border: none;">
+                                            <div class="d-flex justify-content-between w-100">
+                                                <h6>{{ $member->no_telpon }}</h6>
+                                                <small class="text-muted">{{ $date->diffForHumans() }}</small>
+                                            </div>
+                                            <p class="mb-1">
+                                                {{ $latest_chat_text }}
+                                            </p>
+                                        </a>
+                                    @endforeach
+                                @else
+                                    <p>Tidak ada member</p>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -37,14 +47,14 @@
             </div>
         </div>
         <!--/ List Chat Dengan Member -->
-        
+
         <!-- Room Chat -->
         <div class="card col-md-8" id="chat2">
             <div class="card-body overflow-auto" data-mdb-perfect-scrollbar="true"
                 style="position: relative; height: 400px">
                 <div class="d-flex flex-row justify-content-start">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
-                        alt="avatar 1" style="width: 45px; height: 100%;">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 1"
+                        style="width: 45px; height: 100%;">
                     <div>
                         <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">Hi</p>
                         <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">How are
@@ -72,13 +82,13 @@
                             be free on sunday.</p>
                         <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">00:06</p>
                     </div>
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
-                        alt="avatar 1" style="width: 45px; height: 100%;">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar 1"
+                        style="width: 45px; height: 100%;">
                 </div>
 
                 <div class="d-flex flex-row justify-content-start mb-4">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
-                        alt="avatar 1" style="width: 45px; height: 100%;">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 1"
+                        style="width: 45px; height: 100%;">
                     <div>
                         <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">Okay</p>
                         <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">We will
@@ -98,13 +108,13 @@
                         <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Is that okay?</p>
                         <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">00:09</p>
                     </div>
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
-                        alt="avatar 1" style="width: 45px; height: 100%;">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar 1"
+                        style="width: 45px; height: 100%;">
                 </div>
 
                 <div class="d-flex flex-row justify-content-start mb-4">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
-                        alt="avatar 1" style="width: 45px; height: 100%;">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 1"
+                        style="width: 45px; height: 100%;">
                     <div>
                         <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">Okay i
                             will meet
@@ -121,13 +131,13 @@
                             Marriage?</p>
                         <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">00:11</p>
                     </div>
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
-                        alt="avatar 1" style="width: 45px; height: 100%;">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar 1"
+                        style="width: 45px; height: 100%;">
                 </div>
 
                 <div class="d-flex flex-row justify-content-start mb-4">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
-                        alt="avatar 1" style="width: 45px; height: 100%;">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 1"
+                        style="width: 45px; height: 100%;">
                     <div>
                         <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">Sorry I
                             don't
@@ -144,14 +154,14 @@
                         </p>
                         <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">00:15</p>
                     </div>
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
-                        alt="avatar 1" style="width: 45px; height: 100%;">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar 1"
+                        style="width: 45px; height: 100%;">
                 </div>
 
             </div>
             <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
-                    alt="avatar 3" style="width: 40px; height: 100%;">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3"
+                    style="width: 40px; height: 100%;">
                 <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
                     placeholder="Type message">
                 <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
