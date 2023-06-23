@@ -22,7 +22,9 @@ class ChatController extends Controller
             order by created_at desc limit 1');
             $member['latest_chat'] = $latest_chat;
         }
-        return view('chat', compact('members_pegawai'));
+
+        $chats = [];
+        return view('chat', compact('members_pegawai', 'chats'));
     }
 
     public function getNameByPhoneNumber(Request $request)
@@ -34,7 +36,9 @@ class ChatController extends Controller
     public function getChatByPhoneNumber(Request $request)
     {
         $member = Member::where('no_telpon', $request->input('no_telpon'))->first();
-        $chats = Chat::where('pengirim', $member->no_telpon)->pluck('text');
-        return $chats;
+        $chats = Chat::where('pengirim', $member->no_telpon)->select('text', 'pengirim')->get();
+        $member_name = $member->nama_member;
+
+        return view('layout.room_chat', compact('chats', 'member_name'))->render();
     }
 }
