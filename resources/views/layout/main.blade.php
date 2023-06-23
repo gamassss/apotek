@@ -182,8 +182,8 @@
                 <div class="menu-inner-shadow"></div>
 
                 <ul class="menu-inner py-1">
-                    <li class="menu-item {{ Request::is('admin') ? 'active' : '' }}">
-                        <a href="/admin" class="menu-link">
+                    <li class="menu-item {{ Request::is('admin/dashboard/*') ? 'active' : '' }}">
+                        <a href="{{ Auth::user()->jabatan=='manajemen'? route('dashboard.manajemen'):route('dashboard.pegawai') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
                             <div data-i18n="Analytics">Dashboard</div>
                         </a>
