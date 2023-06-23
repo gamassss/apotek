@@ -22,15 +22,19 @@ class ChatController extends Controller
             order by created_at desc limit 1');
             $member['latest_chat'] = $latest_chat;
         }
-
-        // foreach ($members_pegawai as $member) {
-        //     echo $member->nama_member . " " . $member->no_telpon . "<br>";
-        //     $chats = Chat::where('pengirim', $member->no_telpon)->get();
-        //     // dd($chats);
-        //     foreach ($chats as $chat) {
-        //         echo $chat->text . " " . $chat->created_at . "<br>";
-        //     }
-        // }
         return view('chat', compact('members_pegawai'));
+    }
+
+    public function getNameByPhoneNumber(Request $request)
+    {
+        $member = Member::where('no_telpon', $request->input('no_telpon'))->first();
+        return $member->nama_member;
+    }
+
+    public function getChatByPhoneNumber(Request $request)
+    {
+        $member = Member::where('no_telpon', $request->input('no_telpon'))->first();
+        $chats = Chat::where('pengirim', $member->no_telpon)->pluck('text');
+        return $chats;
     }
 }
