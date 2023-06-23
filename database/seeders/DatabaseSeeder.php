@@ -23,14 +23,25 @@ class DatabaseSeeder extends Seeder
             'username' => 'pegawai1',
             'password' => bcrypt('123'),
             'jabatan' => 'pegawai',
-            'no_telpon' => '082232763556',
+        ]);
+       User::create([
+            'name' => 'Yuda',
+            'username' => 'pegawai2',
+            'password' => bcrypt('123'),
+            'jabatan' => 'Pegawai'
+        ]);
+       User::create([
+            'name' => 'Yuda',
+            'username' => 'pegawai2',
+            'password' => bcrypt('123'),
+            'jabatan' => 'Pegawai'
         ]);
         User::create([
             'name' => 'Budi',
             'username' => 'Manajemen',
             'password' => bcrypt('123'),
             'jabatan' => 'manajemen',
-            'no_telpon' => '085790824615',
+            
         ]);
         Member::create([
             'user_id' => 1,

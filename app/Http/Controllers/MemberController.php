@@ -62,6 +62,10 @@ class MemberController extends Controller
         ]);
         if(Auth::user()->jabatan=='Pegawai'){
             $validatedData['user_id']=Auth::user()->id;
+        }else{
+            if (isset($request->nama_pegawai)) {
+                $validatedData['user_id']=$request->nama_pegawai;
+            }
         }
         try {
             //code...
@@ -81,8 +85,9 @@ class MemberController extends Controller
      */
     public function show($id)
     {
-        $member = Member::findOrFail($id);
+        $member = Member::with('user')->findOrFail($id);
         return response()->json($member);
+        
     }
 
     /**
@@ -102,13 +107,14 @@ class MemberController extends Controller
             'nama_member' => 'required',
             'alamat_member' => 'required',
             'no_telpon' => 'required|numeric',
+            'user_id'=>'required|numeric'
         ]);
     
         try {
             $member = Member::findOrFail($id);
             $member->update($validatedData);
             return back()->with(['success' => 'Member successfully updated']);
-        } catch (ModelNotFoundException $e) {
+        } catch (\Throwable $e) {
             return back()->with(['error' => 'Member not found']);
         }
     }

@@ -5,6 +5,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\TemplateChatController;
 use App\Http\Controllers\AuthenticationController;
 
@@ -25,13 +26,14 @@ Route::get('/', function() {
 
 // pegawai
 Route::group(['middleware' => ['auth','checkRole:Pegawai'], 'prefix' => '/admin'],function () {
-
+       
 });
 // bersama
 Route::group(['middleware' => ['auth'], 'prefix' => '/admin'],function () {
     Route::get('/',function () {
         return view('layout.main');
     })->name('home');
+    Route::resource('/transaksi-obat', TransaksiController::class);
     Route::prefix('/data')->group(function () {
         Route::resource('/obat', ObatController::class);
         Route::resource('/member', MemberController::class);

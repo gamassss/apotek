@@ -15,5 +15,11 @@ class Obat extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
+    public function members()
+    {
+        return $this->belongsToMany(Member::class, 'transaksis')
+                    ->withPivot('lama_habis')
+                    ->withTimestamps();
+    }
   
 }

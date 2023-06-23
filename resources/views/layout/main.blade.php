@@ -148,7 +148,12 @@
             height: 1px;
             background: #eee;
         }
+
+        .select2-container--open {
+            z-index: 9999999
+        }
     </style>
+
 </head>
 
 <body>
@@ -232,6 +237,7 @@
                                 <div data-i18n="Form Layouts">Data Management</div>
                             </a>
                             <ul class="menu-sub">
+
                                 <li class="menu-item {{ Request::is('admin/data/member') ? 'active' : '' }}">
                                     <a href="{{ route('member.index') }}" class="menu-link">
                                         <div data-i18n="Horizontal Form">Member</div>
@@ -244,7 +250,15 @@
                                 </li>
                             </ul>
                         </li>
-                    @endif
+                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Transaksi</span>
+                            @endif
+                    </li>
+                    <li class="menu-item {{ Request::is('admin/transaksi-obat') ? 'active' : '' }}">
+                        <a href="{{ route('transaksi-obat.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-dollar-circle"></i>
+                            <div data-i18n="Analytics">Transaksi</div>
+                        </a>
+                    </li>
                 </ul>
 
             </aside>
@@ -355,11 +369,6 @@
         <!-- Page JS -->
         <script src="{{ asset('js/dashboards-analytics.js') }}"></script>
         <script src="{{ asset('js/dtables.js') }}"></script>
-        <script>
-            $(".select2").select2({
-                theme: "bootstrap-5",
-            });
-        </script>
         <!-- datepicker -->
         {{-- <script src="{{ asset('js/air-datepicker.js') }}"></script>
         <script src="{{ asset('js/datepicker-pemesanan.js') }}"></script> --}}

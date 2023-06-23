@@ -11,19 +11,16 @@ class Member extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
-    /**
-     * Get the user that owns the Member
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+   
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-    /**
-     * The obats that belong to the Member
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-   
+
+    public function obats()
+    {
+        return $this->belongsToMany(Obat::class, 'transaksis')
+                    ->withPivot('lama_habis')
+                    ->withTimestamps();
+    }
 }
