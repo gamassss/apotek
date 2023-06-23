@@ -23,7 +23,10 @@ class AuthenticationController extends Controller
         if (Auth::attempt($credentials)) {
             $req->session()->regenerate();
 
-            return redirect()->intended('/admin');
+           return  Auth::user()->jabatan=='pegawai'?
+             redirect()->route('dashboard.pegawai')
+            :
+             redirect()->route('dashboard.manajemen');
         }
 
         return back()->withErrors([
