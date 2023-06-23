@@ -62,7 +62,7 @@
     <div class="container-xxl">
 			<div class="authentication-wrapper authentication-basic container-p-y" style="gap: 96px;">
 				<a href="/" class="d-flex justify-content-center">
-					<img src="{{ asset('img/logo-agt.png') }}" alt="" style="height: 85px;">
+					{{-- <img src="{{ asset('img/logo-agt.png') }}" alt="" style="height: 85px;"> --}}
 				</a>
             <div class="authentication-inner">
                 <!-- Register -->

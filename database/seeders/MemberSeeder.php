@@ -105,8 +105,7 @@ class MemberSeeder extends Seeder
             ["1", "Ny. Tiara", "Jln Asem mulya I no. 60 D", "085895979399"],
             ["2", "DEFI NURAINI", "ASEM ROWO MULYA 46", "081515338568"],
             ["1", "Rahmat adi", "Margorukun 12/1A", "08175400113"],
-            ["2", "bp Trimo", "Margorukun Gg Rel No.42
-", "082230665303"],
+            ["2", "bp Trimo", "Margorukun Gg Rel No.42", "082230665303"],
             ["1", "JASON", "SAWAHAN SARIMULYO NO. 6", "082299008169"],
             ["2", "MUSNIA", "JALAN DUPAK MASIGIT 3/20", "081331003110"],
             ["1", "BU ROTIBAH", "TAMBAK ASRI SELATAN I/41", "081999961277"],
