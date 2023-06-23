@@ -21,7 +21,14 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                if ($request->user() && $request->user()->jabatan == 'manajemen') {
+                    # code...
+                    return redirect()->route('dashboard.manajemen')->with('error', 'Unauthorized access');
+                }
+                if ($request->user() && $request->user()->jabatan == 'pegawai') {
+                    # code...
+                    return redirect()->route('dashboard.pegawai')->with('error', 'Unauthorized access');
+                }
             }
         }
 

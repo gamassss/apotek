@@ -6,6 +6,7 @@ use App\Models\Member;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class MemberController extends Controller
@@ -19,21 +20,22 @@ class MemberController extends Controller
         if (request()->ajax()) {
             $member;
             if (Auth::user()->jabatan == 'pegawai') {
-                $member = Member::where('user_id', Auth::user()->id)->get();
+                // $member = Member::where('user_id',Auth::user()->id)->get();
+                $member = DB::table('members as m')
+                    ->join('users as u', 'm.user_id', '=', 'u.id')
+                    ->select('m.*', 'u.name')
+                    ->where('user_id', Auth::user()->id)
+                    ->get();
             }
+
             if (Auth::user()->jabatan == 'manajemen') {
-                # code...
-                $member = Member::all();
+                $member = DB::table('members as m')
+                    ->join('users as u', 'm.user_id', '=', 'u.id')
+                    ->select('m.*', 'u.name')
+                    ->get();
             }
             return DataTables::of($member)
                 ->addIndexColumn()
-                ->addColumn('name', function ($member) {
-                    if (isset($member->user->name)) {
-                        return $member->user->name;
-                    } else {
-                        return 'Belum Dipasangkan';
-                    }
-                })
                 ->addColumn('action', 'layout.button.edit')
                 ->make(true);
         }

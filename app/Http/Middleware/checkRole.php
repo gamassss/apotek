@@ -19,9 +19,15 @@ class checkRole
         if ($request->user() && $request->user()->jabatan == $role) {
             return $next($request);
         }
-
+        if ($request->user() && $request->user()->jabatan == 'manajemen') {
+            # code...
+            return redirect()->route('dashboard.manajemen')->with('error', 'Unauthorized access');
+        }
+        if ($request->user() && $request->user()->jabatan == 'pegawai') {
+            # code...
+            return redirect()->route('dashboard.pegawai')->with('error', 'Unauthorized access');
+        }
         // Jika tidak memiliki peran yang sesuai, arahkan ke halaman yang sesuai
-        return redirect()->route('home')->with('error', 'Unauthorized access');
     }
 
 }

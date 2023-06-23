@@ -189,10 +189,6 @@
                         $('#edit_nama_pegawai').val(data.user.id).trigger("change");
                         $('#modal-edit').modal('show');
                     },
-<<<<<<< HEAD
-=======
-
->>>>>>> 9c4360a71cd1f2f3577d08f93acde992aa1fd70f
                 );
             });
       
