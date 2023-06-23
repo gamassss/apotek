@@ -25,7 +25,7 @@ Route::get('/', function() {
 });
 
 // pegawai
-Route::group(['middleware' => ['auth','checkRole:Pegawai'], 'prefix' => '/admin'],function () {
+Route::group(['middleware' => ['auth','checkRole:pegawai'], 'prefix' => '/admin'],function () {
        
 });
 // bersama
@@ -41,7 +41,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => '/admin'],function () {
     Route::get('/chats', [ChatController::class, 'index']);
 });
 // manajemen
-Route::group(['middleware' => ['auth','checkRole:Manajemen'], 'prefix' => '/admin'],function () {
+Route::group(['middleware' => ['auth','checkRole:manajemen'], 'prefix' => '/admin'],function () {
     Route::prefix('/data')->group(function () {
         Route::resource('/pegawai', PegawaiController::class);
         Route::resource('/template-chat', TemplateChatController::class);

@@ -17,10 +17,10 @@ class MemberController extends Controller
     {
         if (request()->ajax()) {
             $member;
-            if(Auth::user()->jabatan=='Pegawai'){
+            if(Auth::user()->jabatan=='pegawai'){
               $member = Member::where('user_id',Auth::user()->id)->get();
             }
-            if (Auth::user()->jabatan=='Manajemen') {
+            if (Auth::user()->jabatan=='manajemen') {
                 # code...
                 $member = Member::all();
             }
@@ -60,7 +60,7 @@ class MemberController extends Controller
             'alamat_member' => 'required',
             'no_telpon' => 'required|numeric',
         ]);
-        if(Auth::user()->jabatan=='Pegawai'){
+        if(Auth::user()->jabatan=='pegawai'){
             $validatedData['user_id']=Auth::user()->id;
         }else{
             if (isset($request->nama_pegawai)) {

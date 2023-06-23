@@ -190,7 +190,7 @@
                     </li>
 
                     <!-- Dashboard -->
-                    @if (Auth::user()->jabatan == 'Manajemen')
+                    @if (Auth::user()->jabatan == 'manajemen')
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span>
                         </li>
                         <!-- Forms -->
@@ -226,7 +226,7 @@
                             </ul>
                         </li>
                     @endif
-                    @if (Auth::user()->jabatan == 'Pegawai')
+                    @if (Auth::user()->jabatan == 'pegawai')
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span>
                         </li>
                         <!-- Forms -->

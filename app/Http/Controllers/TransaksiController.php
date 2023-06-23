@@ -20,7 +20,7 @@ class TransaksiController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            if (Auth::user()->jabatan=='Pegawai') {
+            if (Auth::user()->jabatan=='pegawai') {
                 $transaksi = DB::table('transaksis as t')
                 ->join('members as m','m.id','=','t.member_id')
                 ->join('obats as o','o.id','=','t.obat_id')
