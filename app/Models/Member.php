@@ -25,5 +25,4 @@ class Member extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-   
 }
