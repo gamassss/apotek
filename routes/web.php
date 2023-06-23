@@ -27,6 +27,7 @@ Route::get('/', function() {
 Route::group(['middleware' => ['auth','checkRole:Pegawai'], 'prefix' => '/admin'],function () {
 
 });
+
 // bersama
 Route::group(['middleware' => ['auth'], 'prefix' => '/admin'],function () {
     Route::get('/',function () {
@@ -38,6 +39,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => '/admin'],function () {
     });
     Route::get('/chats', [ChatController::class, 'index']);
 });
+
 // manajemen
 Route::group(['middleware' => ['auth','checkRole:Manajemen'], 'prefix' => '/admin'],function () {
     Route::prefix('/data')->group(function () {

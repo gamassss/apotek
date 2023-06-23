@@ -169,7 +169,6 @@
                         $('#edit_telpon_member').val(data.no_telpon);
                         $('#modal-edit').modal('show');
                     },
-                   
                 );
             });
         </script>

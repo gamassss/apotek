@@ -15,13 +15,13 @@ class MemberController extends Controller
      */
     public function index()
     {
+        // dd(Member::all());
         if (request()->ajax()) {
             $member;
-            if(Auth::user()->jabatan=='Pegawai'){
-              $member = Member::where('user_id',Auth::user()->id)->get();
+            if(Auth::user()->jabatan=='pegawai'){
+                $member = Member::where('user_id',Auth::user()->id)->get();
             }
-            if (Auth::user()->jabatan=='Manajemen') {
-                # code...
+            if (Auth::user()->jabatan=='manajemen') {
                 $member = Member::all();
             }
             return DataTables::of($member)
