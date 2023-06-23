@@ -190,9 +190,9 @@
                     </li>
 
                     <!-- Dashboard -->
+                    <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span>
+                    </li>
                     @if (Auth::user()->jabatan == 'manajemen')
-                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span>
-                        </li>
                         <!-- Forms -->
                         <!-- Tables -->
                         <li class="menu-item {{ Request::is('admin/data/*') ? 'active' : '' }}">
@@ -227,8 +227,6 @@
                         </li>
                     @endif
                     @if (Auth::user()->jabatan == 'pegawai')
-                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span>
-                        </li>
                         <!-- Forms -->
                         <!-- Tables -->
                         <li class="menu-item {{ Request::is('admin/data/*') ? 'active' : '' }}">
@@ -250,15 +248,22 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Transaksi</span>
-                            @endif
-                    </li>
+                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Chats</span>
+                            <li class="menu-item {{ Request::is('admin/chats') ? 'active' : '' }}">
+                                <a href="{{ route('transaksi-obat.index') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-chat"></i>
+                                    <div data-i18n="Analytics">Chats</div>
+                                </a>
+                            </li>
+                        @endif
+                    <li class="menu-header small text-uppercase"><span class="menu-header-text">Transaksi</span>
                     <li class="menu-item {{ Request::is('admin/transaksi-obat') ? 'active' : '' }}">
                         <a href="{{ route('transaksi-obat.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-dollar-circle"></i>
                             <div data-i18n="Analytics">Transaksi</div>
                         </a>
                     </li>
+
                 </ul>
 
             </aside>

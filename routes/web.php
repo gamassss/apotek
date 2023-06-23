@@ -22,7 +22,7 @@ use App\Http\Controllers\AuthenticationController;
 */
 
 Route::get('/', function() {
-    return view('login');
+    return redirect()->route('login');
 });
 
 // pegawai

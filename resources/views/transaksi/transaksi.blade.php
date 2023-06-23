@@ -15,7 +15,7 @@
         @endif
         <div class="d-flex justify-content-end mb-3">
             <div class="demo-inline-spacing">
-                @if (Auth::user()->jabatan == 'Pegawai')
+                @if (Auth::user()->jabatan == 'pegawai')
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                         data-bs-target="#modal-create">
                         <span class="tf-icons bx bx-plus"></span>&nbsp; Tambah
@@ -28,7 +28,7 @@
             <thead>
                 <tr>
                     <th style="max-width: 50px;">No</th>
-                    @if (Auth::user()->jabatan == 'Manajemen')
+                    @if (Auth::user()->jabatan == 'manajemen')
                         <th>Nama Pegawai</th>
                     @endif
                     <th>Nama Member</th>
@@ -95,7 +95,7 @@
             </div>
         </div>
     </div>
-    @if (Auth::user()->jabatan == 'Pegawai')
+    @if (Auth::user()->jabatan == 'pegawai')
         @push('script')
             <script>
                 $('#myTable').DataTable({
@@ -148,7 +148,7 @@
             </script>
         @endpush
     @endif
-    @if (Auth::user()->jabatan == 'Manajemen')
+    @if (Auth::user()->jabatan == 'manajemen')
         @push('script')
             <script>
                 $('#myTable').DataTable({
