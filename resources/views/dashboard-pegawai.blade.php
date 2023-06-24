@@ -117,16 +117,62 @@
                 <div class="card" id="chart-member-yearly"></div>
             </div>
         </div>
+        <div class="row mb-3">
+            <div class="col">
+                <div class="card p-3">
+                    <div class="row">
+
+                        <div class="col">
+                            <p>Tahun</p>
+                            <div class="row">
+                                <div class="col-5">
+                                    <select class="form-select" name="year" id="year-transaksi">
+                                        @foreach ($tahunTransaksi as $item)
+                                            <option {{ date('Y') == $item ? 'selected' : '' }}
+                                                value="{{ $item }}">{{ $item }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <button type="button" id="search-transaksi" class="btn btn-primary">
+                                        <span class="tf-icons bx bx-search"></span>
+                                        &nbsp;Cari
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <div class="card" id="chart-transaksi-monthly"></div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <div class="card" id="chart-transaksi-yearly"></div>
+            </div>
+        </div>
     </div>
     @push('script')
         <script>
             $(document).ready(function() {
                 loadMemberStatMonthly('{{ date('Y') }}');
+                loadTransaksiStatMonthly('{{ date('Y') }}');
                 loadMemberStatYearly();
+                loadTransaksiStatYearly();
                 $('#search-member').on('click', function() {
                     let year = $('#year-member').val();
                     $('#chart-member').html('');
                     loadMemberStatMonthly(year);
+                });
+                $('#search-transaksi').on('click', function() {
+                    let year = $('#year-transaksi').val();
+                    $('#chart-transaksi-monthly').html('');
+                    loadTransaksiStatMonthly(year);
                 });
             });
             function loadMemberStatMonthly(years) {
@@ -200,6 +246,81 @@
                         };
 
                         chart = new ApexCharts(document.querySelector("#chart-member-yearly"), options);
+                        chart.render();
+                    }
+                });
+            }
+            function loadTransaksiStatYearly() {
+                $.ajax({
+                    type: "get",
+                    url: "{{ route('peningkatan.transaksi.pegawai.yearly') }}",
+                    success: function(response) {
+                        var options = {
+                            chart: {
+                                type: 'line'
+                            },
+                            series: [{
+                                name: 'Penjualan',
+                                data: response.dataTahunan,
+                            }],
+                            xaxis: {
+                                categories: response.year,
+                            },
+                            title: {
+                                text: `Peningkatan Transaksi Tahunan`,
+                                align: 'center',
+                                margin: 50,
+                                offsetX: 0,
+                                offsetY: 0,
+                                floating: false,
+                                style: {
+                                    fontSize: '16px',
+                                    fontWeight: 'medium',
+                                    color: '#263238',
+                                },
+                            },
+                        };
+
+                        chart = new ApexCharts(document.querySelector("#chart-transaksi-yearly"), options);
+                        chart.render();
+                    }
+                });
+            }
+            function loadTransaksiStatMonthly(years) {
+                $.ajax({
+                    type: "get",
+                    url: "{{ route('peningkatan.transaksi.pegawai.monthly') }}",
+                    data: {
+                        'year': years
+                    },
+                    success: function(response) {
+                        var options = {
+                            chart: {
+                                type: 'line'
+                            },
+                            series: [{
+                                name: 'Penjualan',
+                                data: response.dataBulanan,
+                            }],
+                            xaxis: {
+                                categories: response.month,
+                            },
+                            title: {
+                                text: `Peningkatan Transaksi ${years}`,
+                                align: 'center',
+                                margin: 50,
+                                offsetX: 0,
+                                offsetY: 0,
+                                floating: false,
+                                style: {
+                                    fontSize: '16px',
+                                    fontWeight: 'medium',
+                                    color: '#263238',
+                                },
+                            },
+                        };
+
+                        chart = new ApexCharts(document.querySelector("#chart-transaksi-monthly"), options);
                         chart.render();
                     }
                 });

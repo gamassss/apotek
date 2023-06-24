@@ -557,7 +557,7 @@ class MemberSeeder extends Seeder
             }
             // Generate random month between January (1) and the current month
             $randomMonth = mt_rand(1, 12);
-            $randomYear = '202'.mt_rand(1,9) ;
+            $randomYear = '202'.mt_rand(1,3) ;
             
             $insert_data = [
                 'user_id' => $data[0],

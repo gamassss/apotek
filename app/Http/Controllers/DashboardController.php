@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Member;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -46,7 +47,7 @@ class DashboardController extends Controller
     $dataBulanan = $monthlyData->pluck('count')->toArray();
     return response()->json(['month'=>$bulan,'dataBulanan'=>$dataBulanan]);
   }
-  function peningkatanMemberPegawaiYearly(Request $request) {
+  function peningkatanMemberPegawaiYearly() {
     
     $yearlyData = Member::selectRaw("DATE_FORMAT(created_at, '%Y') AS year, COUNT(*) AS count")
     ->where('user_id',Auth::user()->id)
@@ -56,5 +57,32 @@ class DashboardController extends Controller
     $year = $yearlyData->pluck('year')->toArray();
     $dataTahunan = $yearlyData->pluck('count')->toArray();
     return response()->json(['year'=>$year,'dataTahunan'=>$dataTahunan]);
+  }
+  function peningkatanTransaksiPegawaiYearly() {
+    
+    $yearlyData = DB::table('transaksis as t')
+    ->join('members as m','m.id','t.member_id')
+    ->selectRaw("DATE_FORMAT(t.created_at, '%Y') AS year, COUNT(*) AS count")
+    ->where('m.user_id',Auth::user()->id)
+    ->groupBy('year')
+    ->orderByRaw("YEAR(t.created_at)")
+    ->get();
+    $year = $yearlyData->pluck('year')->toArray();
+    $dataTahunan = $yearlyData->pluck('count')->toArray();
+    return response()->json(['year'=>$year,'dataTahunan'=>$dataTahunan]);
+  }
+  function peningkatanTransaksiPegawaiMonthly(Request $request) {
+    $currentYear = $request->year;
+    $monthlyData =  DB::table('transaksis as t')
+    ->join('members as m','m.id','t.member_id')
+    ->selectRaw("DATE_FORMAT(t.created_at, '%M') AS month, COUNT(*) AS count")
+    ->whereYear('t.created_at', $currentYear)
+    ->where('m.user_id',Auth::user()->id)
+    ->groupBy('month')
+    ->orderByRaw("MONTH(t.created_at)")
+    ->get();
+    $bulan = $monthlyData->pluck('month')->toArray();
+    $dataBulanan = $monthlyData->pluck('count')->toArray();
+    return response()->json(['month'=>$bulan,'dataBulanan'=>$dataBulanan]);
   }
 }
