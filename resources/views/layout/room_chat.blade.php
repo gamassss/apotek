@@ -13,12 +13,6 @@
                             <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">
                                 {{ $chat->text }}
                             </p>
-                            {{-- <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">How are
-                        you ...???
-                    </p>
-                    <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">What are
-                        you doing
-                        tomorrow? Can we come up a bar?</p> --}}
                             <p class="small ms-3 mb-3 rounded-3 text-muted">23:58</p>
                         </div>
                     </div>

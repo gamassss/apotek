@@ -56,3 +56,7 @@ Route::get('/login', [AuthenticationController::class, 'login'])->name('login')-
 Route::post('/login', [AuthenticationController::class, 'auth'])->name('auth');
 
 Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
+
+Route::get('/tes_rabbit', function() {
+    return view('message');
+});
