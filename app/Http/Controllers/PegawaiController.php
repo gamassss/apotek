@@ -52,8 +52,6 @@ class PegawaiController extends Controller
         $validatedData['jabatan']= 'pegawai';
         User::create($validatedData);
         return back()->with('success','Transaksi berhasil disimpan.');
-
-
     }
 
 

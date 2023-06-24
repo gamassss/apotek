@@ -28,6 +28,8 @@ Route::get('/', function() {
 // pegawai
 Route::group(['middleware' => ['auth','checkRole:pegawai'], 'prefix' => '/admin'],function () {
     Route::get('/dashboard/pegawai',[DashboardController::class,'indexPegawai'])->name('dashboard.pegawai');
+    Route::get('/dashboard/pegawai/peningkatan-member/monthly',[DashboardController::class,'peningkatanMemberPegawaiMonthly'])->name('peningkatan.member.pegawai.monthly');
+    Route::get('/dashboard/pegawai/peningkatan-member/yearly',[DashboardController::class,'peningkatanMemberPegawaiYearly'])->name('peningkatan.member.pegawai.yearly');
 });
 
 // bersama

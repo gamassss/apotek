@@ -550,16 +550,21 @@ class MemberSeeder extends Seeder
             ["1", "NY Fitri", "Tambak Asri gg 32 No. 64", "089619350268"],
         ];
 
+        $currentYear = date('Y');
         foreach ($data_member as $data) {
             if (!preg_match('/\d/', $data[3])) {
                 continue;
             }
-
+            // Generate random month between January (1) and the current month
+            $randomMonth = mt_rand(1, 12);
+            $randomYear = '202'.mt_rand(1,9) ;
+            
             $insert_data = [
                 'user_id' => $data[0],
                 'nama_member' => $data[1],
                 'alamat_member' => $data[2],
                 'no_telpon' => $data[3],
+                'created_at'=> date("$randomYear-$randomMonth-01")
             ];
 
             Member::create($insert_data);
