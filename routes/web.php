@@ -49,7 +49,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => '/admin'],function () {
 // manajemen
 Route::group(['middleware' => ['auth','checkRole:manajemen'], 'prefix' => '/admin'],function () {
     Route::get('/dashboard/manajemen',[DashboardController::class,'indexManajemen'])->name('dashboard.manajemen');
-
+    Route::get('/dashboard/manajemen/peningkatan-member/monthly',[DashboardController::class,'peningkatanMemberMonthly'])->name('peningkatan.member.monthly');
+    Route::get('/dashboard/manajemen/peningkatan-member/yearly',[DashboardController::class,'peningkatanMemberYearly'])->name('peningkatan.member.yearly');
+    Route::get('/dashboard/manajemen/peningkatan-transaksi/monthly',[DashboardController::class,'peningkatanTransaksiMonthly'])->name('peningkatan.transaksi.monthly');
+    Route::get('/dashboard/manajemen/peningkatan-transaksi/yearly',[DashboardController::class,'peningkatanTransaksiYearly'])->name('peningkatan.transaksi.yearly');
     Route::prefix('/data')->group(function () {
         Route::resource('/pegawai', PegawaiController::class);
         Route::resource('/template-chat', TemplateChatController::class);
