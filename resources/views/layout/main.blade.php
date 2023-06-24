@@ -133,7 +133,7 @@
         }
 
         #chat2 .form-control {
-            border-color: transparent;
+            border-color: tranparent;
         }
 
         #chat2 .form-control:focus {
@@ -201,8 +201,6 @@
                                 <div data-i18n="Form Layouts">Data Management</div>
                             </a>
                             <ul class="menu-sub">
-
-
                                 <li class="menu-item {{ Request::is('admin/data/pegawai') ? 'active' : '' }}">
                                     <a href="{{ route('pegawai.index') }}" class="menu-link">
                                         <div data-i18n="Horizontal Form">Pegawai</div>
@@ -250,7 +248,7 @@
                         </li>
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Chats</span>
                             <li class="menu-item {{ Request::is('admin/chats') ? 'active' : '' }}">
-                                <a href="{{ route('transaksi-obat.index') }}" class="menu-link">
+                                <a href="{{ route('chat.index') }}" class="menu-link">
                                     <i class="menu-icon tf-icons bx bx-chat"></i>
                                     <div data-i18n="Analytics">Chats</div>
                                 </a>

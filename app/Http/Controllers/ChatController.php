@@ -23,14 +23,22 @@ class ChatController extends Controller
             $member['latest_chat'] = $latest_chat;
         }
 
-        // foreach ($members_pegawai as $member) {
-        //     echo $member->nama_member . " " . $member->no_telpon . "<br>";
-        //     $chats = Chat::where('pengirim', $member->no_telpon)->get();
-        //     // dd($chats);
-        //     foreach ($chats as $chat) {
-        //         echo $chat->text . " " . $chat->created_at . "<br>";
-        //     }
-        // }
-        return view('chat', compact('members_pegawai'));
+        $chats = [];
+        return view('chat', compact('members_pegawai', 'chats'));
+    }
+
+    public function getNameByPhoneNumber(Request $request)
+    {
+        $member = Member::where('no_telpon', $request->input('no_telpon'))->first();
+        return $member->nama_member;
+    }
+
+    public function getChatByPhoneNumber(Request $request)
+    {
+        $member = Member::where('no_telpon', $request->input('no_telpon'))->first();
+        $chats = Chat::where('pengirim', $member->no_telpon)->select('text', 'pengirim')->get();
+        $member_name = $member->nama_member;
+
+        return view('layout.room_chat', compact('chats', 'member_name'))->render();
     }
 }
