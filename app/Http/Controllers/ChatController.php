@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Chat;
 use App\Models\Member;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Services\FonnteService;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
@@ -44,5 +45,15 @@ class ChatController extends Controller
         $member_name = $member->nama_member;
 
         return view('layout.room_chat', compact('chats', 'member_name'))->render();
+    }
+
+    public function sendMessage(Request $request)
+    {
+        $message = $request->input('message');
+        $no_telpon = $request->query('no_telpon');
+        $fonnte = new FonnteService();
+        // dd($message, $no_telpon);
+        $fonnte->send_fonnte($message, $no_telpon);
+        return back();
     }
 }

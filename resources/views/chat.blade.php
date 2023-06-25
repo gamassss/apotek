@@ -49,7 +49,8 @@
         <!--/ List Chat Dengan Member -->
 
         <!-- Room Chat -->
-        <div class="card col-md-8" id="chat2">
+        <form class="card col-md-8" id="chat2" method="POST">
+            @csrf
             {{-- <div id="chat-box" class="d-none card-body overflow-auto pt-0" data-mdb-perfect-scrollbar="true"
                 style="position: relative; height: 400px">
                 <div
@@ -74,24 +75,30 @@
                     mudah
                     dan cepat.</p>
             </div>
-        </div>
+        </form>
 
         <!--/ Room Chat -->
     </div>
     <script>
         $(document).ready(function() {
+
+            function submitForm() {
+                $('#chat2').submit();
+                console.log('submitted')
+            }
+
             $('.list-chat-member').one('click', function() {
                 $('#chat-box').removeClass('d-none');
                 $('#chat-footer').removeClass('d-none');
                 $('#chat-first-notif').addClass('d-none');
             });
 
-            $('#test-btn').on('click', function () {
+            $('#test-btn').on('click', function() {
                 $.ajax({
                     type: "GET",
                     url: '{{ route('chat.index') }}',
-                    success: function (response) {
-                        console.log(response)
+                    success: function(response) {
+                        // console.log(response)
                     }
                 });
             });
@@ -118,8 +125,9 @@
                     },
                     success: function(response) {
                         // console.log('berhasil')
-                        console.log(response)
+                        // console.log(response)
                         $('#chat2').html(response);
+                        $('#chat2').attr('action', '{{ route('send_message', ['no_telpon' => 6282232763556]) }}');
                         $('#chat-first-notif').addClass('d-none');
                     }
                 });

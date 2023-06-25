@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Services\FonnteService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class FonnteWebhookController extends Controller
 {
@@ -33,7 +35,7 @@ class FonnteWebhookController extends Controller
         $extension = $data['extension'];
         //end
 
-        $reply_message = 'hi ' . $name . ' your message is' . $message;
+        $reply_message = 'hi ' . $name . ' your message is ' . $message;
 
         
         $fonnte = new FonnteService();
