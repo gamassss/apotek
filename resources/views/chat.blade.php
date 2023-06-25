@@ -7,11 +7,11 @@
         <!-- List Chat Dengan Member -->
         <div class="col-md-4 col-sm-4">
             <div class="card overflow-hidden mb-4" style="max-height: calc(100vh - 128px); min-height: calc(100vh - 128px);">
-                <h5 class="card-header" style="padding-bottom: 12px;">Chat</h5>
+                <h5 class="card-header" style="padding-bottom: 12px;" id="test-btn">Chat</h5>
                 <div class="card-body" id="vertical-example">
                     <div class="col-lg-12">
                         <div class="demo-inline-spacing">
-                            <div class="list-group">
+                            <div class="list-group" id="list-kontak-member">
                                 @if (isset($members_pegawai))
                                     @foreach ($members_pegawai as $member)
                                         @php
@@ -84,6 +84,16 @@
                 $('#chat-box').removeClass('d-none');
                 $('#chat-footer').removeClass('d-none');
                 $('#chat-first-notif').addClass('d-none');
+            });
+
+            $('#test-btn').on('click', function () {
+                $.ajax({
+                    type: "GET",
+                    url: '{{ route('chat.index') }}',
+                    success: function (response) {
+                        console.log(response)
+                    }
+                });
             });
 
             //get chat data onclick

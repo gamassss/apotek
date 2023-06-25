@@ -22,9 +22,9 @@ use App\Http\Controllers\AuthenticationController;
 |
 */
 
-// Route::get('/', function() {
-//     return redirect()->route('login');
-// });
+Route::get('/', function() {
+    return redirect()->route('login');
+});
 
 // pegawai
 Route::group(['middleware' => ['auth','checkRole:pegawai'], 'prefix' => '/admin'],function () {
