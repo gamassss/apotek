@@ -1,4 +1,4 @@
 <div class="d-flex gap-3">
     <button class="btn btn-secondary">Chat</button>
-    <button class="btn btn-primary">Profile</button>
+    <a href="{{ route('pegawai.profile',['username'=>$username]) }}" class="btn btn-primary">Profile</a>
 </div>

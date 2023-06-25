@@ -28,10 +28,7 @@ Route::get('/', function() {
 // pegawai
 Route::group(['middleware' => ['auth','checkRole:pegawai'], 'prefix' => '/admin'],function () {
     Route::get('/dashboard/pegawai',[DashboardController::class,'indexPegawai'])->name('dashboard.pegawai');
-    Route::get('/dashboard/pegawai/peningkatan-member/monthly',[DashboardController::class,'peningkatanMemberPegawaiMonthly'])->name('peningkatan.member.pegawai.monthly');
-    Route::get('/dashboard/pegawai/peningkatan-member/yearly',[DashboardController::class,'peningkatanMemberPegawaiYearly'])->name('peningkatan.member.pegawai.yearly');
-    Route::get('/dashboard/pegawai/peningkatan-transaksi/monthly',[DashboardController::class,'peningkatanTransaksiPegawaiMonthly'])->name('peningkatan.transaksi.pegawai.monthly');
-    Route::get('/dashboard/pegawai/peningkatan-transaksi/yearly',[DashboardController::class,'peningkatanTransaksiPegawaiYearly'])->name('peningkatan.transaksi.pegawai.yearly');
+
 });
 
 // bersama
@@ -44,6 +41,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => '/admin'],function () {
     Route::get('/chats', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/get_name_by_number', [ChatController::class, 'getNameByPhoneNumber'])->name('get_name_by_phone_number');
     Route::get('/get_chat_by_number', [ChatController::class, 'getChatByPhoneNumber'])->name('get_chat_by_phone_number');
+    Route::get('/dashboard/pegawai/peningkatan-member/monthly',[DashboardController::class,'peningkatanMemberPegawaiMonthly'])->name('peningkatan.member.pegawai.monthly');
+    Route::get('/dashboard/pegawai/peningkatan-member/yearly',[DashboardController::class,'peningkatanMemberPegawaiYearly'])->name('peningkatan.member.pegawai.yearly');
+    Route::get('/dashboard/pegawai/peningkatan-transaksi/monthly',[DashboardController::class,'peningkatanTransaksiPegawaiMonthly'])->name('peningkatan.transaksi.pegawai.monthly');
+    Route::get('/dashboard/pegawai/peningkatan-transaksi/yearly',[DashboardController::class,'peningkatanTransaksiPegawaiYearly'])->name('peningkatan.transaksi.pegawai.yearly');
 });
 
 // manajemen
@@ -55,6 +56,7 @@ Route::group(['middleware' => ['auth','checkRole:manajemen'], 'prefix' => '/admi
     Route::get('/dashboard/manajemen/peningkatan-transaksi/yearly',[DashboardController::class,'peningkatanTransaksiYearly'])->name('peningkatan.transaksi.yearly');
     Route::prefix('/data')->group(function () {
         Route::resource('/pegawai', PegawaiController::class);
+        Route::get('/pegawai/profile/{username}', [PegawaiController::class,'viewProfilePegawai'])->name('pegawai.profile');
         Route::resource('/template-chat', TemplateChatController::class);
     });
 });
