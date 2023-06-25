@@ -48,13 +48,6 @@ const handleWebhook = async (req, res) => {
             return;
         }
         console.log("Chat berhasil diinsert");
-        axios.get('/chats')
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error("Kesalahan dalam permintaan AJAX: ", error);
-            });
     });
 
     res.end();

@@ -9,6 +9,7 @@ use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\TemplateChatController;
+use App\Http\Controllers\FonnteWebhookController;
 use App\Http\Controllers\AuthenticationController;
 
 /*
@@ -70,3 +71,6 @@ Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logou
 Route::get('/tes_rabbit', function() {
     return view('message');
 });
+
+Route::get('/webhook', [FonnteWebhookController::class, 'getReplyMessage'])->name('webhook.get_reply');
+Route::post('/webhook', [FonnteWebhookController::class, 'postReplyMessage'])->name('webhook.post_reply');

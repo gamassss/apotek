@@ -6,6 +6,7 @@ class FonnteService
 {
     public function send_fonnte($message, $no_telpon)
     {
+        $csrfToken = csrf_token();
         $curl = curl_init();
         
         curl_setopt_array($curl, array(
@@ -25,6 +26,7 @@ class FonnteService
                 'schedule' => '0',
                 'delay' => '2',
                 'countryCode' => '62',
+                '_token' => $csrfToken,
             ),
             CURLOPT_HTTPHEADER => array(
                 'Authorization: QI7VDZtc64p4Dg6_EjpX',
@@ -34,6 +36,6 @@ class FonnteService
         $response = curl_exec($curl);
 
         curl_close($curl);
-        echo $response;
+        return $response;
     }
 }
