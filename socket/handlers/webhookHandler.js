@@ -11,18 +11,18 @@ const handleWebhook = async (req, res) => {
             target: req.body.sender,
             message: "working great!",
         };
+        
         let json_res = await sendMessage(data);
-        // console.log(await json_res);
         res_detail = JSON.stringify(json_res);
         console.log('res_detail ' + res_detail)
     } else {
+        let message = `hi ${req.body.name} your message is ${req.body.message}`
         const data = {
             target: req.body.sender,
-            message: "this is default reply from fonnte",
+            message
         };
-        // sendMessage(data);
+
         let json_res = await sendMessage(data);
-        // console.log(await json_res);
         res_detail = JSON.stringify(json_res);
         console.log('res_detail ' + res_detail)
     }
