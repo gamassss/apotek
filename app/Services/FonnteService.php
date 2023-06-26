@@ -6,7 +6,7 @@ class FonnteService
 {
 
     const device = '088806388436';
-
+    
     public function send_fonnte($message, $no_telpon)
     {
         $csrfToken = csrf_token();
