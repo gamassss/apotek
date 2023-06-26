@@ -41,19 +41,29 @@ class ChatController extends Controller
     public function getChatByPhoneNumber(Request $request)
     {
         $member = Member::where('no_telpon', $request->input('no_telpon'))->first();
-        $chats = Chat::where('pengirim', $member->no_telpon)->select('text', 'pengirim')->get();
+        $chats = Chat::where('pengirim', $member->no_telpon)->orWhere('penerima', $member->no_telpon)->select('text', 'pengirim', 'created_at')->get();
         $member_name = $member->nama_member;
+        $member_no_telpon = $member->no_telpon;
 
-        return view('layout.room_chat', compact('chats', 'member_name'))->render();
+        return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
     }
 
     public function sendMessage(Request $request)
     {
         $message = $request->input('message');
-        $no_telpon = $request->query('no_telpon');
+        $no_telpon = $request->input('no_telpon');
         $fonnte = new FonnteService();
         // dd($message, $no_telpon);
-        $fonnte->send_fonnte($message, $no_telpon);
-        return back();
+        $response = $fonnte->send_fonnte($message, $no_telpon);
+        // dd($response);
+        DB::table('chats')->insert([
+            'text' => $message,
+            'pengirim' => $fonnte::device,
+            'penerima' => $no_telpon,
+            'res_detail' => $response,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        return response()->json(['response' => json_decode($response), 'message' => $message]);
     }
 }

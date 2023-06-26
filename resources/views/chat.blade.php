@@ -49,8 +49,7 @@
         <!--/ List Chat Dengan Member -->
 
         <!-- Room Chat -->
-        <form class="card col-md-8" id="chat2" method="POST">
-            @csrf
+        <div class="card col-md-8" id="chat2" style="max-height: calc(100vh - 128px);">
             {{-- <div id="chat-box" class="d-none card-body overflow-auto pt-0" data-mdb-perfect-scrollbar="true"
                 style="position: relative; height: 400px">
                 <div
@@ -75,7 +74,7 @@
                     mudah
                     dan cepat.</p>
             </div>
-        </form>
+        </div>
 
         <!--/ Room Chat -->
     </div>
@@ -106,16 +105,16 @@
             //get chat data onclick
             $('a.list-chat-member').on('click', function() {
                 let member_no_telpon = $(this).attr('value');
-                $.ajax({
-                    type: "GET",
-                    url: '{{ route('get_name_by_phone_number') }}',
-                    data: {
-                        'no_telpon': member_no_telpon
-                    },
-                    success: function(response) {
-                        $('#nama_member').html(response);
-                    }
-                });
+                // $.ajax({
+                //     type: "GET",
+                //     url: '{{ route('get_name_by_phone_number') }}',
+                //     data: {
+                //         'no_telpon': member_no_telpon
+                //     },
+                //     success: function(response) {
+                //         $('#nama_member').html(response);
+                //     }
+                // });
 
                 $.ajax({
                     type: "GET",
@@ -124,13 +123,24 @@
                         'no_telpon': member_no_telpon
                     },
                     success: function(response) {
-                        // console.log('berhasil')
-                        // console.log(response)
                         $('#chat2').html(response);
-                        $('#chat2').attr('action', '{{ route('send_message', ['no_telpon' => 6282232763556]) }}');
+                        var chat_box = $('#chat-box');
+                        chat_box.animate({
+                            scrollTop: chat_box.prop('scrollHeight')
+                        }, 500);
                         $('#chat-first-notif').addClass('d-none');
                     }
                 });
+            });
+
+            // $('#send-btn').on('click', function() {
+            //     console.log('in')
+            // });
+        });
+
+        $('#send-btn').ready(function() {
+            $('#send-btn').on('click', function() {
+                console.log('in')
             });
         });
     </script>
