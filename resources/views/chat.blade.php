@@ -80,7 +80,8 @@
                                 value: currentValue
                             },
                             success: function (response) {
-                                console.log("res:" + response)
+                                // console.log("res:" + response)
+                                $('#list-kontak-member').html(response);
                             }
                         });
                     }, 500);

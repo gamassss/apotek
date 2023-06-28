@@ -36,21 +36,22 @@ class ChatController extends Controller
     {
         $passed_data = $request->input('value');
 
-        // search by nama
+        // search by nama and chats
         $members_pegawai = Member::where('user_id', Auth::user()->id)
                             ->where('nama_member', $passed_data)
                             ->orWhereHas('chats', function ($query) use ($passed_data) {
                                 $query->where('text', 'LIKE', '%'.$passed_data.'%');
                             })
                             ->get();
-
-        // dd($members_pegawai);
-        // search by text
         
-
+        // showed chats
+        // foreach ($members_pegawai as $member) {
+        //     $showed_chat = DB::select('SELECT * FROM chats WHERE');
+        // }
         foreach ($members_pegawai as $member) {
             $latest_chat = DB::select('select * from chats
             where pengirim = ' . $member->no_telpon . '
+            and text LIKE "%'.$passed_data.'%"
             order by created_at desc limit 1');
             $member['latest_chat'] = $latest_chat;
         }
