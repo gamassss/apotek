@@ -11,34 +11,16 @@
                 <div class="card-body" id="vertical-example">
                     <div class="col-lg-12">
                         <div class="demo-inline-spacing">
+                            <div class="input-group rounded mb-3">
+                                <input id="search-field" type="search" class="form-control rounded" placeholder="Search"
+                                    aria-label="Search" aria-describedby="search-addon"
+                                    style="border-top: none; border-left: none; border-right: none;" />
+                                <span class="input-group-text border-0" id="search-addon">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
                             <div class="list-group" id="list-kontak-member">
-                                @if (isset($members_pegawai))
-                                    @foreach ($members_pegawai as $member)
-                                        @php
-                                            // $latest_chat_time = !isset($member->latest_chat[0]->created_at) ? $member->latest_chat[0]->created_at : Carbon\Carbon::now()->timestamp;
-                                            // $latest_chat_text = isset($member->latest_chat[0]->text) ? $member->latest_chat[0]->text : Carbon\Carbon::now()->timestamp;
-                                            $latest_chat_text = isset($member->latest_chat[0]->text) ? $member->latest_chat[0]->text : 'Mulai percakapan dengan member anda.';
-                                            // dd($latest_chat_text);
-                                            $latest_chat_time = isset($member->latest_chat[0]->created_at) ? $member->latest_chat[0]->created_at : Carbon\Carbon::now();
-                                            $date = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $latest_chat_time, 'Asia/Jakarta');
-                                            $date->setTimeZone('Asia/Jakarta');
-                                            // dd($date);
-                                        @endphp
-                                        <a href="javascript:void(0);"
-                                            class="list-group-item list-group-item-action flex-column align-items-start list-chat-member"
-                                            style="border: none;" value="{{ $member->no_telpon }}">
-                                            <div class="d-flex justify-content-between w-100">
-                                                <h6>{{ $member->no_telpon }}</h6>
-                                                <small class="text-muted">{{ $date->diffForHumans() }}</small>
-                                            </div>
-                                            <p class="mb-1 text-muted">
-                                                {{ $latest_chat_text }}
-                                            </p>
-                                        </a>
-                                    @endforeach
-                                @else
-                                    <p class="text-center text-muted">Tidak ada member</p>
-                                @endif
+                                @include('list_chat')
                             </div>
                         </div>
                     </div>
@@ -81,6 +63,34 @@
     <script>
         $(document).ready(function() {
 
+            var previousValue = $('#search-field').val();
+            var delayTimer;
+            $('#search-field').on('input', function() {
+                clearTimeout(delayTimer); // Menghapus timeout sebelumnya
+                var currentValue = $(this).val();
+                if (currentValue !== previousValue) {
+                    
+                    delayTimer = setTimeout(function() {
+                        console.log('call ajax')
+
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('chat.search') }}',
+                            data: {
+                                value: currentValue
+                            },
+                            success: function (response) {
+                                // console.log("res:" + response)
+                                console.log(response)
+                                $('#list-kontak-member').html(response);
+                            }
+                        });
+                    }, 500);
+                }
+
+                previousValue = currentValue;
+            });
+
             function submitForm() {
                 $('#chat2').submit();
                 console.log('submitted')
@@ -105,16 +115,6 @@
             //get chat data onclick
             $('a.list-chat-member').on('click', function() {
                 let member_no_telpon = $(this).attr('value');
-                // $.ajax({
-                //     type: "GET",
-                //     url: '{{ route('get_name_by_phone_number') }}',
-                //     data: {
-                //         'no_telpon': member_no_telpon
-                //     },
-                //     success: function(response) {
-                //         $('#nama_member').html(response);
-                //     }
-                // });
 
                 $.ajax({
                     type: "GET",
@@ -132,10 +132,6 @@
                     }
                 });
             });
-
-            // $('#send-btn').on('click', function() {
-            //     console.log('in')
-            // });
         });
 
         $('#send-btn').ready(function() {
