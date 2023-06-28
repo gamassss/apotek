@@ -29,12 +29,15 @@ Route::get('/', function() {
 
 // pegawai
 Route::group(['middleware' => ['auth','checkRole:pegawai'], 'prefix' => '/admin'],function () {
-    Route::get('/dashboard/pegawai',[DashboardController::class,'indexPegawai'])->name('dashboard.pegawai');
-
+    Route::middleware(['ResetDefaultPassword'])->group(function () {
+        Route::get('/dashboard/pegawai',[DashboardController::class,'indexPegawai'])->name('dashboard.pegawai');
+    });
+    Route::get('/reset-password',[DashboardController::class,'resetPassword'])->name('reset-password.pegawai');
+    Route::put('/reset-password',[PegawaiController::class,'updatePassword'])->name('reset-password.pegawai');
 });
 
 // bersama
-Route::group(['middleware' => ['auth'], 'prefix' => '/admin'],function () {
+Route::group(['middleware' => ['auth','ResetDefaultPassword'], 'prefix' => '/admin'],function () {
     Route::resource('/transaksi-obat', TransaksiController::class);
     Route::prefix('/data')->group(function () {
         Route::resource('/obat', ObatController::class);
@@ -59,7 +62,7 @@ Route::group(['middleware' => ['auth','checkRole:manajemen'], 'prefix' => '/admi
     Route::get('/dashboard/manajemen/peningkatan-transaksi/yearly',[DashboardController::class,'peningkatanTransaksiYearly'])->name('peningkatan.transaksi.yearly');
     Route::prefix('/data')->group(function () {
         Route::resource('/pegawai', PegawaiController::class);
-        Route::get('/pegawai/profile/{username}', [PegawaiController::class,'viewProfilePegawai'])->name('pegawai.profile');
+        Route::post('/pegawai/{pegawai}/reset-password', [PegawaiController::class,'resetPassword'])->name('pegawai.reset-password');
         Route::resource('/template-chat', TemplateChatController::class);
     });
 });

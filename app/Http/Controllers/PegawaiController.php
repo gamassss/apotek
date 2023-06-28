@@ -7,6 +7,7 @@ use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class PegawaiController extends Controller
@@ -55,7 +56,12 @@ class PegawaiController extends Controller
         return back()->with('success','Transaksi berhasil disimpan.');
     }
 
-    function viewProfilePegawai($username) {
+ 
+    /**
+     * Display the specified resource.
+     */
+    public function show($username)
+    {
         $user = User::where('username',$username)->select()->first();
         $jumlahMemberTotal= Member::where('user_id',$user->id)->count();
         $query = DB::table('transaksis as t')
@@ -73,14 +79,7 @@ class PegawaiController extends Controller
         ->groupBy('year')
         ->get();
         return view('master.profile-pegawai',compact('user','jumlahMemberTotal','jumlahTransaksiTotal','tahunTransaksi','tahunMember'));
-    }
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-     
+
     }
 
     /**
@@ -105,5 +104,22 @@ class PegawaiController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+    public function resetPassword($id) 
+    {
+        $user = User::find($id)->update(['password'=>bcrypt('12345678')]);
+        return back()->with('success','Password berhasil direset.');
+    }
+    public function updatePassword(Request $request) 
+    {
+        $validatedData = $request->validate([
+            'password' => 'required|confirmed',
+        ]);
+        if ($validatedData['password']=='12345678') {
+            # code...
+            return back()->with('error','Gunakan password yang lebih aman.');
+        }
+        $user = User::find(Auth::user()->id)->update(['password'=>bcrypt($validatedData['password'])]);
+        return redirect()->route('dashboard.pegawai')->with('success','Password berhasil diubah.');
     }
 }
