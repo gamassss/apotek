@@ -81,6 +81,7 @@
                             },
                             success: function (response) {
                                 // console.log("res:" + response)
+                                console.log(response)
                                 $('#list-kontak-member').html(response);
                             }
                         });
