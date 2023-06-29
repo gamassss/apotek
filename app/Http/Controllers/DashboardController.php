@@ -188,4 +188,8 @@ class DashboardController extends Controller
         $dataBulanan = $monthlyData->pluck('count')->toArray();
         return response()->json(['month'=>$bulan,'dataBulanan'=>$dataBulanan]);
       }
+      public function resetPassword() 
+      {
+        return view('reset-password-pegawai');
+      }
 }

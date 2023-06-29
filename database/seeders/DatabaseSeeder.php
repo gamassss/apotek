@@ -58,6 +58,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ObatSeeder::class);
         $this->call(TemplateChatSeeder::class);
         // $this->call(MemberSeeder::class);
-        $this->call(TransaksiSeeder::class);
+        // $this->call(TransaksiSeeder::class);
+
     }
 }
