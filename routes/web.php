@@ -77,3 +77,4 @@ Route::get('/webhook', [FonnteWebhookController::class, 'getReplyMessage'])->nam
 Route::post('/webhook', [FonnteWebhookController::class, 'postReplyMessage'])->name('webhook.post_reply');
 Route::get('/tes_response_time', [ChatController::class, 'getResponseTime'])->name('response_time.get');
 Route::get('/search-chat', [ChatController::class, 'searchChat'])->name('chat.search');
+Route::get('/update-chat-list', [ChatController::class, 'updateChatList'])->name('list_chat.update');

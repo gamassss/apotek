@@ -63,6 +63,21 @@
     <script>
         $(document).ready(function() {
 
+            setInterval(() => {
+                $.ajax({
+                    type: "GET",
+                    url: '{{ route('list_chat.update') }}',
+                    data: "",
+                    success: function (res) {
+                        // console.log(res)
+                        $('#list-kontak-member').html(res);
+                    },
+                    error: (err) => {
+                        console.log(err)
+                    }
+                });
+            }, 5000);
+
             var previousValue = $('#search-field').val();
             var delayTimer;
             $('#search-field').on('input', function() {
@@ -139,5 +154,7 @@
                 console.log('in')
             });
         });
+
+
     </script>
 @endsection

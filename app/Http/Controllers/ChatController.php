@@ -32,17 +32,26 @@ class ChatController extends Controller
         return view('chat', compact('members_pegawai', 'chats'));
     }
 
+    public function updateChatList()
+    {
+        $members_pegawai = Member::where('user_id', Auth::user()->id)->get();
+
+        foreach ($members_pegawai as $member) {
+            $latest_chat = DB::select('select * from chats
+            where pengirim = ' . $member->no_telpon . '
+            order by created_at desc limit 1');
+            $member['latest_chat'] = $latest_chat;
+        }
+
+        $chats = [];
+
+        return view('list_chat', compact('members_pegawai', 'chats'))->render();
+    }
+
     public function searchChat(Request $request)
     {
         $passed_data = $request->input('value');
 
-        // search by nama and chats
-        // $members_pegawai = Member::where('user_id', Auth::user()->id)
-        //                     ->where('nama_member', $passed_data)
-        //                     ->orWhereHas('chats', function ($query) use ($passed_data) {
-        //                         $query->where('text', 'LIKE', '%'.$passed_data.'%');
-        //                     })
-        //                     ->get();
         $members_pegawai = Member::where('user_id', Auth::user()->id)
             ->where(function ($query) use ($passed_data) {
                 $query->where('nama_member', 'LIKE', '%' . $passed_data . '%')
@@ -51,23 +60,22 @@ class ChatController extends Controller
                     });
             })
             ->get();
-        // showed chats
-        // foreach ($members_pegawai as $member) {
-        //     $showed_chat = DB::select('SELECT * FROM chats WHERE');
-        // }
+
         foreach ($members_pegawai as $member) {
             $searched_chat = DB::select('select * from chats
             where pengirim = ' . $member->no_telpon . '
             and text LIKE "%' . $passed_data . '%"
             order by created_at desc limit 1');
+
             $member['searched_chat'] = $searched_chat;
 
             $latest_chat = DB::select('select * from chats
             where pengirim = ' . $member->no_telpon . '
             order by created_at desc limit 1');
+
             $member['latest_chat'] = $latest_chat;
         }
-        // dd($members_pegawai);
+        
         $chats = [];
 
         return view('list_chat', compact('members_pegawai', 'chats'));
@@ -94,9 +102,9 @@ class ChatController extends Controller
         $message = $request->input('message');
         $no_telpon = $request->input('no_telpon');
         $fonnte = new FonnteService();
-        // dd($message, $no_telpon);
+        
         $response = $fonnte->send_fonnte($message, $no_telpon);
-        // dd($response);
+        
         DB::table('chats')->insert([
             'text' => $message,
             'pengirim' => $fonnte::device,
