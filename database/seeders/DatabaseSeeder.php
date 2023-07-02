@@ -3,13 +3,11 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\User;
 use App\Models\Member;
-use Illuminate\Database\Seeder;
+use App\Models\User;
 use Database\Seeders\ObatSeeder;
-use Database\Seeders\MemberSeeder;
-use Database\Seeders\TransaksiSeeder;
 use Database\Seeders\TemplateChatSeeder;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,23 +23,29 @@ class DatabaseSeeder extends Seeder
             'username' => 'pegawai1',
             'password' => bcrypt('123'),
             'jabatan' => 'pegawai',
-            'no_telpon'=>'08123456'
+            'no_telpon' => '08123456',
         ]);
-       User::create([
+        User::create([
             'name' => 'Yuda',
             'username' => 'pegawai2',
             'password' => bcrypt('123'),
             'jabatan' => 'pegawai',
-            'no_telpon'=>'08123456'
-
+            'no_telpon' => '08123456',
         ]);
-    
+        User::create([
+            'name' => 'CS',
+            'username' => 'staff',
+            'password' => bcrypt('123'),
+            'jabatan' => 'pegawai',
+            'no_telpon' => '087654321',
+        ]);
+
         User::create([
             'name' => 'Budi',
             'username' => 'Manajemen',
             'password' => bcrypt('123'),
             'jabatan' => 'manajemen',
-            
+
         ]);
         Member::create([
             'user_id' => 1,

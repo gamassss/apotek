@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticationController extends Controller
@@ -23,10 +23,12 @@ class AuthenticationController extends Controller
         if (Auth::attempt($credentials)) {
             $req->session()->regenerate();
 
-           return  Auth::user()->jabatan=='pegawai'?
-             redirect()->route('dashboard.pegawai')
-            :
-             redirect()->route('dashboard.manajemen');
+            switch (Auth::user()->jabatan) {
+                case 'pegawai':
+                    return redirect()->route('dashboard.pegawai');
+                default:
+                    return redirect()->route('dashboard.manajemen');
+            }
         }
 
         return back()->withErrors([

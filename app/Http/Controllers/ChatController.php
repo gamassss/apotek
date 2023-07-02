@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Chat;
 use App\Models\Member;
 use App\Services\FonnteService;
+use App\Services\MemberService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,34 @@ class ChatController extends Controller
     // function untuk test data
     public function index(Request $request)
     {
+        if (Auth::user()->username == 'staff') {
+            $member_service = new MemberService();
+            $exist_phone_number = $member_service->get_members_phone_number();
+
+            $showed_chats = Chat::whereIn('id', function ($query) use ($exist_phone_number) {
+                $query->selectRaw('MAX(id)')
+                    ->from('chats')
+                    ->whereNotIn('pengirim', $exist_phone_number)
+                    ->groupBy('pengirim');
+            })
+                ->get();
+            // dd($showed_chats[0]->text);
+            foreach ($showed_chats as $chat) {
+                // $latest_chat = DB::select('select * from chats
+                //     order by created_at desc limit 1');
+                $chat['latest_chat'] = $chat->text;
+                // dd($chat->latest_chat);
+                // dd($latest_chat);
+            }
+            // dd($showed_chats);
+
+            $chats = [];
+            return view('chat', [
+                'members_pegawai' => $showed_chats,
+                'chats' => $chats,
+            ]);
+        }
+
         $members_pegawai = Member::where('user_id', Auth::user()->id)->get();
 
         foreach ($members_pegawai as $member) {
@@ -23,7 +52,7 @@ class ChatController extends Controller
             order by created_at desc limit 1');
             $member['latest_chat'] = $latest_chat;
         }
-
+        // dd($members_pegawai);
         if ($request->ajax()) {
             return view('list_member', compact('members_pegawai'))->render();
         }
@@ -75,7 +104,7 @@ class ChatController extends Controller
 
             $member['latest_chat'] = $latest_chat;
         }
-        
+
         $chats = [];
 
         return view('list_chat', compact('members_pegawai', 'chats'));
@@ -89,12 +118,37 @@ class ChatController extends Controller
 
     public function getChatByPhoneNumber(Request $request)
     {
-        $member = Member::where('no_telpon', $request->input('no_telpon'))->first();
-        $chats = Chat::where('pengirim', $member->no_telpon)->orWhere('penerima', $member->no_telpon)->select('text', 'pengirim', 'created_at')->get();
-        $member_name = $member->nama_member;
-        $member_no_telpon = $member->no_telpon;
+        if (Auth::user()->username != 'staff') {
+            $member = Member::where('no_telpon', $request->input('no_telpon'))->first();
+            $chats = Chat::where('pengirim', $member->no_telpon)->orWhere('penerima', $member->no_telpon)->select('text', 'pengirim', 'created_at')->get();
+            $member_name = $member->nama_member;
+            $member_no_telpon = $member->no_telpon;
+            return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
+        } else {
+            // dd($request->input('no_telpon'));
+            $member_service = new MemberService();
+            $exist_phone_number = $member_service->get_members_phone_number();
 
-        return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
+            $chats = Chat::whereIn('id', function ($query) use ($request, $exist_phone_number) {
+                $query->selectRaw('id')
+                    ->from('chats')
+                    ->groupBy('pengirim');
+            })
+                ->where('pengirim', $request->input('no_telpon'))
+                ->whereNotIn('pengirim', $exist_phone_number)
+                ->orWhere(function ($query) use ($request, $exist_phone_number) {
+                    $query->where('penerima', $request->input('no_telpon'))
+                        ->whereNotIn('penerima', $exist_phone_number);
+                })
+                ->select('text', 'pengirim', 'created_at')
+                ->get();
+            // dd(count($chats));
+            $member_name = '';
+            $member_no_telpon = $request->input('no_telpon');
+            // dd($chats->pengirim);
+            return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
+        }
+
     }
 
     public function sendMessage(Request $request)
@@ -102,9 +156,9 @@ class ChatController extends Controller
         $message = $request->input('message');
         $no_telpon = $request->input('no_telpon');
         $fonnte = new FonnteService();
-        
+
         $response = $fonnte->send_fonnte($message, $no_telpon);
-        
+
         DB::table('chats')->insert([
             'text' => $message,
             'pengirim' => $fonnte::device,

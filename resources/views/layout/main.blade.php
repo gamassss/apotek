@@ -183,15 +183,18 @@
 
                 <ul class="menu-inner py-1">
                     <li class="menu-item {{ Request::is('admin/dashboard/*') ? 'active' : '' }}">
-                        <a href="{{ Auth::user()->jabatan=='manajemen'? route('dashboard.manajemen'):route('dashboard.pegawai') }}" class="menu-link">
+                        <a href="{{ Auth::user()->jabatan == 'manajemen' ? route('dashboard.manajemen') : route('dashboard.pegawai') }}"
+                            class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
                             <div data-i18n="Analytics">Dashboard</div>
                         </a>
                     </li>
 
                     <!-- Dashboard -->
-                    <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span>
-                    </li>
+                    @if (Auth::user()->username != 'staff')
+                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span>
+                        </li>
+                    @endif
                     @if (Auth::user()->jabatan == 'manajemen')
                         <!-- Forms -->
                         <!-- Tables -->
@@ -224,7 +227,7 @@
                             </ul>
                         </li>
                     @endif
-                    @if (Auth::user()->jabatan == 'pegawai')
+                    @if (Auth::user()->jabatan == 'pegawai' && Auth::user()->username != 'staff')
                         <!-- Forms -->
                         <!-- Tables -->
                         <li class="menu-item {{ Request::is('admin/data/*') ? 'active' : '' }}">
@@ -247,20 +250,31 @@
                             </ul>
                         </li>
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Chats</span>
-                            <li class="menu-item {{ Request::is('admin/chats') ? 'active' : '' }}">
-                                <a href="{{ route('chat.index') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons bx bx-chat"></i>
-                                    <div data-i18n="Analytics">Chats</div>
-                                </a>
-                            </li>
-                        @endif
-                    <li class="menu-header small text-uppercase"><span class="menu-header-text">Transaksi</span>
-                    <li class="menu-item {{ Request::is('admin/transaksi-obat') ? 'active' : '' }}">
-                        <a href="{{ route('transaksi-obat.index') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bxs-dollar-circle"></i>
-                            <div data-i18n="Analytics">Transaksi</div>
-                        </a>
-                    </li>
+                        <li class="menu-item {{ Request::is('admin/chats') ? 'active' : '' }}">
+                            <a href="{{ route('chat.index') }}" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-chat"></i>
+                                <div data-i18n="Analytics">Chats</div>
+                            </a>
+                        </li>
+                    @endif
+                    @if (Auth::user()->username == 'staff')
+                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Chats</span>
+                        <li class="menu-item {{ Request::is('admin/chats') ? 'active' : '' }}">
+                            <a href="{{ route('chat.index') }}" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-chat"></i>
+                                <div data-i18n="Analytics">Chats</div>
+                            </a>
+                        </li>
+                    @endif
+                    @if (Auth::user()->username != 'staff')
+                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Transaksi</span>
+                        <li class="menu-item {{ Request::is('admin/transaksi-obat') ? 'active' : '' }}">
+                            <a href="{{ route('transaksi-obat.index') }}" class="menu-link">
+                                <i class="menu-icon tf-icons bx bxs-dollar-circle"></i>
+                                <div data-i18n="Analytics">Transaksi</div>
+                            </a>
+                        </li>
+                    @endif
 
                 </ul>
 

@@ -2,7 +2,7 @@
         style="position: relative; max-height: calc(100vh - 16px);">
         <div
             style="max-height: 46px; max-width: 100%; background-color: #fff; display: fixed; position: sticky; top: 0; padding-top: 12px; padding-bottom: 8px; border-bottom: 1px solid #ccc">
-            <p style="line-height: 26px;" id="nama_member">{{ $member_name }}</p>
+            <p style="line-height: 26px;" id="nama_member">{{ $member_name ?? $member_no_telpon }}</p>
         </div>
         {{-- @include('layout.room_chat') --}}
         @foreach ($chats as $chat)
