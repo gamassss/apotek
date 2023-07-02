@@ -68,8 +68,8 @@
                     type: "GET",
                     url: '{{ route('list_chat.update') }}',
                     data: "",
-                    success: function (res) {
-                        // console.log(res)
+                    success: function(res) {
+                        console.log(res)
                         $('#list-kontak-member').html(res);
                     },
                     error: (err) => {
@@ -84,7 +84,7 @@
                 clearTimeout(delayTimer); // Menghapus timeout sebelumnya
                 var currentValue = $(this).val();
                 if (currentValue !== previousValue) {
-                    
+
                     delayTimer = setTimeout(function() {
                         console.log('call ajax')
 
@@ -94,7 +94,7 @@
                             data: {
                                 value: currentValue
                             },
-                            success: function (response) {
+                            success: function(response) {
                                 // console.log("res:" + response)
                                 console.log(response)
                                 $('#list-kontak-member').html(response);
@@ -111,7 +111,7 @@
                 console.log('submitted')
             }
 
-            $('.list-chat-member').one('click', function() {
+            $(document).one('click', '.list-chat-member', function() {
                 $('#chat-box').removeClass('d-none');
                 $('#chat-footer').removeClass('d-none');
                 $('#chat-first-notif').addClass('d-none');
@@ -127,8 +127,7 @@
                 });
             });
 
-            //get chat data onclick
-            $('a.list-chat-member').on('click', function() {
+            $(document).on('click', 'a.list-chat-member', function() {
                 let member_no_telpon = $(this).attr('value');
 
                 $.ajax({
@@ -154,7 +153,5 @@
                 console.log('in')
             });
         });
-
-
     </script>
 @endsection
