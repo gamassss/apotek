@@ -40,12 +40,11 @@ class FonnteWebhookController extends Controller
         
         $fonnte = new FonnteService();
         
-        $response = $fonnte->send_fonnte($reply_message, $sender);
+        // $response = $fonnte->send_fonnte($reply_message, $sender);
         DB::table('chats')->insert([
             'text' => $message,
             'pengirim' => $sender,
             'penerima' => $device,
-            'res_detail' => $response,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

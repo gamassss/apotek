@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('text');
             $table->string('pengirim');
             $table->string('penerima');
-            $table->string('res_detail');
+            $table->string('res_detail')->nullable();
             $table->timestamps();
         });
     }
