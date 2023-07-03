@@ -201,9 +201,9 @@
                   <p class="mb-0">Once you reset passoword of this  account, the password will be back to default settings.</p>
                 </div>
               </div>
-              <form method="POST" action="{{ route('pegawai.reset-password',['pegawai'=>$user->id]) }}" onsubmit="return confirm('apakah anda yakin?')">
+              <form method="POST" id="resetpassword" action="{{ route('pegawai.reset-password',['pegawai'=>$user->id]) }}">
                 @csrf
-                <button type="submit" class="btn btn-danger deactivate-account">Reset Password</button>
+                <button type="button" onclick="return confirm('resetpassword')" class="btn btn-danger deactivate-account">Reset Password</button>
               </form>
             </div>
           </div>

@@ -31,6 +31,9 @@
     <link rel="stylesheet" href="{{ asset('css/demo.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/select2-bs5.css') }}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css"
+        integrity="sha256-7jUS+MWeqkFdmW9ozkZ7mPagz+QmMbsBlt+Q3MsE+FU=" crossorigin="anonymous">
+
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
@@ -364,6 +367,29 @@
                 }
             });
         </script>
+        @if (session('success'))
+            @push('script')
+                <script>
+                    Swal.fire(
+                        'Success',
+                        '{{ session('success') }}',
+                        'success'
+                    )
+                </script>
+            @endpush
+        @endif
+
+        @if (session('error'))
+            @push('script')
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: '{{ session('error') }}',
+                    })
+                </script>
+            @endpush
+        @endif
 
         <!-- Core JS -->
         <!-- build:js assets/vendor/js/core.js -->
@@ -387,6 +413,22 @@
         <script src="{{ asset('js/dashboards-analytics.js') }}"></script>
         <script src="{{ asset('js/dtables.js') }}"></script>
         <!-- datepicker -->
+        <script>
+            function confirm(id) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $(`#${id}`).submit();
+                    }
+                })
+            }
+        </script>
         {{-- <script src="{{ asset('js/air-datepicker.js') }}"></script>
         <script src="{{ asset('js/datepicker-pemesanan.js') }}"></script> --}}
         @stack('script')

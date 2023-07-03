@@ -127,8 +127,8 @@
                                 <div class="col-5">
                                     <select class="form-select" name="year" id="year-transaksi">
                                         @foreach ($tahunTransaksi as $item)
-                                            <option {{ date('Y') == $item ? 'selected' : '' }}
-                                                value="{{ $item }}">{{ $item }}</option>
+                                            <option {{ date('Y') == $item ? 'selected' : '' }} value="{{ $item }}">
+                                                {{ $item }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -156,6 +156,7 @@
             </div>
         </div>
     </div>
+ 
     @push('script')
         <script>
             $(document).ready(function() {
@@ -173,7 +174,10 @@
                     $('#chart-transaksi-monthly').html('');
                     loadTransaksiStatMonthly(year);
                 });
+
+
             });
+
             function loadMemberStatMonthly(years) {
                 $.ajax({
                     type: "get",
@@ -213,6 +217,7 @@
                     }
                 });
             }
+
             function loadMemberStatYearly() {
                 $.ajax({
                     type: "get",
@@ -249,6 +254,7 @@
                     }
                 });
             }
+
             function loadTransaksiStatYearly() {
                 $.ajax({
                     type: "get",
@@ -285,6 +291,7 @@
                     }
                 });
             }
+
             function loadTransaksiStatMonthly(years) {
                 $.ajax({
                     type: "get",
@@ -324,7 +331,6 @@
                     }
                 });
             }
-
         </script>
     @endpush
 @endsection
