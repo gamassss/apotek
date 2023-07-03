@@ -40,7 +40,7 @@
                 <form action="" method="POST">
                     @csrf
                     <div class="modal-body">
-                        @if (Auth::user()->jabatan=="Manajemen")
+                        @if (Auth::user()->jabatan=="manajemen")
                         <div class="row">
                             <div class="col mb-3">
                                 <label for="nama_pegawai" class="form-label">Nama Pegawai</label>
