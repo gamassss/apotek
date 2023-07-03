@@ -84,6 +84,7 @@
 
             var previousValue = $('#search-field').val();
             var delayTimer;
+
             $('#search-field').on('input', function() {
                 clearTimeout(delayTimer); // Menghapus timeout sebelumnya
                 var currentValue = $(this).val();
@@ -92,18 +93,33 @@
                     delayTimer = setTimeout(function() {
                         console.log('call ajax')
 
-                        $.ajax({
-                            type: "GET",
-                            url: '{{ route('chat.search') }}',
-                            data: {
-                                value: currentValue
-                            },
-                            success: function(response) {
-                                // console.log("res:" + response)
-                                console.log(response)
-                                $('#list-kontak-member').html(response);
-                            }
-                        });
+                        if ("{{ Auth::user()->username }}" === 'staff') {
+                            $.ajax({
+                                type: "GET",
+                                url: '{{ route('chat.search_nonmember') }}',
+                                data: {
+                                    value: currentValue
+                                },
+                                success: function(response) {
+                                    console.log("res:" + response)
+                                    // console.log(response)
+                                    $('#list-kontak-member').html(response);
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                type: "GET",
+                                url: '{{ route('chat.search') }}',
+                                data: {
+                                    value: currentValue
+                                },
+                                success: function(response) {
+                                    // console.log("res:" + response)
+                                    console.log(response)
+                                    $('#list-kontak-member').html(response);
+                                }
+                            });
+                        }
                     }, 500);
                 }
 

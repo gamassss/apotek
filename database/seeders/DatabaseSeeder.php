@@ -47,18 +47,18 @@ class DatabaseSeeder extends Seeder
             'jabatan' => 'manajemen',
 
         ]);
-        Member::create([
-            'user_id' => 1,
-            'nama_member' => 'gamas',
-            'alamat_member' => 'mulyorejo',
-            'no_telpon' => '6282232763556',
-        ]);
-        Member::create([
-            'user_id' => 1,
-            'nama_member' => 'yuuji',
-            'alamat_member' => 'jember',
-            'no_telpon' => '6287822771121',
-        ]);
+        // Member::create([
+        //     'user_id' => 1,
+        //     'nama_member' => 'gamas',
+        //     'alamat_member' => 'mulyorejo',
+        //     'no_telpon' => '6282232763556',
+        // ]);
+        // Member::create([
+        //     'user_id' => 1,
+        //     'nama_member' => 'yuuji',
+        //     'alamat_member' => 'jember',
+        //     'no_telpon' => '6287822771121',
+        // ]);
         $this->call(ObatSeeder::class);
         $this->call(TemplateChatSeeder::class);
         // $this->call(MemberSeeder::class);

@@ -27,15 +27,10 @@ class ChatController extends Controller
                     ->groupBy('pengirim');
             })
                 ->get();
-            // dd($showed_chats[0]->text);
+
             foreach ($showed_chats as $chat) {
-                // $latest_chat = DB::select('select * from chats
-                //     order by created_at desc limit 1');
                 $chat['latest_chat'] = $chat->text;
-                // dd($chat->latest_chat);
-                // dd($latest_chat);
             }
-            // dd($showed_chats);
 
             $chats = [];
             return view('chat', [
@@ -52,7 +47,7 @@ class ChatController extends Controller
             order by created_at desc limit 1');
             $member['latest_chat'] = $latest_chat;
         }
-        // dd($members_pegawai);
+
         if ($request->ajax()) {
             return view('list_member', compact('members_pegawai'))->render();
         }
@@ -89,7 +84,7 @@ class ChatController extends Controller
                     });
             })
             ->get();
-
+        
         foreach ($members_pegawai as $member) {
             $searched_chat = DB::select('select * from chats
             where pengirim = ' . $member->no_telpon . '
@@ -108,6 +103,27 @@ class ChatController extends Controller
         $chats = [];
 
         return view('list_chat', compact('members_pegawai', 'chats'));
+    }
+
+    public function searchChatNonMember(Request $request)
+    {
+        $passed_data = $request->input('value');
+        $member_service = new MemberService();
+        $exist_phone_number = $member_service->get_members_phone_number();
+
+        $members_pegawai = Chat::whereIn('id', function ($query) use ($passed_data) {
+            $query->selectRaw('MAX(id)')
+                ->from('chats')
+                ->where('pengirim', 'like', '%' . $passed_data . '%')
+                ->orWhere('text', 'like', '%' . $passed_data . '%')
+                ->groupBy('pengirim');
+        })
+        ->get();
+        
+        $chats = [];
+
+        return view('list_chat_non_member', compact('members_pegawai', 'chats'));
+
     }
 
     public function getNameByPhoneNumber(Request $request)
@@ -142,10 +158,10 @@ class ChatController extends Controller
                 })
                 ->select('text', 'pengirim', 'created_at')
                 ->get();
-            // dd(count($chats));
+            
             $member_name = '';
             $member_no_telpon = $request->input('no_telpon');
-            // dd($chats->pengirim);
+            
             return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
         }
 
