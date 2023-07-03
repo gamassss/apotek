@@ -26,6 +26,7 @@ class ChatController extends Controller
                     ->whereNotIn('pengirim', $exist_phone_number)
                     ->groupBy('pengirim');
             })
+            ->orderBy('created_at', 'DESC')
                 ->get();
 
             foreach ($showed_chats as $chat) {
@@ -72,6 +73,32 @@ class ChatController extends Controller
         return view('list_chat', compact('members_pegawai', 'chats'))->render();
     }
 
+    public function updateChatListNonMember()
+    {
+        $member_service = new MemberService();
+        $exist_phone_number = $member_service->get_members_phone_number();
+
+        $showed_chats = Chat::whereIn('id', function ($query) use ($exist_phone_number) {
+            $query->selectRaw('MAX(id)')
+                ->from('chats')
+                ->whereNotIn('pengirim', $exist_phone_number)
+                ->groupBy('pengirim');
+        })
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        foreach ($showed_chats as $chat) {
+            $chat['latest_chat'] = $chat->text;
+        }
+
+        $chats = [];
+
+        return view('list_chat_non_member', [
+            'members_pegawai' => $showed_chats,
+            'chats' => $chats,
+        ])->render();
+    }
+
     public function searchChat(Request $request)
     {
         $passed_data = $request->input('value');
@@ -84,7 +111,7 @@ class ChatController extends Controller
                     });
             })
             ->get();
-        
+
         foreach ($members_pegawai as $member) {
             $searched_chat = DB::select('select * from chats
             where pengirim = ' . $member->no_telpon . '
@@ -118,8 +145,8 @@ class ChatController extends Controller
                 ->orWhere('text', 'like', '%' . $passed_data . '%')
                 ->groupBy('pengirim');
         })
-        ->get();
-        
+            ->get();
+
         $chats = [];
 
         return view('list_chat_non_member', compact('members_pegawai', 'chats'));
@@ -158,10 +185,10 @@ class ChatController extends Controller
                 })
                 ->select('text', 'pengirim', 'created_at')
                 ->get();
-            
+
             $member_name = '';
             $member_no_telpon = $request->input('no_telpon');
-            
+
             return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
         }
 

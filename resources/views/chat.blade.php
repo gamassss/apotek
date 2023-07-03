@@ -67,20 +67,36 @@
     <script>
         $(document).ready(function() {
 
-            // setInterval(() => {
-            //     $.ajax({
-            //         type: "GET",
-            //         url: '{{ route('list_chat.update') }}',
-            //         data: "",
-            //         success: function(res) {
-            //             console.log(res)
-            //             $('#list-kontak-member').html(res);
-            //         },
-            //         error: (err) => {
-            //             console.log(err)
-            //         }
-            //     });
-            // }, 5000);
+            setInterval(() => {
+                if ("{{ Auth::user()->username }}" === 'staff') {
+                    $.ajax({
+                        type: "GET",
+                        url: '{{ route('list_chat_nonmember.update') }}',
+                        data: "",
+                        success: function(res) {
+                            console.log(res)
+                            $('#list-kontak-member').html(res);
+                        },
+                        error: (err) => {
+                            console.log(err)
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "GET",
+                        url: '{{ route('list_chat.update') }}',
+                        data: "",
+                        success: function(res) {
+                            console.log(res)
+                            $('#list-kontak-member').html(res);
+                        },
+                        error: (err) => {
+                            console.log(err)
+                        }
+                    });
+                }
+
+            }, 5000);
 
             var previousValue = $('#search-field').val();
             var delayTimer;
@@ -101,7 +117,7 @@
                                     value: currentValue
                                 },
                                 success: function(response) {
-                                    console.log("res:" + response)
+                                    // console.log("res:" + response)
                                     // console.log(response)
                                     $('#list-kontak-member').html(response);
                                 }
