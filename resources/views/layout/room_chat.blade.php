@@ -7,7 +7,7 @@
         {{-- @include('layout.room_chat') --}}
         @foreach ($chats as $chat)
             @if ($loop->first)
-                @if (true)
+                @if ($chat->pengirim == $member_no_telpon)
                     <!-- Untuk Member -->
                     <div class="d-flex flex-row justify-content-start mt-2">
                         <div>
@@ -21,13 +21,10 @@
                     <!-- Untuk Pegawai -->
                     <div class="d-flex flex-row justify-content-end mb-4 mt-2">
                         <div>
-                            <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">That's awesome!</p>
-                            <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">I will meet you
-                                Sandon Square
-                                sharp at
-                                10 AM</p>
-                            <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Is that okay?</p>
-                            <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">00:09</p>
+                            <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">
+                                {{ $chat->text }}
+                            </p>
+                            <p class="small ms-3 mb-3 rounded-3 text-muted">{{ $chat->created_at->format('H:i') }}</p>
                         </div>
                     </div>
                 @endif

@@ -13,6 +13,7 @@ class MemberService
     {
         $this->members_phone_number = [];
         $this->members_phone_number = Member::all()->pluck('no_telpon');
+        $this->members_phone_number[] = '088806388436';
     }
 
     public function is_no_telpon_exist($no_telpon)
