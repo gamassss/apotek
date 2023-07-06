@@ -181,6 +181,26 @@
                         $('#chat-first-notif').addClass('d-none');
                     }
                 });
+
+                function rerender_room_chat(phone_number) {
+                    $.ajax({
+                        type: "GET",
+                        url: '{{ route('get_chat_by_phone_number') }}',
+                        data: {
+                            'no_telpon': phone_number
+                        },
+                        success: function(response) {
+                            $('#chat2').html(response);
+                            var chatBox = $('#chat-box');
+                            chatBox.scrollTop(chatBox.prop('scrollHeight'));
+                            $('#chat-first-notif').addClass('d-none');
+                        }
+                    });
+                }
+
+                setInterval(() => {
+                    rerender_room_chat(member_no_telpon)
+                }, 5000);
             });
         });
 
@@ -188,6 +208,28 @@
             $('#send-btn').on('click', function() {
                 console.log('in')
             });
+        });
+
+        $(document).ready(function() {
+            // function rerender_room_chat(phone_number) {
+            //     $.ajax({
+            //         type: "GET",
+            //         url: '{{ route('get_chat_by_phone_number') }}',
+            //         data: {
+            //             'no_telpon': phone_number
+            //         },
+            //         success: function(response) {
+            //             $('#chat2').html(response);
+            //             var chatBox = $('#chat-box');
+            //             chatBox.scrollTop(chatBox.prop('scrollHeight'));
+            //             $('#chat-first-notif').addClass('d-none');
+            //         }
+            //     });
+            // }
+
+            // setInterval(() => {
+            //     rerender_room_chat('6282232763556')
+            // }, 5000);
         });
     </script>
 @endsection

@@ -65,7 +65,25 @@ class ChatController extends Controller
             $latest_chat = DB::select('select * from chats
             where pengirim = ' . $member->no_telpon . '
             order by created_at desc limit 1');
+
+            // $latest_chat = $latest_chat[0];
             $member['latest_chat'] = $latest_chat;
+            // dd($member['latest_chat']);
+
+            if(is_array($latest_chat) && empty($latest_chat)) {
+
+                $latest_pegawai_chat = DB::select('SELECT * FROM chats
+                WHERE penerima = ' . $member->no_telpon . '
+                ORDER BY id DESC
+                LIMIT 1');
+    
+                $member['latest_chat'] = $latest_pegawai_chat;
+            }
+            // if (!empty($latest_pegawai_chat)) {
+            //     $latest_pegawai_chat = $latest_pegawai_chat[0];
+            //     if ($latest_pegawai_chat->id > $latest_chat->id) {
+            //     }
+            // }
         }
 
         $chats = [];
@@ -166,6 +184,9 @@ class ChatController extends Controller
             $chats = Chat::where('pengirim', $member->no_telpon)->orWhere('penerima', $member->no_telpon)->select('text', 'pengirim', 'created_at')->get();
             $member_name = $member->nama_member;
             $member_no_telpon = $member->no_telpon;
+
+            // dd($member_no_telpon);
+
             return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
         } else {
             // dd($request->input('no_telpon'));

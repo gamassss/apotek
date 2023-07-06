@@ -21,7 +21,7 @@
                     <!-- Untuk Pegawai -->
                     <div class="d-flex flex-row justify-content-end mb-4 mt-2">
                         <div>
-                            <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">
+                            <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
                                 {{ $chat->text }}
                             </p>
                             <p class="small ms-3 mb-3 rounded-3 text-muted">{{ $chat->created_at->format('H:i') }}</p>
@@ -88,7 +88,7 @@
             style="width: 40px; height: 100%;">
         @csrf
         <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
-            placeholder="Type message" name="message">
+            placeholder="Type message" name="message" autocomplete="off">
         <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
         <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
         <a class="ms-3" href="#" id="send-btn"><i class="fas fa-paper-plane"></i></a>
