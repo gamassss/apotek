@@ -1,11 +1,10 @@
 @if (isset($members_pegawai))
     @foreach ($members_pegawai as $member)
         @php
-            // $latest_chat_time = !isset($member->latest_chat[0]->created_at) ? $member->latest_chat[0]->created_at : Carbon\Carbon::now()->timestamp;
-            // $latest_chat_text = isset($member->latest_chat[0]->text) ? $member->latest_chat[0]->text : Carbon\Carbon::now()->timestamp;
+            
             $latest_chat_text = isset($member->latest_chat[0]->text) ? $member->latest_chat[0]->text : 'Mulai percakapan dengan member anda.';
             $searched_chat = isset($member->searched_chat[0]->text) ? $member->searched_chat[0]->text : $latest_chat_text;
-            // dd($searched_chat);
+            
             $latest_chat_time = isset($member->latest_chat[0]->created_at) ? $member->latest_chat[0]->created_at : Carbon\Carbon::now();
             $searched_chat_time = isset($member->searched_chat[0]->created_at) ? $member->searched_chat[0]->created_at : '';
             $date_latest = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $latest_chat_time, 'Asia/Jakarta');
@@ -25,7 +24,11 @@
                 @if ($searched_chat_time)
                     <small class="text-muted">{{ $date_searched->diffForHumans() }}</small>
                 @else
-                    <small class="text-muted">{{ $date_latest->diffForHumans() }}</small>
+                    @if ($member->latest_chat)
+                        <small class="text-muted">{{ $date_latest->diffForHumans() }}</small>
+                    @else
+                        <small class="text-muted">{{ '~' }}</small>
+                    @endif
                 @endif
             </div>
             <p class="mb-1 text-muted">

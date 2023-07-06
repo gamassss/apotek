@@ -46,12 +46,19 @@ class ChatController extends Controller
             $latest_chat = DB::select('select * from chats
             where pengirim = ' . $member->no_telpon . '
             order by created_at desc limit 1');
-            $member['latest_chat'] = $latest_chat;
+            if (is_array($latest_chat) && empty($latest_chat)) {
+                $member['latest_chat'] = null;
+            } else {
+                $member['latest_chat'] = $latest_chat;
+            }
         }
 
         if ($request->ajax()) {
             return view('list_member', compact('members_pegawai'))->render();
         }
+
+        // dd($members_pegawai);
+        // dd(isset($members_pegawai[1]->latest_chat));
 
         $chats = [];
         return view('chat', compact('members_pegawai', 'chats'));

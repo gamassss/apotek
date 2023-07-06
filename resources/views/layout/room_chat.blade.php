@@ -33,29 +33,25 @@
                     <!-- Untuk Member -->
                     <div class="d-flex flex-row justify-content-start">
                         <div>
-                            <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">
-                                {{ $chat->text }}
-                            </p>
-                            {{-- <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">How are
-                        you ...???
-                    </p>
-                    <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">What are
-                        you doing
-                        tomorrow? Can we come up a bar?</p> --}}
-                            <p class="small ms-3 mb-3 rounded-3 text-muted">{{ $chat->created_at->format('H:i') }}</p>
+                            <div class="small p-2 ms-3 mb-1 rounded-3 d-flex gap-3 align-items-end" style="background-color: #f5f6f7;">
+                                <p style="margin-bottom: 0px;">{{ $chat->text }}</p>
+                                <p class="small rounded-3 text-muted" style="margin-bottom: 0px; font-size: 10px;">{{ $chat->created_at->format('H:i') }}</p>
+                            </div>
                         </div>
                     </div>
                 @else
                     <!-- Untuk Pegawai -->
                     <div class="d-flex flex-row justify-content-end mb-4">
                         <div>
-                            <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">{{ $chat->text }}</p>
-                            {{-- <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">I will meet you
-                                Sandon Square
-                                sharp at
-                                10 AM</p>
-                            <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Is that okay?</p> --}}
-                            <p class="small ms-3 mb-3 rounded-3 text-muted">{{ $chat->created_at->format('H:i') }}</p>
+                            <div class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary d-flex align-items-end gap-3">
+                                <p style="margin-bottom: 0px;">{{ $chat->text }}</p>
+                                <div class="d-flex align-items-baseline gap-1">
+                                    <p class="small rounded-3 text-white" style="margin-bottom: 0px; font-size: 10px;">{{ $chat->created_at->format('H:i') }}</p>
+                                    {{-- <i class="fa-regular fa-clock fa-xs" style="color: #f0f0f0;"></i> --}}
+                                    {{-- <i class="fa-solid fa-check fa-xs" style="color: #f0f0f0;"></i> --}}
+                                    <i class="fa-solid fa-check-double fa-xs" style="color: #f0f0f0;"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @endif
