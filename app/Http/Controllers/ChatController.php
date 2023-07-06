@@ -73,9 +73,7 @@ class ChatController extends Controller
             where pengirim = ' . $member->no_telpon . '
             order by created_at desc limit 1');
 
-            // $latest_chat = $latest_chat[0];
             $member['latest_chat'] = $latest_chat;
-            // dd($member['latest_chat']);
 
             if(is_array($latest_chat) && empty($latest_chat)) {
 
@@ -86,11 +84,6 @@ class ChatController extends Controller
     
                 $member['latest_chat'] = $latest_pegawai_chat;
             }
-            // if (!empty($latest_pegawai_chat)) {
-            //     $latest_pegawai_chat = $latest_pegawai_chat[0];
-            //     if ($latest_pegawai_chat->id > $latest_chat->id) {
-            //     }
-            // }
         }
 
         $chats = [];
@@ -229,17 +222,20 @@ class ChatController extends Controller
         $fonnte = new FonnteService();
 
         $response = $fonnte->send_fonnte($message, $no_telpon);
-
+        // dd($response->body());
         DB::table('chats')->insert([
             'text' => $message,
             'pengirim' => $fonnte::device,
             'penerima' => $no_telpon,
-            'res_detail' => $response,
+            'res_detail' => $response->body(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        return response()->json(['response' => json_decode($response), 'message' => $message]);
+
+        return response()->json(['response' => json_decode($response->body()), 'message' => $message]);
     }
+
+    
 
     public function getResponseTime()
     {
