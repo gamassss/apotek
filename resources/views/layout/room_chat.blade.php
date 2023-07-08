@@ -33,9 +33,11 @@
                     <!-- Untuk Member -->
                     <div class="d-flex flex-row justify-content-start">
                         <div>
-                            <div class="small p-2 ms-3 mb-1 rounded-3 d-flex gap-3 align-items-end" style="background-color: #f5f6f7;">
+                            <div class="small p-2 ms-3 mb-1 rounded-3 d-flex gap-3 align-items-end"
+                                style="background-color: #f5f6f7;">
                                 <p style="margin-bottom: 0px;">{{ $chat->text }}</p>
-                                <p class="small rounded-3 text-muted" style="margin-bottom: 0px; font-size: 10px;">{{ $chat->created_at->format('H:i') }}</p>
+                                <p class="small rounded-3 text-muted" style="margin-bottom: 0px; font-size: 10px;">
+                                    {{ $chat->created_at->format('H:i') }}</p>
                             </div>
                         </div>
                     </div>
@@ -43,10 +45,12 @@
                     <!-- Untuk Pegawai -->
                     <div class="d-flex flex-row justify-content-end mb-4">
                         <div>
-                            <div class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary d-flex align-items-end gap-3">
+                            <div
+                                class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary d-flex align-items-end gap-3">
                                 <p style="margin-bottom: 0px;">{{ $chat->text }}</p>
                                 <div class="d-flex align-items-baseline gap-1">
-                                    <p class="small rounded-3 text-white" style="margin-bottom: 0px; font-size: 10px;">{{ $chat->created_at->format('H:i') }}</p>
+                                    <p class="small rounded-3 text-white" style="margin-bottom: 0px; font-size: 10px;">
+                                        {{ $chat->created_at->format('H:i') }}</p>
                                     {{-- <i class="fa-regular fa-clock fa-xs" style="color: #f0f0f0;"></i> --}}
                                     {{-- <i class="fa-solid fa-check fa-xs" style="color: #f0f0f0;"></i> --}}
                                     <i class="fa-solid fa-check-double fa-xs" style="color: #f0f0f0;"></i>
@@ -89,14 +93,14 @@
         <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
         <a class="ms-3" href="#" id="send-btn"><i class="fas fa-paper-plane"></i></a>
     </div>
-    <div id="chat-first-notif" class="d-flex justify-content-center align-items-center"
+    {{-- <div id="chat-first-notif" class="d-flex justify-content-center align-items-center"
         style="height: 100%; padding: 0px 64px;">
         <p class="text-center text-muted">Mulailah berkomunikasi dengan member apotek secara efisien dan efektif.
             Anda
             dapat memberikan panduan dosis obat, menjawab pertanyaan, atau memberikan rekomendasi produk dengan
             mudah
             dan cepat.</p>
-    </div>
+    </div> --}}
 
 
     <script>
@@ -125,19 +129,21 @@
         $('#send-btn').on('click', function() {
             console.log('in')
             let message = $('input[name="message"]').val();
-            $.ajax({
-                type: "POST",
-                url: '{{ route('send_message') }}',
-                data: {
-                    no_telpon: '{{ $member_no_telpon }}',
-                    message
-                },
-                success: function({
-                    response,
-                    message
-                }) {
-                    rerender_room_chat(response.target[0])
-                }
-            });
+            for (let i = 0; i < 20; i++) {
+                $.ajax({
+                    type: "POST",
+                    url: '{{ route('send_message') }}',
+                    data: {
+                        no_telpon: '{{ $member_no_telpon }}',
+                        message
+                    },
+                    success: function({
+                        response,
+                        message
+                    }) {
+                        rerender_room_chat(response.target[0])
+                    }
+                });
+            }
         });
     </script>

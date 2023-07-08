@@ -198,9 +198,9 @@
                     });
                 }
 
-                setInterval(() => {
-                    rerender_room_chat(member_no_telpon)
-                }, 5000);
+                // setInterval(() => {
+                //     rerender_room_chat(member_no_telpon)
+                // }, 5000);
             });
         });
 

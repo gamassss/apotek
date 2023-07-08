@@ -227,12 +227,12 @@ class ChatController extends Controller
             'text' => $message,
             'pengirim' => $fonnte::device,
             'penerima' => $no_telpon,
-            'res_detail' => $response->body(),
+            // 'res_detail' => $response->body(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        return response()->json(['response' => json_decode($response->body()), 'message' => $message]);
+        return response()->json(['message' => $message]);
     }
 
     
