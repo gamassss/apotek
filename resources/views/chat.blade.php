@@ -67,37 +67,6 @@
     <script>
         $(document).ready(function() {
 
-            setInterval(() => {
-                if ("{{ Auth::user()->username }}" === 'staff') {
-                    $.ajax({
-                        type: "GET",
-                        url: '{{ route('list_chat_nonmember.update') }}',
-                        data: "",
-                        success: function(res) {
-                            console.log(res)
-                            $('#list-kontak-member').html(res);
-                        },
-                        error: (err) => {
-                            console.log(err)
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "GET",
-                        url: '{{ route('list_chat.update') }}',
-                        data: "",
-                        success: function(res) {
-                            console.log(res)
-                            $('#list-kontak-member').html(res);
-                        },
-                        error: (err) => {
-                            console.log(err)
-                        }
-                    });
-                }
-
-            }, 5000);
-
             var previousValue = $('#search-field').val();
             var delayTimer;
 
@@ -231,5 +200,47 @@
             //     rerender_room_chat('6282232763556')
             // }, 5000);
         });
+    </script>
+@endsection
+
+@section('websocket_scripts')
+    <script>
+        $(document).ready(function() {
+            Echo.channel(`incoming-message`)
+                .listen('ChatEvent', (e) => {
+                    if ("{{ Auth::user()->username }}" === 'staff') {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('list_chat_nonmember.update') }}',
+                            data: "",
+                            success: function(res) {
+                                console.log(res)
+                                $('#list-kontak-member').html(res);
+                            },
+                            error: (err) => {
+                                console.log(err)
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('list_chat.update') }}',
+                            data: "",
+                            success: function(res) {
+                                console.log(res)
+                                $('#list-kontak-member').html(res);
+                            },
+                            error: (err) => {
+                                console.log(err)
+                            }
+                        });
+                    }   
+                });
+        });
+
+        // setInterval(() => {
+
+
+        //     }, 5000);
     </script>
 @endsection

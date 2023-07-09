@@ -86,6 +86,6 @@ Route::get('/update-chat-list', [ChatController::class, 'updateChatList'])->name
 Route::get('/update-chat-list-nonmember', [ChatController::class, 'updateChatListNonMember'])->name('list_chat_nonmember.update');
 
 // web socket
-Route::get('/send-event', function () {
-    broadcast(new ChatEvent);
-});
+// Route::get('/send-event', function () {
+//     broadcast(new ChatEvent);
+// });

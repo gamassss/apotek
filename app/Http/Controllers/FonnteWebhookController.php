@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Events\ChatEvent;
 use App\Services\FonnteService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -48,5 +49,7 @@ class FonnteWebhookController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        broadcast(new ChatEvent);
     }
 }
