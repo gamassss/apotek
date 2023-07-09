@@ -196,13 +196,13 @@
             $(document).on('click', 'a.list-chat-member', function() {
                 let member_no_telpon = $(this).attr('value');
 
-                console.log(member_no_telpon)
+                // console.log(member_no_telpon)
 
                 rerender_room_chat(member_no_telpon)
 
                 Echo.channel(`room-${member_no_telpon}`)
                     .listen('IncomingMessageEvent', (e) => {
-                        console.log(`ada pesan dari ${member_no_telpon}`)
+                        // console.log(`ada pesan dari ${member_no_telpon}`)
                         rerender_room_chat(member_no_telpon)
                     });
             });
