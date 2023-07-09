@@ -132,73 +132,13 @@
                 });
             });
 
-            $(document).on('click', 'a.list-chat-member', function() {
-                let member_no_telpon = $(this).attr('value');
 
-                $.ajax({
-                    type: "GET",
-                    url: '{{ route('get_chat_by_phone_number') }}',
-                    data: {
-                        'no_telpon': member_no_telpon
-                    },
-                    success: function(response) {
-                        $('#chat2').html(response);
-                        var chat_box = $('#chat-box');
-                        chat_box.animate({
-                            scrollTop: chat_box.prop('scrollHeight')
-                        }, 500);
-                        $('#chat-first-notif').addClass('d-none');
-                    }
-                });
-
-                function rerender_room_chat(phone_number) {
-                    $.ajax({
-                        type: "GET",
-                        url: '{{ route('get_chat_by_phone_number') }}',
-                        data: {
-                            'no_telpon': phone_number
-                        },
-                        success: function(response) {
-                            $('#chat2').html(response);
-                            var chatBox = $('#chat-box');
-                            chatBox.scrollTop(chatBox.prop('scrollHeight'));
-                            $('#chat-first-notif').addClass('d-none');
-                        }
-                    });
-                }
-
-                // setInterval(() => {
-                //     rerender_room_chat(member_no_telpon)
-                // }, 5000);
-            });
         });
 
         $('#send-btn').ready(function() {
             $('#send-btn').on('click', function() {
                 console.log('in')
             });
-        });
-
-        $(document).ready(function() {
-            // function rerender_room_chat(phone_number) {
-            //     $.ajax({
-            //         type: "GET",
-            //         url: '{{ route('get_chat_by_phone_number') }}',
-            //         data: {
-            //             'no_telpon': phone_number
-            //         },
-            //         success: function(response) {
-            //             $('#chat2').html(response);
-            //             var chatBox = $('#chat-box');
-            //             chatBox.scrollTop(chatBox.prop('scrollHeight'));
-            //             $('#chat-first-notif').addClass('d-none');
-            //         }
-            //     });
-            // }
-
-            // setInterval(() => {
-            //     rerender_room_chat('6282232763556')
-            // }, 5000);
         });
     </script>
 @endsection
@@ -207,14 +147,14 @@
     <script>
         $(document).ready(function() {
             Echo.channel(`incoming-message`)
-                .listen('ChatEvent', (e) => {
+                .listen('IncomingMessageEvent', (e) => {
                     if ("{{ Auth::user()->username }}" === 'staff') {
                         $.ajax({
                             type: "GET",
                             url: '{{ route('list_chat_nonmember.update') }}',
                             data: "",
                             success: function(res) {
-                                console.log(res)
+                                // console.log(res)
                                 $('#list-kontak-member').html(res);
                             },
                             error: (err) => {
@@ -227,20 +167,45 @@
                             url: '{{ route('list_chat.update') }}',
                             data: "",
                             success: function(res) {
-                                console.log(res)
+                                // console.log(res)
                                 $('#list-kontak-member').html(res);
                             },
                             error: (err) => {
                                 console.log(err)
                             }
                         });
-                    }   
+                    }
                 });
+
+            function rerender_room_chat(phone_number) {
+                $.ajax({
+                    type: "GET",
+                    url: '{{ route('get_chat_by_phone_number') }}',
+                    data: {
+                        'no_telpon': phone_number
+                    },
+                    success: function(response) {
+                        $('#chat2').html(response);
+                        var chatBox = $('#chat-box');
+                        chatBox.scrollTop(chatBox.prop('scrollHeight'));
+                        $('#chat-first-notif').addClass('d-none');
+                    }
+                });
+            }
+
+            $(document).on('click', 'a.list-chat-member', function() {
+                let member_no_telpon = $(this).attr('value');
+
+                console.log(member_no_telpon)
+
+                rerender_room_chat(member_no_telpon)
+
+                Echo.channel(`room-${member_no_telpon}`)
+                    .listen('IncomingMessageEvent', (e) => {
+                        console.log(`ada pesan dari ${member_no_telpon}`)
+                        rerender_room_chat(member_no_telpon)
+                    });
+            });
         });
-
-        // setInterval(() => {
-
-
-        //     }, 5000);
     </script>
 @endsection

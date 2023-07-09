@@ -6,6 +6,7 @@ use App\Models\Member;
 use App\Events\ChatEvent;
 use App\Services\FonnteService;
 use Illuminate\Support\Facades\DB;
+use App\Events\IncomingMessageEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,6 +51,7 @@ class FonnteWebhookController extends Controller
             'updated_at' => now(),
         ]);
 
-        broadcast(new ChatEvent);
+        broadcast(new IncomingMessageEvent($sender));
+        broadcast(new IncomingMessageEvent());
     }
 }

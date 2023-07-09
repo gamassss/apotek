@@ -10,16 +10,17 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ChatEvent implements ShouldBroadcast
+class IncomingMessageEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    protected $room_id;
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct($room_id = null)
     {
-        //
+        $this->room_id = $room_id;
     }
 
     /**
@@ -29,8 +30,14 @@ class ChatEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        return [
-            new Channel('incoming-message'),
-        ];
+        if ($this->room_id) {
+            return [
+                new Channel('room-' . $this->room_id),
+            ];
+        } else {
+            return [
+                new Channel('incoming-message'),
+            ];
+        }
     }
 }
