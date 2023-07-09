@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Member;
-use App\Events\ChatEvent;
-use App\Services\FonnteService;
-use Illuminate\Support\Facades\DB;
 use App\Events\IncomingMessageEvent;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class FonnteWebhookController extends Controller
 {
@@ -26,23 +22,16 @@ class FonnteWebhookController extends Controller
         $device = $data['device'];
         $sender = $data['sender'];
         $message = $data['message'];
-        $text = $data['text']; //button text
-        $member = $data['member']; //group member who send the message
+        $text = $data['text'];
+        $member = $data['member'];
         $name = $data['name'];
         $location = $data['location'];
-        //data below will only received by device with all feature package
-        //start
         $url = $data['url'];
         $filename = $data['filename'];
         $extension = $data['extension'];
-        //end
 
         $reply_message = 'hi ' . $name . ' your message is ' . $message;
 
-        
-        $fonnte = new FonnteService();
-        
-        // $response = $fonnte->send_fonnte($reply_message, $sender);
         DB::table('chats')->insert([
             'text' => $message,
             'pengirim' => $sender,
@@ -53,5 +42,66 @@ class FonnteWebhookController extends Controller
 
         broadcast(new IncomingMessageEvent($sender));
         broadcast(new IncomingMessageEvent());
+    }
+
+    public function update_message_status()
+    {
+        // sleep(20);
+        header('Content-Type: application/json; charset=utf-8');
+
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        $device = $data['device'];
+        // $id = $data['id']; //cause error idk
+        $stateid = $data['stateid'];
+        // $status = $data['status']; //cause error too
+        $state = $data['state'];
+
+        if (isset($data['id'])) {
+            $id = $data['id'];
+        }
+
+        if (isset($data['status'])) {
+            $status = $data['status'];
+        }
+
+        if (isset($status) && isset($id)) { // first call
+            $results = DB::select("
+                SELECT *
+                FROM chats
+                WHERE JSON_UNQUOTE(JSON_EXTRACT(res_detail, '$.id[0]')) = '" . $id . "'
+            ");
+
+            $chat = collect($results)->first();
+
+            $resDetail = json_decode($chat->res_detail, true);
+            $resDetail['status'] = $status;
+            $resDetailEncoded = json_encode($resDetail);
+
+            DB::table('chats')
+                ->where('id', $chat->id)
+                ->update([
+                    'state' => $state,
+                    'res_detail' => $resDetailEncoded,
+                    'state_id' => $stateid,
+                ]);
+
+        } else if (!isset($status) && isset($id)) {
+        } else { // second call
+            $chat = DB::table('chats')
+                ->where('state_id', $stateid)
+                ->first();
+
+            if ($chat) {
+                DB::table('chats')
+                    ->where('id', $chat->id)
+                    ->update(['state' => $state]);
+            }
+        }
+    }
+
+    public function get_update_message_status()
+    {
+
     }
 }

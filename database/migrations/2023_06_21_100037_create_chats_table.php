@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('pengirim');
             $table->string('penerima');
             $table->string('res_detail')->nullable();
+            $table->string('state')->nullable();
+            $table->string('state_id')->nullable();
             $table->timestamps();
         });
     }

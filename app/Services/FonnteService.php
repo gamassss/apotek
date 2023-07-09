@@ -12,7 +12,7 @@ class FonnteService
     public function send_fonnte($message, $no_telpon)
     {
         $csrfToken = csrf_token();
-        
+
         $promise = Http::async()->withHeaders([
             'Authorization' => 'QI7VDZtc64p4Dg6_EjpX',
         ])->post('https://api.fonnte.com/send', [
@@ -28,4 +28,5 @@ class FonnteService
         
         return $promise->wait();
     }
+
 }
