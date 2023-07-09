@@ -157,6 +157,8 @@
         }
     </style>
 
+    @vite('resources/css/app.css')
+
 </head>
 
 <body>
@@ -391,6 +393,7 @@
             @endpush
         @endif
 
+        @vite('resources/js/app.js')
         <!-- Core JS -->
         <!-- build:js assets/vendor/js/core.js -->
         <script src="{{ asset('vendor/libs/popper/popper.js') }}"></script>
@@ -429,9 +432,22 @@
                 })
             }
         </script>
+
+        <script>
+            $(document).ready(function() {
+                Echo.channel(`tes-channel`)
+                    .listen('ChatEvent', (e) => {
+                        console.log('event from chat event')
+                        console.log(e)
+                    });
+            });
+        </script>
         {{-- <script src="{{ asset('js/air-datepicker.js') }}"></script>
         <script src="{{ asset('js/datepicker-pemesanan.js') }}"></script> --}}
         @stack('script')
+
+
+
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\ChatEvent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ObatController;
@@ -83,3 +84,8 @@ Route::get('/search-chat', [ChatController::class, 'searchChat'])->name('chat.se
 Route::get('/search-chat-nonmember', [ChatController::class, 'searchChatNonMember'])->name('chat.search_nonmember');
 Route::get('/update-chat-list', [ChatController::class, 'updateChatList'])->name('list_chat.update');
 Route::get('/update-chat-list-nonmember', [ChatController::class, 'updateChatListNonMember'])->name('list_chat_nonmember.update');
+
+// web socket
+Route::get('/send-event', function () {
+    broadcast(new ChatEvent);
+});
