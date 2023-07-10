@@ -16,10 +16,9 @@
                     <!-- Untuk Member -->
                     <div class="d-flex flex-row justify-content-start mt-2 mb-1">
                         <div>
-                            <div class="small p-2 ms-3 mb-1 rounded-3 d-flex gap-3 align-items-end"
-                                style="background-color: #f5f6f7;">
+                            <div class="small p-2 ms-3 mb-1 rounded-3 d-flex gap-3 align-items-end bg-primary text-white">
                                 <p style="margin-bottom: 0px;">{{ $chat->text }}</p>
-                                <p class="small rounded-3 text-muted" style="margin-bottom: 0px; font-size: 10px;">
+                                <p class="small rounded-3 text-white" style="margin-bottom: 0px; font-size: 10px;">
                                     {{ $chat->created_at->format('H:i') }}</p>
                             </div>
                         </div>
@@ -86,9 +85,6 @@
                                             <i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>
                                         @endif
                                     </div>
-                                    {{-- <i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i> --}}
-                                    {{-- <i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i> --}}
-                                    {{-- <i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i> --}}
                                 </div>
                             </div>
                         </div>
@@ -119,6 +115,7 @@
                     'no_telpon': phone_number
                 },
                 success: function(response) {
+                    console.log(response)
                     $('#chat2').html(response);
                     var chatBox = $('#chat-box');
                     chatBox.scrollTop(chatBox.prop('scrollHeight'));
@@ -141,7 +138,27 @@
 
         $('#send-btn').on('click', function() {
             let message = $('input[name="message"]').val();
+            const date = new Date();
+            let nowTime = `${date.getHours()}:${date.getMinutes()}`;
 
+            let bubble_chat_pegawai = `<div class="d-flex flex-row justify-content-end mb-4">
+                        <div>
+                            <div class="small p-2 me-3 mb-1 text-white rounded-3 d-flex align-items-end gap-3"
+                                style="background-color: #f5f6f7;">
+                                <p style="margin-bottom: 0px; color: #4F4F4F;">${message}</p>
+                                <div class="d-flex align-items-baseline gap-1">
+                                    <p class="small rounded-3 text-muted" style="margin-bottom: 0px; font-size: 10px;">${nowTime}</p>
+                                    <div id="">
+                                        <i class="fa-regular fa-clock fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+
+            $('#chat-box').append(bubble_chat_pegawai);
+            var chatBox = $('#chat-box');
+            chatBox.scrollTop(chatBox.prop('scrollHeight'));
             $.ajax({
                 type: "POST",
                 url: '{{ route('send_message') }}',
