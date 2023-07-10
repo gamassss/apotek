@@ -205,6 +205,30 @@
                         // console.log(`ada pesan dari ${member_no_telpon}`)
                         rerender_room_chat(member_no_telpon)
                     });
+
+                Echo.channel(`message-sent`)
+                    .listen('MessageSentEvent', (e) => {
+                        console.log(`sent ${e.msg_id}`)
+                        $(`#${e.msg_id}`).html(
+                            '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
+                        );
+                    });
+
+                Echo.channel(`message-delivered`)
+                    .listen('MessageDeliveredEvent', (e) => {
+                        console.log(`delivered ${e.msg_id}`)
+                        $(`#${e.msg_id}`).html(
+                            '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
+                        );
+                    });
+
+                Echo.channel(`message-read`)
+                    .listen('MessageReadEvent', (e) => {
+                        console.log(`read ${e.msg_id}`)
+                        $(`#${e.msg_id}`).html(
+                            '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>'
+                        );
+                    });
             });
         });
     </script>

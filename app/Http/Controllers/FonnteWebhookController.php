@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageReadEvent;
+use App\Events\MessageSentEvent;
+use Illuminate\Support\Facades\DB;
 use App\Events\IncomingMessageEvent;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
+use App\Events\MessageDeliveredEvent;
 
 class FonnteWebhookController extends Controller
 {
@@ -65,7 +68,7 @@ class FonnteWebhookController extends Controller
             $status = $data['status'];
         }
 
-        if (isset($status) && isset($id)) { // first call
+        if (isset($status) && isset($id)) { // first call set status to sent
             $results = DB::select("
                 SELECT *
                 FROM chats
@@ -86,7 +89,9 @@ class FonnteWebhookController extends Controller
                     'state_id' => $stateid,
                 ]);
 
-        } else if (!isset($stateid) && isset($id)) {
+            broadcast(new MessageSentEvent($id)); // send broadcast that msg with $id is sent
+
+        } else if (!isset($stateid) && isset($id)) { // third call set state to read
             $results = DB::select("
                 SELECT *
                 FROM chats
@@ -94,6 +99,8 @@ class FonnteWebhookController extends Controller
             ");
 
             $chat = collect($results)->first();
+
+            $fonnte_chat_id = json_decode($chat->res_detail, true)['id'][0] ?? '';
 
             $resDetail = json_decode($chat->res_detail, true);
             $resDetail['status'] = $status;
@@ -104,7 +111,10 @@ class FonnteWebhookController extends Controller
                 ->update([
                     'res_detail' => $resDetailEncoded,
                 ]);
-        } else { // second call
+            
+            broadcast(new MessageReadEvent($fonnte_chat_id));
+            
+        } else { // second call set state to delivered
             $chat = DB::table('chats')
                 ->where('state_id', $stateid)
                 ->first();
@@ -113,6 +123,14 @@ class FonnteWebhookController extends Controller
                 DB::table('chats')
                     ->where('id', $chat->id)
                     ->update(['state' => $state]);
+                $fonnte_chat_id = json_decode($chat->res_detail, true)['id'][0] ?? '';
+
+                if ($state == 'delivered') {
+                    broadcast(new MessageDeliveredEvent($fonnte_chat_id)); // send broadcast that msg with $id is sent
+                } else if ($state == 'read') {
+                    broadcast(new MessageReadEvent($fonnte_chat_id));
+                }
+
             }
         }
     }

@@ -6,6 +6,11 @@
         </div>
         {{-- @include('layout.room_chat') --}}
         @foreach ($chats as $chat)
+            @php
+                $fonnte_chat_id = json_decode($chat->res_detail, true)['id'][0] ?? '';
+                $status = json_decode($chat->res_detail, true)['status'] ?? '';
+            @endphp
+
             @if ($loop->first)
                 @if ($chat->pengirim == $member_no_telpon)
                     <!-- Untuk Member -->
@@ -21,17 +26,26 @@
                     </div>
                 @else
                     <!-- Untuk Pegawai -->
-                    <div class="d-flex flex-row justify-content-end mt-2 mb-1">
+                    <div class="d-flex flex-row justify-content-end mb-1 mt-2">
                         <div>
-                            <div
-                                class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary d-flex align-items-end gap-3">
-                                <p style="margin-bottom: 0px;">{{ $chat->text }}</p>
+                            <div class="small p-2 me-3 mb-1 text-white rounded-3 d-flex align-items-end gap-3"
+                                style="background-color: #f5f6f7;">
+                                <p style="margin-bottom: 0px; color: #4F4F4F;">{{ $chat->text }}</p>
                                 <div class="d-flex align-items-baseline gap-1">
-                                    <p class="small rounded-3 text-white" style="margin-bottom: 0px; font-size: 10px;">
+                                    <p class="small rounded-3 text-muted" style="margin-bottom: 0px; font-size: 10px;">
                                         {{ $chat->created_at->format('H:i') }}</p>
-                                    {{-- <i class="fa-regular fa-clock fa-xs" style="color: #f0f0f0;"></i> --}}
-                                    {{-- <i class="fa-solid fa-check fa-xs" style="color: #f0f0f0;"></i> --}}
-                                    <i class="fa-solid fa-check-double fa-xs" style="color: #f0f0f0;"></i>
+                                    <div id="{{ $fonnte_chat_id }}">
+                                        @if ($status == 'true')
+                                            <i class="fa-regular fa-clock fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
+                                        @elseif ($chat->state == 'sent' && $status == 'sent')
+                                            <i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
+                                        @elseif($chat->state == 'delivered' && $status == 'sent')
+                                            <i class="fa-solid fa-check-double fa-xs"
+                                                style="color: rgba(0, 0, 0, .7);"></i>
+                                        @elseif($chat->state == 'read' && $status == 'sent')
+                                            <i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -42,10 +56,10 @@
                     <!-- Untuk Member -->
                     <div class="d-flex flex-row justify-content-start mb-1">
                         <div>
-                            <div class="small p-2 ms-3 mb-1 rounded-3 d-flex gap-3 align-items-end"
-                                style="background-color: #f5f6f7;">
+                            <div
+                                class="small p-2 ms-3 mb-1 rounded-3 d-flex gap-3 align-items-end bg-primary text-white">
                                 <p style="margin-bottom: 0px;">{{ $chat->text }}</p>
-                                <p class="small rounded-3 text-muted" style="margin-bottom: 0px; font-size: 10px;">
+                                <p class="small rounded-3 text-white" style="margin-bottom: 0px; font-size: 10px;">
                                     {{ $chat->created_at->format('H:i') }}</p>
                             </div>
                         </div>
@@ -54,15 +68,27 @@
                     <!-- Untuk Pegawai -->
                     <div class="d-flex flex-row justify-content-end mb-4">
                         <div>
-                            <div
-                                class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary d-flex align-items-end gap-3">
-                                <p style="margin-bottom: 0px;">{{ $chat->text }}</p>
+                            <div class="small p-2 me-3 mb-1 text-white rounded-3 d-flex align-items-end gap-3"
+                                style="background-color: #f5f6f7;">
+                                <p style="margin-bottom: 0px; color: #4F4F4F;">{{ $chat->text }}</p>
                                 <div class="d-flex align-items-baseline gap-1">
-                                    <p class="small rounded-3 text-white" style="margin-bottom: 0px; font-size: 10px;">
+                                    <p class="small rounded-3 text-muted" style="margin-bottom: 0px; font-size: 10px;">
                                         {{ $chat->created_at->format('H:i') }}</p>
-                                    {{-- <i class="fa-regular fa-clock fa-xs" style="color: #f0f0f0;"></i> --}}
-                                    {{-- <i class="fa-solid fa-check fa-xs" style="color: #f0f0f0;"></i> --}}
-                                    <i class="fa-solid fa-check-double fa-xs" style="color: #f0f0f0;"></i>
+                                    <div id="{{ $fonnte_chat_id }}">
+                                        @if ($status == 'true')
+                                            <i class="fa-regular fa-clock fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
+                                        @elseif ($chat->state == 'sent' && $status == 'sent')
+                                            <i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
+                                        @elseif($chat->state == 'delivered' && $status == 'sent')
+                                            <i class="fa-solid fa-check-double fa-xs"
+                                                style="color: rgba(0, 0, 0, .7);"></i>
+                                        @elseif($chat->state == 'read' && $status == 'sent')
+                                            <i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>
+                                        @endif
+                                    </div>
+                                    {{-- <i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i> --}}
+                                    {{-- <i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i> --}}
+                                    {{-- <i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i> --}}
                                 </div>
                             </div>
                         </div>
@@ -71,26 +97,6 @@
             @endif
         @endforeach
 
-        <!-- Divider -->
-        {{-- <div class="divider d-flex align-items-center mb-4">
-                    <p class="text-center mx-3 mb-0" style="color: #a2aab7;">Today</p>
-                </div> --}}
-
-        <!-- After Divide -->
-        {{-- <div class="d-flex flex-row justify-content-end mb-4 pt-1">
-                    <div>
-                        <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Hiii, I'm good.</p>
-                        <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">How are you doing?
-                        </p>
-                        <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">Long time no see!
-                            Tomorrow
-                            office. will
-                            be free on sunday.</p>
-                        <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">00:06</p>
-                    </div>
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar 1"
-                        style="width: 45px; height: 100%;">
-                </div> --}}
     </div>
     <div id="chat-footer" class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3"
@@ -102,14 +108,6 @@
         <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
         <a class="ms-3" href="#" id="send-btn"><i class="fas fa-paper-plane"></i></a>
     </div>
-    {{-- <div id="chat-first-notif" class="d-flex justify-content-center align-items-center"
-        style="height: 100%; padding: 0px 64px;">
-        <p class="text-center text-muted">Mulailah berkomunikasi dengan member apotek secara efisien dan efektif.
-            Anda
-            dapat memberikan panduan dosis obat, menjawab pertanyaan, atau memberikan rekomendasi produk dengan
-            mudah
-            dan cepat.</p>
-    </div> --}}
 
 
     <script>
@@ -129,6 +127,12 @@
             });
         }
 
+        $(document).ready(function() {
+            $(document).on('click', '.div-pegawai', function() {
+                console.log($(this.id - pesan).data('msg-id'))
+            });
+        });
+
         $('input[name="message"]').keyup(function(event) {
             if (event.keyCode === 13) {
                 $('#send-btn').click();
@@ -137,7 +141,7 @@
 
         $('#send-btn').on('click', function() {
             let message = $('input[name="message"]').val();
-            
+
             $.ajax({
                 type: "POST",
                 url: '{{ route('send_message') }}',
@@ -149,7 +153,7 @@
                     response,
                     message
                 }) {
-                    let res =  JSON.parse(response)
+                    let res = JSON.parse(response)
                     rerender_room_chat(res.target[0])
                 }
             });

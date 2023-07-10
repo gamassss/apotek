@@ -181,10 +181,10 @@ class ChatController extends Controller
     {
         if (Auth::user()->username != 'staff') {
             $member = Member::where('no_telpon', $request->input('no_telpon'))->first();
-            $chats = Chat::where('pengirim', $member->no_telpon)->orWhere('penerima', $member->no_telpon)->select('text', 'pengirim', 'created_at')->get();
+            $chats = Chat::where('pengirim', $member->no_telpon)->orWhere('penerima', $member->no_telpon)->select('text', 'pengirim', 'res_detail', 'state', 'created_at')->get();
             $member_name = $member->nama_member;
             $member_no_telpon = $member->no_telpon;
-
+            // dd(json_decode($chats[0]->res_detail, true)['id'][0]);
             // dd($member_no_telpon);
 
             return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
