@@ -115,7 +115,6 @@
                     'no_telpon': phone_number
                 },
                 success: function(response) {
-                    console.log(response)
                     $('#chat2').html(response);
                     var chatBox = $('#chat-box');
                     chatBox.scrollTop(chatBox.prop('scrollHeight'));

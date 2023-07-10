@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\IncomingMessageEvent;
+use App\Events\MessageDeliveredEvent;
 use App\Events\MessageReadEvent;
 use App\Events\MessageSentEvent;
-use Illuminate\Support\Facades\DB;
-use App\Events\IncomingMessageEvent;
 use App\Http\Controllers\Controller;
-use App\Events\MessageDeliveredEvent;
+use Illuminate\Support\Facades\DB;
 
 class FonnteWebhookController extends Controller
 {
@@ -111,9 +111,9 @@ class FonnteWebhookController extends Controller
                 ->update([
                     'res_detail' => $resDetailEncoded,
                 ]);
-            
+
             broadcast(new MessageReadEvent($fonnte_chat_id));
-            
+
         } else { // second call set state to delivered
             $chat = DB::table('chats')
                 ->where('state_id', $stateid)
@@ -129,6 +129,26 @@ class FonnteWebhookController extends Controller
                     broadcast(new MessageDeliveredEvent($fonnte_chat_id)); // send broadcast that msg with $id is sent
                 } else if ($state == 'read') {
                     broadcast(new MessageReadEvent($fonnte_chat_id));
+
+                    $previous_chats = DB::table('chats')
+                        ->where('id', '<', $chat->id)
+                        ->where(function ($query) {
+                            $query->where('state', 'delivered')
+                                ->orWhere('state', 'sent');
+                        })
+                        ->get();
+
+                    if ($previous_chats->isNotEmpty()) {
+                        foreach ($previous_chats as $previous_chat) {
+                            DB::table('chats')
+                                ->where('id', $previous_chat->id)
+                                ->update(['state' => 'read']);
+                            // $res_detail = $previous_chat->res_detail;
+
+                            $fonnte_chat_id = json_decode($previous_chat->res_detail, true)['id'][0] ?? '';
+                            broadcast(new MessageReadEvent($fonnte_chat_id));
+                        }
+                    }
                 }
 
             }
