@@ -129,7 +129,7 @@
         $('#send-btn').on('click', function() {
             console.log('in')
             let message = $('input[name="message"]').val();
-            for (let i = 0; i < 20; i++) {
+            // for (let i = 0; i < 20; i++) {
                 $.ajax({
                     type: "POST",
                     url: '{{ route('send_message') }}',
@@ -144,6 +144,6 @@
                         rerender_room_chat(response.target[0])
                     }
                 });
-            }
+            // }
         });
     </script>
