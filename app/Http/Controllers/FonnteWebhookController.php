@@ -86,7 +86,24 @@ class FonnteWebhookController extends Controller
                     'state_id' => $stateid,
                 ]);
 
-        } else if (!isset($status) && isset($id)) {
+        } else if (!isset($stateid) && isset($id)) {
+            $results = DB::select("
+                SELECT *
+                FROM chats
+                WHERE JSON_UNQUOTE(JSON_EXTRACT(res_detail, '$.id[0]')) = '" . $id . "'
+            ");
+
+            $chat = collect($results)->first();
+
+            $resDetail = json_decode($chat->res_detail, true);
+            $resDetail['status'] = $status;
+            $resDetailEncoded = json_encode($resDetail);
+
+            DB::table('chats')
+                ->where('id', $chat->id)
+                ->update([
+                    'res_detail' => $resDetailEncoded,
+                ]);
         } else { // second call
             $chat = DB::table('chats')
                 ->where('state_id', $stateid)
