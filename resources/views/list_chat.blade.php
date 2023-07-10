@@ -9,10 +9,27 @@
             $searched_chat_time = isset($member->searched_chat[0]->created_at) ? $member->searched_chat[0]->created_at : '';
             $date_latest = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $latest_chat_time, 'Asia/Jakarta');
             $date_latest->setTimeZone('Asia/Jakarta');
+            $carbonTimestamp = Carbon\Carbon::parse($date_latest);
             
             if ($searched_chat_time) {
                 $date_searched = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $searched_chat_time, 'Asia/Jakarta');
                 $date_searched->setTimeZone('Asia/Jakarta');
+                $carbonTimestamp = Carbon\Carbon::parse($date_searched);
+            }
+            
+            $now = Carbon\Carbon::now();
+            
+            // Cek jika timestamp pada hari yang sama dengan hari ini
+            if ($carbonTimestamp->isSameDay($now)) {
+                $formattedTime = $carbonTimestamp->format('H:i'); // Format jam dan menit (misalnya: 03:58)
+            }
+            // Cek jika timestamp pada hari kemarin
+            elseif ($carbonTimestamp->isYesterday()) {
+                $formattedTime = 'Yesterday';
+            }
+            // Jika timestamp lebih lama dari hari kemarin
+            else {
+                $formattedTime = $carbonTimestamp->format('d/m/Y');
             }
             // dd($date);
         @endphp
@@ -22,10 +39,10 @@
             <div class="d-flex justify-content-between w-100">
                 <h6>{{ $member->nama_member }}</h6>
                 @if ($searched_chat_time)
-                    <small class="text-muted">{{ $date_searched->diffForHumans() }}</small>
+                    <small class="text-muted">{{ $formattedTime }}</small>
                 @else
                     @if ($member->latest_chat)
-                        <small class="text-muted">{{ $date_latest->diffForHumans() }}</small>
+                        <small class="text-muted">{{ $formattedTime }}</small>
                     @else
                         <small class="text-muted">{{ '~' }}</small>
                     @endif
