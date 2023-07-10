@@ -137,6 +137,7 @@
 
         $('#send-btn').on('click', function() {
             let message = $('input[name="message"]').val();
+<<<<<<< HEAD
             
             $.ajax({
                 type: "POST",
@@ -154,5 +155,23 @@
                 }
             });
 
+=======
+            // for (let i = 0; i < 20; i++) {
+                $.ajax({
+                    type: "POST",
+                    url: '{{ route('send_message') }}',
+                    data: {
+                        no_telpon: '{{ $member_no_telpon }}',
+                        message
+                    },
+                    success: function({
+                        response,
+                        message
+                    }) {
+                        rerender_room_chat(response.target[0])
+                    }
+                });
+            // }
+>>>>>>> f2bfa19a52c258e7ace8c60c50238c00f74db508
         });
     </script>
