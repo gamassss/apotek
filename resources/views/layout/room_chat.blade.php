@@ -16,7 +16,8 @@
                     <!-- Untuk Member -->
                     <div class="d-flex flex-row justify-content-start mt-2 mb-1">
                         <div>
-                            <div class="small p-2 ms-3 mb-1 rounded-3 d-flex gap-3 align-items-end bg-primary text-white">
+                            <div
+                                class="small p-2 ms-3 mb-1 rounded-3 d-flex gap-3 align-items-end bg-primary text-white">
                                 <p style="margin-bottom: 0px;">{{ $chat->text }}</p>
                                 <p class="small rounded-3 text-white" style="margin-bottom: 0px; font-size: 10px;">
                                     {{ $chat->created_at->format('H:i') }}</p>
@@ -95,8 +96,8 @@
 
     </div>
     <div id="chat-footer" class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3"
-            style="width: 40px; height: 100%;">
+        {{-- <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="avatar 3"
+            style="width: 40px; height: 100%;"> --}}
         @csrf
         <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
             placeholder="Type message" name="message" autocomplete="off">
@@ -123,12 +124,6 @@
             });
         }
 
-        $(document).ready(function() {
-            $(document).on('click', '.div-pegawai', function() {
-                console.log($(this.id - pesan).data('msg-id'))
-            });
-        });
-
         $('input[name="message"]').keyup(function(event) {
             if (event.keyCode === 13) {
                 $('#send-btn').click();
@@ -137,6 +132,7 @@
 
         $('#send-btn').on('click', function() {
             let message = $('input[name="message"]').val();
+            $('input[name="message"]').val('');
             const date = new Date();
             let nowTime = `${date.getHours()}:${date.getMinutes()}`;
 
@@ -171,6 +167,9 @@
                 }) {
                     let res = JSON.parse(response)
                     rerender_room_chat(res.target[0])
+                    setTimeout(() => {
+                        $('input[name="message"]').focus();
+                    }, 250);
                 }
             });
 

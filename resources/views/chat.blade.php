@@ -189,6 +189,9 @@
                         var chatBox = $('#chat-box');
                         chatBox.scrollTop(chatBox.prop('scrollHeight'));
                         $('#chat-first-notif').addClass('d-none');
+                        setTimeout(() => {
+                            $('input[name="message"]').focus();
+                        }, 250);
                     }
                 });
             }
@@ -199,6 +202,7 @@
                 // console.log(member_no_telpon)
 
                 rerender_room_chat(member_no_telpon)
+
 
                 Echo.channel(`room-${member_no_telpon}`)
                     .listen('IncomingMessageEvent', (e) => {

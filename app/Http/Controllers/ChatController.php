@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
-    // function untuk test data
     public function index(Request $request)
     {
         if (Auth::user()->username == 'staff') {
@@ -56,9 +55,6 @@ class ChatController extends Controller
         if ($request->ajax()) {
             return view('list_member', compact('members_pegawai'))->render();
         }
-
-        // dd($members_pegawai);
-        // dd(isset($members_pegawai[1]->latest_chat));
 
         $chats = [];
         return view('chat', compact('members_pegawai', 'chats'));
@@ -184,12 +180,10 @@ class ChatController extends Controller
             $chats = Chat::where('pengirim', $member->no_telpon)->orWhere('penerima', $member->no_telpon)->select('text', 'pengirim', 'res_detail', 'state', 'created_at')->get();
             $member_name = $member->nama_member;
             $member_no_telpon = $member->no_telpon;
-            // dd(json_decode($chats[0]->res_detail, true)['id'][0]);
-            // dd($member_no_telpon);
 
             return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
         } else {
-            // dd($request->input('no_telpon'));
+
             $member_service = new MemberService();
             $exist_phone_number = $member_service->get_members_phone_number();
 
@@ -222,7 +216,7 @@ class ChatController extends Controller
         $fonnte = new FonnteService();
 
         $response = $fonnte->send_fonnte($message, $no_telpon);
-        // dd($response->body());
+        
         DB::table('chats')->insert([
             'text' => $message,
             'pengirim' => $fonnte::device,
