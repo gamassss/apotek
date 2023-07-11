@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth','ResetDefaultPassword'], 'prefix' => '/adm
     Route::get('/chats', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/get_name_by_number', [ChatController::class, 'getNameByPhoneNumber'])->name('get_name_by_phone_number');
     Route::get('/get_chat_by_number', [ChatController::class, 'getChatByPhoneNumber'])->name('get_chat_by_phone_number');
+    Route::get('/get_chat_box_by_number', [ChatController::class, 'getChatBoxByPhoneNumber'])->name('get_chat_box_by_phone_number');
     Route::post('/send_message', [ChatController::class, 'sendMessage'])->name('send_message');
     Route::get('/dashboard/pegawai/peningkatan-member/monthly',[DashboardController::class,'peningkatanMemberPegawaiMonthly'])->name('peningkatan.member.pegawai.monthly');
     Route::get('/dashboard/pegawai/peningkatan-member/yearly',[DashboardController::class,'peningkatanMemberPegawaiYearly'])->name('peningkatan.member.pegawai.yearly');

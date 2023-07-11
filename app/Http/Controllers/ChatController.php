@@ -25,7 +25,7 @@ class ChatController extends Controller
                     ->whereNotIn('pengirim', $exist_phone_number)
                     ->groupBy('pengirim');
             })
-            ->orderBy('created_at', 'DESC')
+                ->orderBy('created_at', 'DESC')
                 ->get();
 
             foreach ($showed_chats as $chat) {
@@ -71,13 +71,13 @@ class ChatController extends Controller
 
             $member['latest_chat'] = $latest_chat;
 
-            if(is_array($latest_chat) && empty($latest_chat)) {
+            if (is_array($latest_chat) && empty($latest_chat)) {
 
                 $latest_pegawai_chat = DB::select('SELECT * FROM chats
                 WHERE penerima = ' . $member->no_telpon . '
                 ORDER BY id DESC
                 LIMIT 1');
-    
+
                 $member['latest_chat'] = $latest_pegawai_chat;
             }
         }
@@ -209,6 +209,41 @@ class ChatController extends Controller
 
     }
 
+    public function getChatBoxByPhoneNumber(Request $request)
+    {
+        if (Auth::user()->username != 'staff') {
+            $member = Member::where('no_telpon', $request->input('no_telpon'))->first();
+            $chats = Chat::where('pengirim', $member->no_telpon)->orWhere('penerima', $member->no_telpon)->select('text', 'pengirim', 'res_detail', 'state', 'created_at')->get();
+            $member_name = $member->nama_member;
+            $member_no_telpon = $member->no_telpon;
+
+            return view('layout.chat_box_content', compact('chats', 'member_name', 'member_no_telpon'))->render();
+        } else {
+
+            $member_service = new MemberService();
+            $exist_phone_number = $member_service->get_members_phone_number();
+
+            $chats = Chat::whereIn('id', function ($query) use ($request, $exist_phone_number) {
+                $query->selectRaw('id')
+                    ->from('chats')
+                    ->groupBy('pengirim');
+            })
+                ->where('pengirim', $request->input('no_telpon'))
+                ->whereNotIn('pengirim', $exist_phone_number)
+                ->orWhere(function ($query) use ($request, $exist_phone_number) {
+                    $query->where('penerima', $request->input('no_telpon'))
+                        ->whereNotIn('penerima', $exist_phone_number);
+                })
+                ->select('text', 'pengirim', 'created_at')
+                ->get();
+
+            $member_name = '';
+            $member_no_telpon = $request->input('no_telpon');
+
+            return view('layout.chat_box_content', compact('chats', 'member_name', 'member_no_telpon'))->render();
+        }
+    }
+
     public function sendMessage(Request $request)
     {
         $message = $request->input('message');
@@ -216,7 +251,7 @@ class ChatController extends Controller
         $fonnte = new FonnteService();
 
         $response = $fonnte->send_fonnte($message, $no_telpon);
-        
+
         DB::table('chats')->insert([
             'text' => $message,
             'pengirim' => $fonnte::device,
@@ -226,10 +261,8 @@ class ChatController extends Controller
             'updated_at' => now(),
         ]);
 
-        return response()->json(['response' => $response->body(),'message' => $message]);
+        return response()->json(['response' => $response->body(), 'message' => $message]);
     }
-
-    
 
     public function getResponseTime()
     {

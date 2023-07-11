@@ -33,8 +33,6 @@ class FonnteWebhookController extends Controller
         $filename = $data['filename'];
         $extension = $data['extension'];
 
-        $reply_message = 'hi ' . $name . ' your message is ' . $message;
-
         DB::table('chats')->insert([
             'text' => $message,
             'pengirim' => $sender,
