@@ -166,6 +166,7 @@
                             data: "",
                             success: function(res) {
                                 // console.log(res)
+                                console.log(res)
                                 $('#list-kontak-member').html(res);
                             },
                             error: (err) => {

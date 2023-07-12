@@ -5,8 +5,8 @@
     </div>
     <div id="chat-footer" class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
         @csrf
-        <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
-            placeholder="Type message" name="message" autocomplete="off">
+        <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1" placeholder="Type message"
+            name="message" autocomplete="off">
         <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
         <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
         <a class="ms-3" href="#" id="send-btn"><i class="fas fa-paper-plane"></i></a>
@@ -23,9 +23,6 @@
                 },
                 success: function(response) {
                     $('#chat-box').html(response);
-                    // setTimeout(() => {
-                    //     $('input[name="message"]').focus();
-                    // }, 300);
                     var chatBox = $('#chat-box');
                     chatBox.scrollTop(chatBox.prop('scrollHeight'));
                     $('#chat-first-notif').addClass('d-none');
@@ -76,6 +73,33 @@
                 }) {
                     let res = JSON.parse(response)
                     rerender_room_chat_box(res.target[0])
+                    if ("{{ Auth::user()->username }}" === 'staff') {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('list_chat_nonmember.update') }}',
+                            data: "",
+                            success: function(res) {
+                                // console.log(res)
+                                $('#list-kontak-member').html(res);
+                            },
+                            error: (err) => {
+                                console.log(err)
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('list_chat.update') }}',
+                            data: "",
+                            success: function(res) {
+                                // console.log(res)
+                                $('#list-kontak-member').html(res);
+                            },
+                            error: (err) => {
+                                console.log(err)
+                            }
+                        });
+                    }
                 }
             });
 

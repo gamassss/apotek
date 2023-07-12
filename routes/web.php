@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth','checkRole:pegawai'], 'prefix' => '/admin'
         Route::get('/dashboard/pegawai',[DashboardController::class,'indexPegawai'])->name('dashboard.pegawai');
     });
     Route::get('/reset-password',[DashboardController::class,'resetPassword'])->name('reset-password.pegawai');
-    Route::put('/reset-password',[PegawaiController::class,'updatePassword'])->name('reset-password.pegawai');
+    Route::put('/reset-password',[PegawaiController::class,'updatePassword'])->name('reset-password.pegawai.put');
 });
 
 // bersama

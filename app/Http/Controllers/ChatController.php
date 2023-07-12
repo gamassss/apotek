@@ -45,13 +45,43 @@ class ChatController extends Controller
             $latest_chat = DB::select('select * from chats
             where pengirim = ' . $member->no_telpon . '
             order by created_at desc limit 1');
+            
             if (is_array($latest_chat) && empty($latest_chat)) {
                 $member['latest_chat'] = null;
+                $latest_pegawai_chat = DB::select('SELECT * FROM chats
+                WHERE penerima = ' . $member->no_telpon . '
+                ORDER BY id DESC
+                LIMIT 1');
+
+                $member['latest_chat'] = $latest_pegawai_chat;
+                // dd($member['latest_chat']);
             } else {
                 $member['latest_chat'] = $latest_chat;
+
+                if (!empty($latest_chat)) {
+                    $latest_chat_id = $latest_chat[0]->id;
+
+                    $newer_chats = DB::select('SELECT * FROM chats
+                                WHERE penerima = ' . $member->no_telpon . '
+                                AND id > ' . $latest_chat_id . '
+                                ORDER BY id DESC
+                                LIMIT 1');
+
+                    if (!empty($newer_chats)) {
+                        $latest_chat = $newer_chats;
+                        $member['latest_chat'] = $latest_chat;
+                        // dd($member['latest_chat']);  
+                    }
+                }
             }
+
         }
 
+        // sort desc on latest chat created at
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+            return $member['latest_chat'][0]->created_at;
+        });
+        
         if ($request->ajax()) {
             return view('list_member', compact('members_pegawai'))->render();
         }
@@ -71,6 +101,22 @@ class ChatController extends Controller
 
             $member['latest_chat'] = $latest_chat;
 
+            if (!empty($latest_chat)) {
+                $latest_chat_id = $latest_chat[0]->id;
+
+                $newer_chats = DB::select('SELECT * FROM chats
+                            WHERE penerima = ' . $member->no_telpon . '
+                            AND id > ' . $latest_chat_id . '
+                            ORDER BY id DESC
+                            LIMIT 1');
+
+                if (!empty($newer_chats)) {
+                    $latest_chat = $newer_chats;
+                    $member['latest_chat'] = $latest_chat;
+                    // dd($member['latest_chat']);  
+                }
+            }
+
             if (is_array($latest_chat) && empty($latest_chat)) {
 
                 $latest_pegawai_chat = DB::select('SELECT * FROM chats
@@ -81,6 +127,10 @@ class ChatController extends Controller
                 $member['latest_chat'] = $latest_pegawai_chat;
             }
         }
+
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+            return $member['latest_chat'][0]->created_at;
+        });
 
         $chats = [];
 
@@ -140,6 +190,10 @@ class ChatController extends Controller
 
             $member['latest_chat'] = $latest_chat;
         }
+
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+            return $member['latest_chat'][0]->created_at;
+        });
 
         $chats = [];
 
@@ -267,6 +321,7 @@ class ChatController extends Controller
     public function getResponseTime()
     {
         $response_time = [];
+        
         $chats = Chat::where('pengirim', '6282232763556')->orWhere('penerima', '6282232763556')->get();
         $chats_count = count($chats);
         foreach ($chats as $index => $chat) {
