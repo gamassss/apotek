@@ -83,7 +83,7 @@ Route::get('/tes_rabbit', function() {
 // Route::get('/status', [FonnteWebhookController::class, 'get_update_message_status'])->name('update.get_msg_status');
 // Route::post('/status', [FonnteWebhookController::class, 'update_message_status'])->name('update.msg_status');
 
-Route::get('/tes_response_time', [ChatController::class, 'getResponseTime'])->name('response_time.get');
+// Route::get('/tes_response_time', [DashboardController::class, 'getResponseTime'])->name('response_time.get');
 Route::get('/search-chat', [ChatController::class, 'searchChat'])->name('chat.search');
 Route::get('/search-chat-nonmember', [ChatController::class, 'searchChatNonMember'])->name('chat.search_nonmember');
 Route::get('/update-chat-list', [ChatController::class, 'updateChatList'])->name('list_chat.update');

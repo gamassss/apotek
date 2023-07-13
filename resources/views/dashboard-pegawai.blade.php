@@ -59,19 +59,24 @@
                                 <span class="badge bg-label-info p-2"><i class='bx bx-chat'></i></span>
 
                             </div>
-                            <div class="dropdown">
+                            {{-- <div class="dropdown">
                                 <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                     <i class="bx bx-dots-vertical-rounded"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
                                     <a class="dropdown-item" href="{{ route('transaksi-obat.index') }}">View Details</a>
-                                    {{-- <a class="dropdown-item" href="javascript:void(0);">Delete</a> --}}
+                                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
-                        <span>Performa Pesan</span>
-                        <h3 class="card-title text-nowrap mb-1">100%</h3>
+                        <span>Response Time</span>
+                        @php
+                            [$hours, $minutes] = explode(':', $responseTime);
+                        @endphp
+
+                        <h3 class="card-title text-nowrap mb-1">
+                            {{ $hours }} jam {{ $minutes }} menit</h3>
                     </div>
                 </div>
             </div>
@@ -175,6 +180,7 @@
                     loadTransaksiStatMonthly(year);
                 });
             });
+
             function loadMemberStatMonthly(years) {
                 $.ajax({
                     type: "get",
@@ -214,6 +220,7 @@
                     }
                 });
             }
+
             function loadMemberStatYearly() {
                 $.ajax({
                     type: "get",
@@ -250,6 +257,7 @@
                     }
                 });
             }
+
             function loadTransaksiStatYearly() {
                 $.ajax({
                     type: "get",
@@ -286,6 +294,7 @@
                     }
                 });
             }
+
             function loadTransaksiStatMonthly(years) {
                 $.ajax({
                     type: "get",
@@ -325,7 +334,6 @@
                     }
                 });
             }
-
         </script>
     @endpush
 @endsection
