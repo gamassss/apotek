@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/message', [RabbitMQController::class, 'send_message'])->name('api.post.message');
+// Route::post('/message', [RabbitMQController::class, 'send_message'])->name('api.post.message');

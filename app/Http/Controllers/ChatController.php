@@ -78,9 +78,9 @@ class ChatController extends Controller
         }
 
         // sort desc on latest chat created at
-        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-            return $member['latest_chat'][0]->created_at;
-        });
+        // $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+        //     return $member['latest_chat'][0]->created_at;
+        // });
         
         if ($request->ajax()) {
             return view('list_member', compact('members_pegawai'))->render();
@@ -128,9 +128,9 @@ class ChatController extends Controller
             }
         }
 
-        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-            return $member['latest_chat'][0]->created_at;
-        });
+        // $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+        //     return $member['latest_chat'][0]->created_at;
+        // });
 
         $chats = [];
 
@@ -191,9 +191,9 @@ class ChatController extends Controller
             $member['latest_chat'] = $latest_chat;
         }
 
-        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-            return $member['latest_chat'][0]->created_at;
-        });
+        // $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+        //     return $member['latest_chat'][0]->created_at;
+        // });
 
         $chats = [];
 
