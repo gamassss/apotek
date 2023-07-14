@@ -206,15 +206,22 @@ class ChatController extends Controller
             order by created_at desc limit 1');
 
             // cek chat pegawai
-            if (is_array($searched_chat) && empty($searched_chat)) {
+            if (is_array($searched_chat) && !empty($searched_chat)) {
                 $searched_chat = DB::select('select * from chats
                     where penerima = 6287822771121
                     and text LIKE "%' . $passed_data . '%"
                     order by created_at desc limit 1');
                 $searched_chat[0]->text = 'You: ' . $searched_chat[0]->text;
+                $member['searched_chat'] = $searched_chat;
+            } else {
+                // jika yang dicari nomor telpom
+                $latest_chat = DB::select('select * from chats
+                where pengirim = ' . $member->no_telpon . '
+                order by created_at desc limit 1');
+
+                $member['latest_chat'] = $latest_chat;
             }
 
-            $member['searched_chat'] = $searched_chat;
         }
         // dd($members_pegawai);
 
@@ -244,8 +251,7 @@ class ChatController extends Controller
                 ->where('pengirim', 'like', '%' . $passed_data . '%')
                 ->orWhere('text', 'like', '%' . $passed_data . '%')
                 ->groupBy('pengirim');
-        })
-            // ->whereNot('pengirim', '088806388436')
+            })
             ->get();
 
         foreach ($members_pegawai as $member) {
@@ -253,12 +259,22 @@ class ChatController extends Controller
             where pengirim = ' . $member->pengirim . '
             and text LIKE "%' . $passed_data . '%"
             order by created_at desc limit 1');
+            // dd($searched_chat);
             // cek chat pegawai
-            if ($searched_chat[0]->pengirim == '088806388436') {
-                $searched_chat[0]->text = 'You: ' . $searched_chat[0]->text;
+            if (is_array($searched_chat) && !empty($searched_chat)) {
+                if ($searched_chat[0]->pengirim == '088806388436') {
+                    $searched_chat[0]->text = 'You: ' . $searched_chat[0]->text;
+                }
+                $member['searched_chat'] = $searched_chat;
+            } else {
+                // jika yang dicari nomor
+                $latest_chat = DB::select('select * from chats
+                where pengirim = ' . $member->pengirim . '
+                order by created_at desc limit 1');
+
+                $member['latest_chat'] = $latest_chat;
             }
 
-            $member['searched_chat'] = $searched_chat;
         }
 
         $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
