@@ -153,7 +153,7 @@ class ChatController extends Controller
         $member_service = new MemberService();
         $exist_phone_number = $member_service->get_members_phone_number();
 
-        $showed_chats = Chat::whereIn('id', function ($query) use ($exist_phone_number) {
+        $members_pegawai = Chat::whereIn('id', function ($query) use ($exist_phone_number) {
             $query->selectRaw('MAX(id)')
                 ->from('chats')
                 ->whereNotIn('pengirim', $exist_phone_number)
@@ -162,13 +162,15 @@ class ChatController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        foreach ($showed_chats as $chat) {
-            $chat['latest_chat'] = $chat->text;
+        foreach ($members_pegawai as $member) {
+            $member['latest_chat'] = DB::select('select * from chats
+            where pengirim = ' . $member->pengirim . '
+            order by created_at desc limit 1');
         }
 
         $chats = [];
 
-        $showed_chats = $showed_chats->sortByDesc(function ($member) {
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
             if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
                 return $member['latest_chat'][0]->created_at;
             } else {
@@ -177,10 +179,7 @@ class ChatController extends Controller
             }
         });
 
-        return view('list_chat_non_member', [
-            'members_pegawai' => $showed_chats,
-            'chats' => $chats,
-        ])->render();
+        return view('list_chat_non_member', compact('members_pegawai', 'chats'))->render();
     }
 
     public function searchChat(Request $request)

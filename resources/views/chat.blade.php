@@ -153,6 +153,7 @@
                             data: "",
                             success: function(res) {
                                 // console.log(res)
+                                console.log('masok')
                                 $('#list-kontak-member').html(res);
                             },
                             error: (err) => {
