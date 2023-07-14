@@ -45,7 +45,7 @@ class ChatController extends Controller
             $latest_chat = DB::select('select * from chats
             where pengirim = ' . $member->no_telpon . '
             order by created_at desc limit 1');
-            
+
             if (is_array($latest_chat) && empty($latest_chat)) {
                 $member['latest_chat'] = null;
                 $latest_pegawai_chat = DB::select('SELECT * FROM chats
@@ -70,7 +70,7 @@ class ChatController extends Controller
                     if (!empty($newer_chats)) {
                         $latest_chat = $newer_chats;
                         $member['latest_chat'] = $latest_chat;
-                        // dd($member['latest_chat']);  
+                        // dd($member['latest_chat']);
                     }
                 }
             }
@@ -78,10 +78,10 @@ class ChatController extends Controller
         }
 
         // sort desc on latest chat created at
-        // $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-        //     return $member['latest_chat'][0]->created_at;
-        // });
-        
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+            return $member['latest_chat'][0]->created_at;
+        });
+
         if ($request->ajax()) {
             return view('list_member', compact('members_pegawai'))->render();
         }
@@ -113,7 +113,7 @@ class ChatController extends Controller
                 if (!empty($newer_chats)) {
                     $latest_chat = $newer_chats;
                     $member['latest_chat'] = $latest_chat;
-                    // dd($member['latest_chat']);  
+                    // dd($member['latest_chat']);
                 }
             }
 
@@ -128,9 +128,14 @@ class ChatController extends Controller
             }
         }
 
-        // $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-        //     return $member['latest_chat'][0]->created_at;
-        // });
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+            if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
+                return $member['latest_chat'][0]->created_at;
+            } else {
+                // Atur tanggal yang sesuai jika 'latest_chat' tidak ada atau kosong
+                return null;
+            }
+        });
 
         $chats = [];
 
@@ -157,6 +162,15 @@ class ChatController extends Controller
 
         $chats = [];
 
+        $showed_chats = $showed_chats->sortByDesc(function ($member) {
+            if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
+                return $member['latest_chat'][0]->created_at;
+            } else {
+                // Atur tanggal yang sesuai jika 'latest_chat' tidak ada atau kosong
+                return null;
+            }
+        });
+
         return view('list_chat_non_member', [
             'members_pegawai' => $showed_chats,
             'chats' => $chats,
@@ -172,6 +186,9 @@ class ChatController extends Controller
                 $query->where('nama_member', 'LIKE', '%' . $passed_data . '%')
                     ->orWhereHas('chats', function ($query) use ($passed_data) {
                         $query->where('text', 'LIKE', '%' . $passed_data . '%');
+                    })
+                    ->orWhereHas('chats_penerima', function ($query) use ($passed_data) {
+                        $query->where('text', 'LIKE', '%' . $passed_data . '%');
                     });
             })
             ->get();
@@ -182,6 +199,15 @@ class ChatController extends Controller
             and text LIKE "%' . $passed_data . '%"
             order by created_at desc limit 1');
 
+            // cek chat pegawai
+            if (is_array($searched_chat) && empty($searched_chat)) {
+                $searched_chat = DB::select('select * from chats
+                    where penerima = 6287822771121
+                    and text LIKE "%' . $passed_data . '%"
+                    order by created_at desc limit 1');
+                $searched_chat[0]->text = 'You: ' . $searched_chat[0]->text;
+            }
+
             $member['searched_chat'] = $searched_chat;
 
             $latest_chat = DB::select('select * from chats
@@ -190,10 +216,16 @@ class ChatController extends Controller
 
             $member['latest_chat'] = $latest_chat;
         }
+        // dd($members_pegawai);
 
-        // $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-        //     return $member['latest_chat'][0]->created_at;
-        // });
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+            if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
+                return $member['latest_chat'][0]->created_at;
+            } else {
+                // Atur tanggal yang sesuai jika 'latest_chat' tidak ada atau kosong
+                return null;
+            }
+        });
 
         $chats = [];
 
@@ -216,6 +248,15 @@ class ChatController extends Controller
             ->get();
 
         $chats = [];
+
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+            if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
+                return $member['latest_chat'][0]->created_at;
+            } else {
+                // Atur tanggal yang sesuai jika 'latest_chat' tidak ada atau kosong
+                return null;
+            }
+        });
 
         return view('list_chat_non_member', compact('members_pegawai', 'chats'));
 
@@ -317,6 +358,5 @@ class ChatController extends Controller
 
         return response()->json(['response' => $response->body(), 'message' => $message]);
     }
-
 
 }
