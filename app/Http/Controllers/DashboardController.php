@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Chat;
 use App\Models\Member;
 use App\Models\Transaksi;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -29,7 +31,8 @@ class DashboardController extends Controller
         ->where('user_id',Auth::user()->id)
         ->groupBy('year')
         ->get();
-        return view('dashboard-pegawai',compact('jumlahMemberTotal','jumlahTransaksiTotal','tahunTransaksi','tahunMember'));
+        $responseTime= $this->getResponseTime(Auth::user()->id);
+        return view('dashboard-pegawai',compact('jumlahMemberTotal','jumlahTransaksiTotal','tahunTransaksi','tahunMember','responseTime'));
         
     }
 
@@ -62,7 +65,7 @@ class DashboardController extends Controller
     ->groupBy('year')
     ->orderByRaw("YEAR(created_at)")
     ->get();
-  }else{
+     }else{
       $yearlyData = Member::selectRaw("DATE_FORMAT(created_at, '%Y') AS year, COUNT(*) AS count")
       ->where('user_id',Auth::user()->id)
       ->groupBy('year')
@@ -83,7 +86,7 @@ class DashboardController extends Controller
     ->groupBy('year')
     ->orderByRaw("YEAR(t.created_at)")
     ->get();
-  }else{
+     }else{
       $yearlyData = DB::table('transaksis as t')
       ->join('members as m','m.id','t.member_id')
       ->selectRaw("DATE_FORMAT(t.created_at, '%Y') AS year, COUNT(*) AS count")
@@ -192,4 +195,5 @@ class DashboardController extends Controller
       {
         return view('reset-password-pegawai');
       }
+     
 }

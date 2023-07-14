@@ -78,7 +78,8 @@ class PegawaiController extends Controller
         ->where('user_id',$user->id)
         ->groupBy('year')
         ->get();
-        return view('master.profile-pegawai',compact('user','jumlahMemberTotal','jumlahTransaksiTotal','tahunTransaksi','tahunMember'));
+        $responseTime = $this->getResponseTime($user->id); 
+        return view('master.profile-pegawai',compact('user','jumlahMemberTotal','jumlahTransaksiTotal','tahunTransaksi','tahunMember','responseTime'));
 
     }
 

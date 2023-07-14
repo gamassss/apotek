@@ -346,24 +346,5 @@ class ChatController extends Controller
         return response()->json(['response' => $response->body(), 'message' => $message]);
     }
 
-    public function getResponseTime()
-    {
-        $response_time = [];
-        
-        $chats = Chat::where('pengirim', '6282232763556')->orWhere('penerima', '6282232763556')->get();
-        $chats_count = count($chats);
-        foreach ($chats as $index => $chat) {
-            if ($chats_count != ($index + 1)) {
-                if ($chat->pengirim == '6282232763556' && $chats[$index + 1]->penerima == '6282232763556') {
-                    $diff_time = strtotime($chats[$index + 1]->created_at) - strtotime($chat->created_at);
-                    array_push($response_time, ($diff_time));
-                }
-            } else {
-                // last chat his
-            }
-        }
-        $avg_res_time = array_sum($response_time) / count($response_time);
-        dd($avg_res_time);
-        // return $chats;
-    }
+
 }
