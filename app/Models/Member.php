@@ -28,4 +28,9 @@ class Member extends Model
     {
         return $this->hasMany(Chat::class, 'pengirim', 'no_telpon');
     }
+
+    public function chats_penerima()
+    {
+        return $this->hasMany(Chat::class, 'penerima', 'no_telpon');
+    }
 }
