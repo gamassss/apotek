@@ -78,18 +78,13 @@ Route::get('/tes_rabbit', function() {
     return view('message');
 });
 
-// Route::get('/webhook', [FonnteWebhookController::class, 'getReplyMessage'])->name('webhook.get_reply');
-// Route::post('/webhook', [FonnteWebhookController::class, 'postReplyMessage'])->name('webhook.post_reply');
-// Route::get('/status', [FonnteWebhookController::class, 'get_update_message_status'])->name('update.get_msg_status');
-// Route::post('/status', [FonnteWebhookController::class, 'update_message_status'])->name('update.msg_status');
+Route::get('/webhook', [FonnteWebhookController::class, 'getReplyMessage'])->name('webhook.get_reply');
+Route::post('/webhook', [FonnteWebhookController::class, 'postReplyMessage'])->name('webhook.post_reply');
+Route::get('/status', [FonnteWebhookController::class, 'get_update_message_status'])->name('update.get_msg_status');
+Route::post('/status', [FonnteWebhookController::class, 'update_message_status'])->name('update.msg_status');
 
 Route::get('/tes_response_time', [ChatController::class, 'getResponseTime'])->name('response_time.get');
 Route::get('/search-chat', [ChatController::class, 'searchChat'])->name('chat.search');
 Route::get('/search-chat-nonmember', [ChatController::class, 'searchChatNonMember'])->name('chat.search_nonmember');
 Route::get('/update-chat-list', [ChatController::class, 'updateChatList'])->name('list_chat.update');
 Route::get('/update-chat-list-nonmember', [ChatController::class, 'updateChatListNonMember'])->name('list_chat_nonmember.update');
-
-// web socket
-// Route::get('/send-event', function () {
-//     broadcast(new ChatEvent);
-// });

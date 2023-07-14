@@ -78,9 +78,9 @@ class ChatController extends Controller
         }
 
         // sort desc on latest chat created at
-        // $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-        //     return $member['latest_chat'][0]->created_at;
-        // });
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+            return $member['latest_chat'][0]->created_at;
+        });
         
         if ($request->ajax()) {
             return view('list_member', compact('members_pegawai'))->render();
@@ -128,9 +128,14 @@ class ChatController extends Controller
             }
         }
 
-        // $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-        //     return $member['latest_chat'][0]->created_at;
-        // });
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+            if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
+                return $member['latest_chat'][0]->created_at;
+            } else {
+                // Atur tanggal yang sesuai jika 'latest_chat' tidak ada atau kosong
+                return null;
+            }
+        });
 
         $chats = [];
 
@@ -156,6 +161,15 @@ class ChatController extends Controller
         }
 
         $chats = [];
+
+        $showed_chats = $showed_chats->sortByDesc(function ($member) {
+            if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
+                return $member['latest_chat'][0]->created_at;
+            } else {
+                // Atur tanggal yang sesuai jika 'latest_chat' tidak ada atau kosong
+                return null;
+            }
+        });
 
         return view('list_chat_non_member', [
             'members_pegawai' => $showed_chats,
@@ -191,9 +205,14 @@ class ChatController extends Controller
             $member['latest_chat'] = $latest_chat;
         }
 
-        // $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-        //     return $member['latest_chat'][0]->created_at;
-        // });
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+            if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
+                return $member['latest_chat'][0]->created_at;
+            } else {
+                // Atur tanggal yang sesuai jika 'latest_chat' tidak ada atau kosong
+                return null;
+            }
+        });
 
         $chats = [];
 
@@ -216,6 +235,15 @@ class ChatController extends Controller
             ->get();
 
         $chats = [];
+
+        $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
+            if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
+                return $member['latest_chat'][0]->created_at;
+            } else {
+                // Atur tanggal yang sesuai jika 'latest_chat' tidak ada atau kosong
+                return null;
+            }
+        });
 
         return view('list_chat_non_member', compact('members_pegawai', 'chats'));
 
