@@ -23,6 +23,9 @@ class AuthenticationController extends Controller
         if (Auth::attempt($credentials)) {
             $req->session()->regenerate();
 
+            if (Auth::user()->username=='staff') {
+                return redirect()->route('chat.index');
+            }
             switch (Auth::user()->jabatan) {
                 case 'pegawai':
                     return redirect()->route('dashboard.pegawai');

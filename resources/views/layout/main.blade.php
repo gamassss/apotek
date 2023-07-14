@@ -187,6 +187,7 @@
                 <div class="menu-inner-shadow"></div>
 
                 <ul class="menu-inner py-1">
+                    @if (Auth::user()->username != 'staff')
                     <li class="menu-item {{ Request::is('admin/dashboard/*') ? 'active' : '' }}">
                         <a href="{{ Auth::user()->jabatan == 'manajemen' ? route('dashboard.manajemen') : route('dashboard.pegawai') }}"
                             class="menu-link">
@@ -196,7 +197,6 @@
                     </li>
 
                     <!-- Dashboard -->
-                    @if (Auth::user()->username != 'staff')
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span>
                         </li>
                     @endif

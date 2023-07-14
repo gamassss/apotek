@@ -38,7 +38,7 @@ class Controller extends BaseController
         $avg_res_time += array_sum($response_time) / count($response_time);
         $duration = Carbon::createFromTimestamp($avg_res_time)->format('H:i');
       }else{
-        $duration = 0;
+        $duration = "0:0";
       }
       return $duration;
     }
