@@ -314,7 +314,7 @@ class ChatController extends Controller
 
             return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
         } else {
-
+            //  non member chat
             $member_service = new MemberService();
             $exist_phone_number = $member_service->get_members_phone_number();
 
@@ -329,7 +329,7 @@ class ChatController extends Controller
                     $query->where('penerima', $request->input('no_telpon'))
                         ->whereNotIn('penerima', $exist_phone_number);
                 })
-                ->select('text', 'pengirim', 'created_at')
+                ->select('text', 'pengirim', 'res_detail', 'state', 'created_at')
                 ->get();
 
             $member_name = '';
@@ -350,26 +350,28 @@ class ChatController extends Controller
 
             return view('layout.chat_box_content', compact('chats', 'member_name', 'member_no_telpon'))->render();
         } else {
-
+            // chat non member
             $member_service = new MemberService();
             $exist_phone_number = $member_service->get_members_phone_number();
 
             $chats = Chat::whereIn('id', function ($query) use ($request, $exist_phone_number) {
-                $query->selectRaw('id')
-                    ->from('chats')
-                    ->groupBy('pengirim');
-            })
+                    $query->selectRaw('id')
+                        ->from('chats')
+                        ->groupBy('pengirim');
+                })
                 ->where('pengirim', $request->input('no_telpon'))
                 ->whereNotIn('pengirim', $exist_phone_number)
                 ->orWhere(function ($query) use ($request, $exist_phone_number) {
                     $query->where('penerima', $request->input('no_telpon'))
                         ->whereNotIn('penerima', $exist_phone_number);
                 })
-                ->select('text', 'pengirim', 'created_at')
+                ->select('text', 'pengirim', 'res_detail', 'state', 'created_at')
                 ->get();
 
             $member_name = '';
             $member_no_telpon = $request->input('no_telpon');
+
+            // dd($chats);
 
             return view('layout.chat_box_content', compact('chats', 'member_name', 'member_no_telpon'))->render();
         }

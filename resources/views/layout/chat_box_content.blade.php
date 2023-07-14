@@ -33,13 +33,15 @@
                                 {{ $chat->created_at->format('H:i') }}</p>
                             <div id="{{ $fonnte_chat_id }}">
                                 @if ($status == 'true')
-                                    <i class="fa-regular fa-clock fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
+                                <i class="fa-regular fa-clock fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
                                 @elseif ($chat->state == 'sent' && $status == 'sent')
-                                    <i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
+                                <i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
                                 @elseif($chat->state == 'delivered' && $status == 'sent')
-                                    <i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
+                                <i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
                                 @elseif($chat->state == 'read' && $status == 'sent')
-                                    <i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>
+                                <i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>
+                                @else
+                                <p>{{ $status . ' ' . $state }}</p>
                                 @endif
                             </div>
                         </div>
