@@ -1,7 +1,6 @@
-@if (isset($members_pegawai))
+@if (count($members_pegawai) > 0)
     @foreach ($members_pegawai as $member)
         @php
-            
             $latest_chat_text = isset($member->latest_chat[0]->text) ? $member->latest_chat[0]->text : 'Mulai percakapan dengan member anda.';
             $searched_chat = isset($member->searched_chat[0]->text) ? $member->searched_chat[0]->text : $latest_chat_text;
             

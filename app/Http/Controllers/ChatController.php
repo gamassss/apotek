@@ -15,11 +15,12 @@ class ChatController extends Controller
 {
     public function index(Request $request)
     {
+        // chat non member
         if (Auth::user()->username == 'staff') {
             $member_service = new MemberService();
             $exist_phone_number = $member_service->get_members_phone_number();
 
-            $showed_chats = Chat::whereIn('id', function ($query) use ($exist_phone_number) {
+            $members_pegawai = Chat::whereIn('id', function ($query) use ($exist_phone_number) {
                 $query->selectRaw('MAX(id)')
                     ->from('chats')
                     ->whereNotIn('pengirim', $exist_phone_number)
@@ -28,17 +29,18 @@ class ChatController extends Controller
                 ->orderBy('created_at', 'DESC')
                 ->get();
 
-            foreach ($showed_chats as $chat) {
-                $chat['latest_chat'] = $chat->text;
+            foreach ($members_pegawai as $member) {
+                $latest_chat = DB::select('select * from chats
+                where pengirim = ' . $member->pengirim . '
+                order by created_at desc limit 1');
+                $member['latest_chat'] = $latest_chat;
             }
-
+            // dd($members_pegawai);
             $chats = [];
-            return view('chat', [
-                'members_pegawai' => $showed_chats,
-                'chats' => $chats,
-            ]);
+            return view('chat', compact('members_pegawai'));
         }
 
+        // chat dengan member
         $members_pegawai = Member::where('user_id', Auth::user()->id)->get();
 
         foreach ($members_pegawai as $member) {
@@ -77,9 +79,13 @@ class ChatController extends Controller
 
         }
 
-        // sort desc on latest chat created at
         $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-            return $member['latest_chat'][0]->created_at;
+            if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
+                return $member['latest_chat'][0]->created_at;
+            } else {
+                // Atur tanggal yang sesuai jika 'latest_chat' tidak ada atau kosong
+                return null;
+            }
         });
 
         if ($request->ajax()) {
@@ -209,18 +215,12 @@ class ChatController extends Controller
             }
 
             $member['searched_chat'] = $searched_chat;
-
-            $latest_chat = DB::select('select * from chats
-            where pengirim = ' . $member->no_telpon . '
-            order by created_at desc limit 1');
-
-            $member['latest_chat'] = $latest_chat;
         }
         // dd($members_pegawai);
 
         $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-            if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
-                return $member['latest_chat'][0]->created_at;
+            if (isset($member['searched_chat']) && count($member['searched_chat']) > 0) {
+                return $member['searched_chat'][0]->created_at;
             } else {
                 // Atur tanggal yang sesuai jika 'latest_chat' tidak ada atau kosong
                 return null;
@@ -245,18 +245,39 @@ class ChatController extends Controller
                 ->orWhere('text', 'like', '%' . $passed_data . '%')
                 ->groupBy('pengirim');
         })
+            // ->whereNot('pengirim', '088806388436')
             ->get();
 
-        $chats = [];
+        foreach ($members_pegawai as $member) {
+            $searched_chat = DB::select('select * from chats
+            where pengirim = ' . $member->pengirim . '
+            and text LIKE "%' . $passed_data . '%"
+            order by created_at desc limit 1');
+            // cek chat pegawai
+            if ($searched_chat[0]->pengirim == '088806388436') {
+                $searched_chat[0]->text = 'You: ' . $searched_chat[0]->text;
+            }
+
+            $member['searched_chat'] = $searched_chat;
+        }
 
         $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
-            if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
-                return $member['latest_chat'][0]->created_at;
+            if (isset($member['searched_chat']) && count($member['searched_chat']) > 0) {
+                return $member['searched_chat'][0]->created_at;
             } else {
-                // Atur tanggal yang sesuai jika 'latest_chat' tidak ada atau kosong
+                // Atur tanggal yang sesuai jika 'searched_chat' tidak ada atau kosong
                 return null;
             }
         });
+        
+        // dd($members_pegawai);
+        if ($passed_data == '') {
+            $members_pegawai = $members_pegawai->filter(function ($member) {
+                return $member['pengirim'] !== '088806388436';
+            });
+        }
+
+        $chats = [];
 
         return view('list_chat_non_member', compact('members_pegawai', 'chats'));
 
