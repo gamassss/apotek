@@ -1,6 +1,6 @@
 <div
     style="max-height: 46px; max-width: 100%; background-color: #fff; display: fixed; position: sticky; top: 0; padding-top: 12px; padding-bottom: 8px; border-bottom: 1px solid #ccc">
-    <p style="line-height: 26px;" id="nama_member">{{ $member_name ?? $member_no_telpon }}</p>
+    <p style="line-height: 26px;" id="nama_member">{{ $member_name != '' ? $member_name : $member_no_telpon }}</p>
 </div>
 {{-- @include('layout.room_chat') --}}
 @foreach ($chats as $chat)
@@ -40,8 +40,6 @@
                                 <i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>
                                 @elseif($chat->state == 'read' && $status == 'sent')
                                 <i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>
-                                @else
-                                <p>{{ $status . ' ' . $state }}</p>
                                 @endif
                             </div>
                         </div>

@@ -58,6 +58,8 @@ class ChatController extends Controller
                 $member['latest_chat'] = $latest_pegawai_chat;
                 // dd($member['latest_chat']);
             } else {
+
+                // chat dari pegawai
                 $member['latest_chat'] = $latest_chat;
 
                 if (!empty($latest_chat)) {
@@ -72,13 +74,22 @@ class ChatController extends Controller
                     if (!empty($newer_chats)) {
                         $latest_chat = $newer_chats;
                         $member['latest_chat'] = $latest_chat;
-                        // dd($member['latest_chat']);
+                        $res_detail = json_decode($latest_chat[0]->res_detail, true);
+                        if ($res_detail['status'] == 'true') {
+                            $latest_chat[0]->text = '<i class="fa-regular fa-clock fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'sent') {
+                            $latest_chat[0]->text = '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'delivered') {
+                            $latest_chat[0]->text = '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'read') {
+                            $latest_chat[0]->text = '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        }
                     }
                 }
             }
 
         }
-
+        // dd($members_pegawai);
         $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
             if (isset($member['latest_chat']) && count($member['latest_chat']) > 0) {
                 return $member['latest_chat'][0]->created_at;
@@ -119,6 +130,16 @@ class ChatController extends Controller
                 if (!empty($newer_chats)) {
                     $latest_chat = $newer_chats;
                     $member['latest_chat'] = $latest_chat;
+                    $res_detail = json_decode($latest_chat[0]->res_detail, true);
+                    if ($res_detail['status'] == 'true') {
+                        $latest_chat[0]->text = '<i class="fa-regular fa-clock fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                    } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'sent') {
+                        $latest_chat[0]->text = '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                    } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'delivered') {
+                        $latest_chat[0]->text = '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                    } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'read') {
+                        $latest_chat[0]->text = '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                    }
                     // dd($member['latest_chat']);
                 }
             }
@@ -250,7 +271,7 @@ class ChatController extends Controller
                 ->where('pengirim', 'like', '%' . $passed_data . '%')
                 ->orWhere('text', 'like', '%' . $passed_data . '%')
                 ->groupBy('pengirim');
-            })
+        })
             ->get();
 
         foreach ($members_pegawai as $member) {
@@ -284,7 +305,7 @@ class ChatController extends Controller
                 return null;
             }
         });
-        
+
         // dd($members_pegawai);
         if ($passed_data == '') {
             $members_pegawai = $members_pegawai->filter(function ($member) {
@@ -355,10 +376,10 @@ class ChatController extends Controller
             $exist_phone_number = $member_service->get_members_phone_number();
 
             $chats = Chat::whereIn('id', function ($query) use ($request, $exist_phone_number) {
-                    $query->selectRaw('id')
-                        ->from('chats')
-                        ->groupBy('pengirim');
-                })
+                $query->selectRaw('id')
+                    ->from('chats')
+                    ->groupBy('pengirim');
+            })
                 ->where('pengirim', $request->input('no_telpon'))
                 ->whereNotIn('pengirim', $exist_phone_number)
                 ->orWhere(function ($query) use ($request, $exist_phone_number) {

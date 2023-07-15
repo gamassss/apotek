@@ -216,6 +216,18 @@
                         $(`#${e.msg_id}`).html(
                             '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
                         );
+
+                        // update icon status untuk chat list
+                        let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
+                        let icon = $(
+                            '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
+                        )
+                        let remainingContent = targetElement.contents().filter(function() {
+                            return this.nodeType === 3; // Filter untuk teks node
+                        });
+
+                        targetElement.find('i').replaceWith(icon);
+                        targetElement.append(remainingContent);
                     });
 
                 Echo.channel(`message-delivered`)
@@ -224,6 +236,18 @@
                         $(`#${e.msg_id}`).html(
                             '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
                         );
+
+                        // update icon status untuk chat list
+                        let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
+                        let icon = $(
+                            '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
+                        )
+                        let remainingContent = targetElement.contents().filter(function() {
+                            return this.nodeType === 3; // Filter untuk teks node
+                        });
+
+                        targetElement.find('i').replaceWith(icon);
+                        targetElement.append(remainingContent);
                     });
 
                 Echo.channel(`message-read`)
@@ -232,6 +256,18 @@
                         $(`#${e.msg_id}`).html(
                             '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>'
                         );
+
+                        // update icon status untuk chat list
+                        let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
+                        let icon = $(
+                            '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>'
+                        )
+                        let remainingContent = targetElement.contents().filter(function() {
+                            return this.nodeType === 3; // Filter untuk teks node
+                        });
+
+                        targetElement.find('i').replaceWith(icon);
+                        targetElement.append(remainingContent);
                     });
             });
         });

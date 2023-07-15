@@ -1,4 +1,4 @@
-@if (isset($members_pegawai))
+@if (count($members_pegawai) > 0)
     @foreach ($members_pegawai as $member)
         @if (true)
             @php

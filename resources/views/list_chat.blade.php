@@ -1,6 +1,10 @@
 @if (count($members_pegawai) > 0)
     @foreach ($members_pegawai as $member)
         @php
+            if (isset($member->latest_chat[0]->res_detail)) {
+                $fonnte_chat_id = json_decode($member->latest_chat[0]->res_detail, true)['id'][0] ?? '';
+            }
+
             $latest_chat_text = isset($member->latest_chat[0]->text) ? $member->latest_chat[0]->text : 'Mulai percakapan dengan member anda.';
             $searched_chat = isset($member->searched_chat[0]->text) ? $member->searched_chat[0]->text : $latest_chat_text;
             
@@ -30,6 +34,7 @@
             else {
                 $formattedTime = $carbonTimestamp->format('d/m/Y');
             }
+            
             // dd($date);
         @endphp
         <a href="javascript:void(0);"
@@ -47,10 +52,13 @@
                     @endif
                 @endif
             </div>
-            <p class="mb-1 text-muted">
-                {{ $searched_chat }}
+            <p class="mb-1 text-muted" data-id-msg="{{ $fonnte_chat_id ?? '0' }}">
+                {!! $searched_chat !!}
             </p>
         </a>
+        @php
+            unset($fonnte_chat_id);
+        @endphp
     @endforeach
 @else
     <p class="text-center text-muted">Tidak ada member</p>
