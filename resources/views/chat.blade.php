@@ -3,7 +3,7 @@
     {{-- <h4 class="fw-bold py-3 mb-4">
         <span class="text-muted fw-light">Members /</span> Chats
     </h4> --}}
-    <div class="row">
+    <div class="row" id="active-telp" data-active-no-telp="">
         <!-- List Chat Dengan Member -->
         <div class="col-md-4 col-sm-4">
             <div class="card overflow-hidden mb-4" style="max-height: calc(100vh - 128px); min-height: calc(100vh - 128px);">
@@ -19,7 +19,7 @@
                                     <i class="fas fa-search"></i>
                                 </span>
                             </div>
-                            <div class="list-group" id="list-kontak-member">
+                            <div class="list-group" id="list-kontak-member" data-active-telpon="">
                                 @if (Auth::user()->username != 'staff')
                                     @include('list_chat')
                                 @else
@@ -98,7 +98,7 @@
                                 },
                                 success: function(response) {
                                     // console.log("res:" + response)
-                                    console.log(response)
+                                    // console.log(response)
                                     $('#list-kontak-member').html(response);
                                 }
                             });
@@ -144,40 +144,6 @@
 @section('websocket_scripts')
     <script>
         $(document).ready(function() {
-            
-            Echo.channel(`incoming-message`)
-                .listen('IncomingMessageEvent', (e) => {
-                    if ("{{ Auth::user()->username }}" === 'staff') {
-                        $.ajax({
-                            type: "GET",
-                            url: '{{ route('list_chat_nonmember.update') }}',
-                            data: "",
-                            success: function(res) {
-                                // console.log(res)
-                                console.log('masok')
-                                $('#list-kontak-member').html(res);
-                            },
-                            error: (err) => {
-                                console.log(err)
-                            }
-                        });
-                    } else {
-                        $.ajax({
-                            type: "GET",
-                            url: '{{ route('list_chat.update') }}',
-                            data: "",
-                            success: function(res) {
-                                // console.log(res)
-                                console.log(res)
-                                $('#list-kontak-member').html(res);
-                            },
-                            error: (err) => {
-                                console.log(err)
-                            }
-                        });
-                    }
-                });
-
             function rerender_room_chat(phone_number) {
                 $.ajax({
                     type: "GET",
@@ -197,19 +163,49 @@
                 });
             }
 
+            Echo.channel(`incoming-message`)
+                .listen('IncomingMessageEvent', (e) => {
+
+                    if (e.no_telpon == $('#active-telp').attr('data-active-no-telp')) {
+                        rerender_room_chat(e.no_telpon)
+                    }
+
+                    if ("{{ Auth::user()->username }}" === 'staff') {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('list_chat_nonmember.update') }}',
+                            data: "",
+                            success: function(res) {
+                                // console.log(res)
+                                $('#list-kontak-member').html(res);
+                            },
+                            error: (err) => {
+                                console.log(err)
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('list_chat.update') }}',
+                            data: "",
+                            success: function(res) {
+                                // console.log(res)
+                                // console.log(res)
+                                $('#list-kontak-member').html(res);
+                            },
+                            error: (err) => {
+                                console.log(err)
+                            }
+                        });
+                    }
+                });
+
             $(document).on('click', 'a.list-chat-member', function() {
                 let member_no_telpon = $(this).attr('value');
-
-                // console.log(member_no_telpon)
+                $('#active-telp').attr('data-active-no-telp', member_no_telpon);
+                console.log($('#active-telp').attr('data-active-no-telp'))
 
                 rerender_room_chat(member_no_telpon)
-
-
-                Echo.channel(`room-${member_no_telpon}`)
-                    .listen('IncomingMessageEvent', (e) => {
-                        // console.log(`ada pesan dari ${member_no_telpon}`)
-                        rerender_room_chat(member_no_telpon)
-                    });
 
                 Echo.channel(`message-sent`)
                     .listen('MessageSentEvent', (e) => {
@@ -220,7 +216,7 @@
 
                         // update icon status untuk chat list
                         let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
-                        
+
                         let icon = $(
                             '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
                         )

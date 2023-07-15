@@ -30,14 +30,13 @@ class IncomingMessageEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        if ($this->room_id) {
-            return [
-                new Channel('room-' . $this->room_id),
-            ];
-        } else {
-            return [
-                new Channel('incoming-message'),
-            ];
-        }
+        return [
+            new Channel('incoming-message'),
+        ];
+    }
+
+    public function broadcastWith(): array
+    {
+        return ['no_telpon' => $this->room_id];
     }
 }

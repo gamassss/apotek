@@ -86,6 +86,17 @@ class ChatController extends Controller
                     if (!empty($newer_chats)) {
                         $latest_chat = $newer_chats;
                         $member['latest_chat'] = $latest_chat;
+
+                        $res_detail = json_decode($latest_chat[0]->res_detail, true);
+                        if ($res_detail['status'] == 'true') {
+                            $latest_chat[0]->text = '<i class="fa-regular fa-clock fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'sent') {
+                            $latest_chat[0]->text = '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'delivered') {
+                            $latest_chat[0]->text = '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'read') {
+                            $latest_chat[0]->text = '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        }
                     }
                 }
             }

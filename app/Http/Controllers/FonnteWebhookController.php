@@ -43,7 +43,7 @@ class FonnteWebhookController extends Controller
         ]);
 
         broadcast(new IncomingMessageEvent($sender));
-        broadcast(new IncomingMessageEvent());
+        // broadcast(new IncomingMessageEvent());
     }
 
     public function update_message_status()
