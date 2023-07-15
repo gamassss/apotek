@@ -15,7 +15,7 @@
             <div class="d-flex flex-row justify-content-start mt-2 mb-1">
                 <div>
                     <div class="small p-2 ms-3 mb-1 rounded-3 d-flex gap-3 align-items-end bg-primary text-white">
-                        <p style="margin-bottom: 0px;">{{ $chat->text }}</p>
+                        <p style="margin-bottom: 0px; max-width: 300px;">{{ $chat->text }}</p>
                         <p class="small rounded-3 text-white" style="margin-bottom: 0px; font-size: 10px;">
                             {{ $chat->created_at->format('H:i') }}</p>
                     </div>
@@ -27,7 +27,7 @@
                 <div>
                     <div class="small p-2 me-3 mb-1 text-white rounded-3 d-flex align-items-end gap-3"
                         style="background-color: #f5f6f7;">
-                        <p style="margin-bottom: 0px; color: #4F4F4F;">{{ $chat->text }}</p>
+                        <p style="margin-bottom: 0px; color: #4F4F4F; max-width: 300px;">{{ $chat->text }}</p>
                         <div class="d-flex align-items-baseline gap-1">
                             <p class="small rounded-3 text-muted" style="margin-bottom: 0px; font-size: 10px;">
                                 {{ $chat->created_at->format('H:i') }}</p>
@@ -53,7 +53,7 @@
             <div class="d-flex flex-row justify-content-start mb-1">
                 <div>
                     <div class="small p-2 ms-3 mb-1 rounded-3 d-flex gap-3 align-items-end bg-primary text-white">
-                        <p style="margin-bottom: 0px;">{{ $chat->text }}</p>
+                        <p style="margin-bottom: 0px; max-width: 300px;">{{ $chat->text }}</p>
                         <p class="small rounded-3 text-white" style="margin-bottom: 0px; font-size: 10px;">
                             {{ $chat->created_at->format('H:i') }}</p>
                     </div>
@@ -65,7 +65,7 @@
                 <div>
                     <div class="small p-2 me-3 mb-1 text-white rounded-3 d-flex align-items-end gap-3"
                         style="background-color: #f5f6f7;">
-                        <p style="margin-bottom: 0px; color: #4F4F4F;">{{ $chat->text }}</p>
+                        <p style="margin-bottom: 0px; color: #4F4F4F; max-width: 300px;">{{ $chat->text }}</p>
                         <div class="d-flex align-items-baseline gap-1">
                             <p class="small rounded-3 text-muted" style="margin-bottom: 0px; font-size: 10px;">
                                 {{ $chat->created_at->format('H:i') }}</p>

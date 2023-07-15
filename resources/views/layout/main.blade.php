@@ -156,7 +156,30 @@
             z-index: 9999999
         }
     </style>
+    <style>
+        .text-field-list-chat {
+            max-width: 100%;
+            display: grid;
+            grid-template-columns: minmax(0, 9fr) minmax(0, 1fr);
+        }
 
+        .text-field-list-chat p {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+
+        .text-field-list-chat div {
+            max-width: 20px;
+            height: 20px;
+            padding: 2px 4px;
+            border-radius: 9999px;
+            font-size: 10px;
+            display: grid;
+            place-items: center;
+        }
+    </style>
     @vite('resources/css/app.css')
 
 </head>
@@ -188,15 +211,15 @@
 
                 <ul class="menu-inner py-1">
                     @if (Auth::user()->username != 'staff')
-                    <li class="menu-item {{ Request::is('admin/dashboard/*') ? 'active' : '' }}">
-                        <a href="{{ Auth::user()->jabatan == 'manajemen' ? route('dashboard.manajemen') : route('dashboard.pegawai') }}"
-                            class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                            <div data-i18n="Analytics">Dashboard</div>
-                        </a>
-                    </li>
+                        <li class="menu-item {{ Request::is('admin/dashboard/*') ? 'active' : '' }}">
+                            <a href="{{ Auth::user()->jabatan == 'manajemen' ? route('dashboard.manajemen') : route('dashboard.pegawai') }}"
+                                class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                                <div data-i18n="Analytics">Dashboard</div>
+                            </a>
+                        </li>
 
-                    <!-- Dashboard -->
+                        <!-- Dashboard -->
                         <li class="menu-header small text-uppercase"><span class="menu-header-text">Manajemen</span>
                         </li>
                     @endif
@@ -394,7 +417,7 @@
         @endif
 
         @vite('resources/js/app.js')
-        
+
         <!-- Core JS -->
         <!-- build:js assets/vendor/js/core.js -->
         <script src="{{ asset('vendor/libs/popper/popper.js') }}"></script>
@@ -434,11 +457,11 @@
             }
         </script>
 
-        
+
         {{-- <script src="{{ asset('js/air-datepicker.js') }}"></script>
         <script src="{{ asset('js/datepicker-pemesanan.js') }}"></script> --}}
         @stack('script')
-        
+
         @yield('websocket_scripts')
 
 

@@ -116,6 +116,14 @@ class ChatController extends Controller
             return view('list_member', compact('members_pegawai'))->render();
         }
 
+        foreach ($members_pegawai as $member) {
+            $count = DB::table('chats')
+            ->where('state', 'delivered')
+            ->where('pengirim', $member->no_telpon)
+            ->count();
+            $member['unread_messages'] = $count;
+        }
+
         $chats = [];
         return view('chat', compact('members_pegawai', 'chats'));
     }
@@ -189,6 +197,14 @@ class ChatController extends Controller
                 return null;
             }
         });
+
+        foreach ($members_pegawai as $member) {
+            $count = DB::table('chats')
+            ->where('state', 'delivered')
+            ->where('pengirim', $member->no_telpon)
+            ->count();
+            $member['unread_messages'] = $count;
+        }
 
         $chats = [];
 
@@ -431,7 +447,7 @@ class ChatController extends Controller
         $fonnte = new FonnteService();
 
         $response = $fonnte->send_fonnte($message, $no_telpon);
-        
+
         DB::table('chats')->insert([
             'text' => $message,
             'pengirim' => $fonnte::device,

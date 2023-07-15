@@ -46,7 +46,7 @@
                         <div>
                             <div class="small p-2 me-3 mb-1 text-white rounded-3 d-flex align-items-end gap-3"
                                 style="background-color: #f5f6f7;">
-                                <p style="margin-bottom: 0px; color: #4F4F4F;">${message}</p>
+                                <p style="margin-bottom: 0px; color: #4F4F4F; max-width: 300px;">${message}</p>
                                 <div class="d-flex align-items-baseline gap-1">
                                     <p class="small rounded-3 text-muted" style="margin-bottom: 0px; font-size: 10px;">${nowTime}</p>
                                     <div id="">
