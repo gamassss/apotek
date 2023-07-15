@@ -308,7 +308,7 @@ class ChatController extends Controller
             // dd($searched_chat);
             // cek chat pegawai
             if (is_array($searched_chat) && !empty($searched_chat)) {
-                if ($searched_chat[0]->pengirim == '088806388436') {
+                if ($searched_chat[0]->pengirim == '6288806388458') {
                     $searched_chat[0]->text = 'You: ' . $searched_chat[0]->text;
                 }
                 $member['searched_chat'] = $searched_chat;
@@ -335,7 +335,7 @@ class ChatController extends Controller
         // dd($members_pegawai);
         if ($passed_data == '') {
             $members_pegawai = $members_pegawai->filter(function ($member) {
-                return $member['pengirim'] !== '088806388436';
+                return $member['pengirim'] !== '6288806388458';
             });
         }
 
@@ -431,7 +431,7 @@ class ChatController extends Controller
         $fonnte = new FonnteService();
 
         $response = $fonnte->send_fonnte($message, $no_telpon);
-
+        
         DB::table('chats')->insert([
             'text' => $message,
             'pengirim' => $fonnte::device,

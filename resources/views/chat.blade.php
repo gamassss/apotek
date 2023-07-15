@@ -189,8 +189,6 @@
                             url: '{{ route('list_chat.update') }}',
                             data: "",
                             success: function(res) {
-                                // console.log(res)
-                                // console.log(res)
                                 $('#list-kontak-member').html(res);
                             },
                             error: (err) => {
@@ -206,68 +204,70 @@
                 console.log($('#active-telp').attr('data-active-no-telp'))
 
                 rerender_room_chat(member_no_telpon)
-
-                Echo.channel(`message-sent`)
-                    .listen('MessageSentEvent', (e) => {
-                        console.log(`sent ${e.msg_id}`)
-                        $(`#${e.msg_id}`).html(
-                            '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
-                        );
-
-                        // update icon status untuk chat list
-                        let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
-
-                        let icon = $(
-                            '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
-                        )
-                        let remainingContent = targetElement.contents().filter(function() {
-                            return this.nodeType === 3; // Filter untuk teks node
-                        });
-
-                        targetElement.find('i').replaceWith(icon);
-                        targetElement.append(remainingContent);
-                    });
-
-                Echo.channel(`message-delivered`)
-                    .listen('MessageDeliveredEvent', (e) => {
-                        console.log(`delivered ${e.msg_id}`)
-                        $(`#${e.msg_id}`).html(
-                            '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
-                        );
-
-                        // update icon status untuk chat list
-                        let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
-                        let icon = $(
-                            '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
-                        )
-                        let remainingContent = targetElement.contents().filter(function() {
-                            return this.nodeType === 3; // Filter untuk teks node
-                        });
-
-                        targetElement.find('i').replaceWith(icon);
-                        targetElement.append(remainingContent);
-                    });
-
-                Echo.channel(`message-read`)
-                    .listen('MessageReadEvent', (e) => {
-                        console.log(`read ${e.msg_id}`)
-                        $(`#${e.msg_id}`).html(
-                            '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>'
-                        );
-
-                        // update icon status untuk chat list
-                        let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
-                        let icon = $(
-                            '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>'
-                        )
-                        let remainingContent = targetElement.contents().filter(function() {
-                            return this.nodeType === 3; // Filter untuk teks node
-                        });
-
-                        targetElement.find('i').replaceWith(icon);
-                        targetElement.append(remainingContent);
-                    });
             });
+
+
+            Echo.channel(`message-sent`)
+                .listen('MessageSentEvent', (e) => {
+                    console.log(`sent ${e.msg_id}`)
+                    $(`#${e.msg_id}`).html(
+                        '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
+                    );
+
+                    // update icon status untuk chat list
+                    let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
+
+                    let icon = $(
+                        '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
+                    )
+                    let remainingContent = targetElement.contents().filter(function() {
+                        return this.nodeType === 3; // Filter untuk teks node
+                    });
+
+                    targetElement.find('i').replaceWith(icon);
+                    targetElement.append(remainingContent);
+                });
+
+            Echo.channel(`message-delivered`)
+                .listen('MessageDeliveredEvent', (e) => {
+                    console.log(`delivered ${e.msg_id}`)
+                    $(`#${e.msg_id}`).html(
+                        '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
+                    );
+
+                    // update icon status untuk chat list
+                    let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
+                    let icon = $(
+                        '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
+                    )
+                    let remainingContent = targetElement.contents().filter(function() {
+                        return this.nodeType === 3; // Filter untuk teks node
+                    });
+
+                    targetElement.find('i').replaceWith(icon);
+                    targetElement.append(remainingContent);
+                });
+
+            Echo.channel(`message-read`)
+                .listen('MessageReadEvent', (e) => {
+                    console.log(`read ${e.msg_id}`)
+                    $(`#${e.msg_id}`).html(
+                        '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>'
+                    );
+
+                    // update icon status untuk chat list
+                    let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
+                    let icon = $(
+                        '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>'
+                    )
+                    let remainingContent = targetElement.contents().filter(function() {
+                        return this.nodeType === 3; // Filter untuk teks node
+                    });
+
+                    targetElement.find('i').replaceWith(icon);
+                    targetElement.append(remainingContent);
+                });
+
         });
     </script>
 @endsection

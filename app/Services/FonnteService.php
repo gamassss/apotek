@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\Http;
 class FonnteService
 {
 
-    const device = '088806388436';
+    const device = '6288806388458';
     
     public function send_fonnte($message, $no_telpon)
     {
         $csrfToken = csrf_token();
 
         $promise = Http::async()->withHeaders([
-            'Authorization' => 'QI7VDZtc64p4Dg6_EjpX',
+            'Authorization' => 'CYhTCDEaLNWB2z4cjnu+',
         ])->post('https://api.fonnte.com/send', [
             'target' => $no_telpon,
             'message' => $message,

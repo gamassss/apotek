@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\IncomingMessageEvent;
-use App\Events\MessageDeliveredEvent;
+use App\Services\FonnteService;
 use App\Events\MessageReadEvent;
 use App\Events\MessageSentEvent;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Events\IncomingMessageEvent;
+use App\Http\Controllers\Controller;
+use App\Events\MessageDeliveredEvent;
 
 class FonnteWebhookController extends Controller
 {
@@ -117,7 +118,8 @@ class FonnteWebhookController extends Controller
             $chat = DB::table('chats')
                 ->where('state_id', $stateid)
                 ->first();
-
+            $penerima = $chat->penerima;
+            
             if ($chat) {
                 DB::table('chats')
                     ->where('id', $chat->id)
@@ -135,17 +137,24 @@ class FonnteWebhookController extends Controller
                             $query->where('state', 'delivered')
                                 ->orWhere('state', 'sent');
                         })
+                        ->where('penerima', $penerima)
                         ->get();
 
                     if ($previous_chats->isNotEmpty()) {
                         foreach ($previous_chats as $previous_chat) {
                             DB::table('chats')
                                 ->where('id', $previous_chat->id)
+                                ->where(function ($query) {
+                                    $query->where('state', 'delivered')
+                                        ->orWhere('state', 'sent');
+                                })
+                                ->where('penerima', $penerima)
                                 ->update(['state' => 'read']);
                             // $res_detail = $previous_chat->res_detail;
-
-                            $fonnte_chat_id = json_decode($previous_chat->res_detail, true)['id'][0] ?? '';
-                            broadcast(new MessageReadEvent($fonnte_chat_id));
+                            if(isset($previous_chat->res_detail) && $previous_chat->penerima == $penerima) {
+                                $fonnte_chat_id = json_decode($previous_chat->res_detail, true)['id'][0] ?? '';
+                                broadcast(new MessageReadEvent($fonnte_chat_id));
+                            }
                         }
                     }
                 }

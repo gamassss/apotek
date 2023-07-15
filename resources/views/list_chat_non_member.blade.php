@@ -33,7 +33,7 @@
                 }
                 // dd($date);
             @endphp
-            @if ($member->pengirim != '088806388436')
+            @if ($member->pengirim != '6288806388458')
                 <a href="javascript:void(0);"
                     class="list-group-item list-group-item-action flex-column align-items-start list-chat-member"
                     style="border: none;" value="{{ $member->pengirim }}">
