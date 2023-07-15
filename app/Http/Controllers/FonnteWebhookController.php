@@ -37,6 +37,7 @@ class FonnteWebhookController extends Controller
             'text' => $message,
             'pengirim' => $sender,
             'penerima' => $device,
+            'state' => 'delivered',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

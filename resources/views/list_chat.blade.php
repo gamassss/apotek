@@ -54,9 +54,11 @@
             </div>
             <p class="mb-1 text-muted" data-id-msg="{{ $fonnte_chat_id ?? '0' }}">
                 {!! $searched_chat !!}
+                {{-- <span class="text-white rounded-pill text-center" style="float: right; background-color: #696CFF; min-width: fit-content; padding: 0px 8px; font-size: 12px;">4</span> --}}
             </p>
         </a>
         @php
+            //unset agar tidak dipakai di next loop
             unset($fonnte_chat_id);
         @endphp
     @endforeach

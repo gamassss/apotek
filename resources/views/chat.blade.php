@@ -144,6 +144,7 @@
 @section('websocket_scripts')
     <script>
         $(document).ready(function() {
+            
             Echo.channel(`incoming-message`)
                 .listen('IncomingMessageEvent', (e) => {
                     if ("{{ Auth::user()->username }}" === 'staff') {
@@ -219,6 +220,7 @@
 
                         // update icon status untuk chat list
                         let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
+                        
                         let icon = $(
                             '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
                         )
