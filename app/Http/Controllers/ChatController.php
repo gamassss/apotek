@@ -118,9 +118,9 @@ class ChatController extends Controller
 
         foreach ($members_pegawai as $member) {
             $count = DB::table('chats')
-            ->where('state', 'delivered')
-            ->where('pengirim', $member->no_telpon)
-            ->count();
+                ->where('state', 'delivered')
+                ->where('pengirim', $member->no_telpon)
+                ->count();
             $member['unread_messages'] = $count;
         }
 
@@ -200,9 +200,9 @@ class ChatController extends Controller
 
         foreach ($members_pegawai as $member) {
             $count = DB::table('chats')
-            ->where('state', 'delivered')
-            ->where('pengirim', $member->no_telpon)
-            ->count();
+                ->where('state', 'delivered')
+                ->where('pengirim', $member->no_telpon)
+                ->count();
             $member['unread_messages'] = $count;
         }
 
@@ -458,6 +458,18 @@ class ChatController extends Controller
         ]);
 
         return response()->json(['response' => $response->body(), 'message' => $message]);
+    }
+
+    public function updateMemberMessageStatus(Request $request)
+    {
+        $no_telpon = $request->input('active_now');
+
+        DB::table('chats')
+            ->where('state', 'delivered')
+            ->where('pengirim', $no_telpon)
+            ->update(['state' => 'read']);
+
+        return 1;
     }
 
 }

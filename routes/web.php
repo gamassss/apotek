@@ -88,3 +88,6 @@ Route::get('/search-chat', [ChatController::class, 'searchChat'])->name('chat.se
 Route::get('/search-chat-nonmember', [ChatController::class, 'searchChatNonMember'])->name('chat.search_nonmember');
 Route::get('/update-chat-list', [ChatController::class, 'updateChatList'])->name('list_chat.update');
 Route::get('/update-chat-list-nonmember', [ChatController::class, 'updateChatListNonMember'])->name('list_chat_nonmember.update');
+
+// update member's messages status
+Route::post('/update-member-msg-status', [ChatController::class, 'updateMemberMessageStatus'])->name('member_message_status.update');

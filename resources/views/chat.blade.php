@@ -201,12 +201,50 @@
             $(document).on('click', 'a.list-chat-member', function() {
                 let member_no_telpon = $(this).attr('value');
                 $('#active-telp').attr('data-active-no-telp', member_no_telpon);
-                console.log($('#active-telp').attr('data-active-no-telp'))
+                let active_now = $('#active-telp').attr('data-active-no-telp');
+                console.log(`active now: ${active_now}`)
+
+                $.ajax({
+                    type: "POST",
+                    url: '{{ route('member_message_status.update') }}',
+                    data: {
+                        active_now
+                    },
+                    success: function(response) {
+                        console.log(response)
+                        if ("{{ Auth::user()->username }}" === 'staff') {
+                            $.ajax({
+                                type: "GET",
+                                url: '{{ route('list_chat_nonmember.update') }}',
+                                data: "",
+                                success: function(res) {
+                                    // console.log(res)
+                                    $('#list-kontak-member').html(res);
+                                },
+                                error: (err) => {
+                                    console.log(err)
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                type: "GET",
+                                url: '{{ route('list_chat.update') }}',
+                                data: "",
+                                success: function(res) {
+                                    $('#list-kontak-member').html(res);
+                                },
+                                error: (err) => {
+                                    console.log(err)
+                                }
+                            });
+                        }
+                    }
+                });
 
                 rerender_room_chat(member_no_telpon)
             });
 
-
+            // listen to channel's event
             Echo.channel(`message-sent`)
                 .listen('MessageSentEvent', (e) => {
                     console.log(`sent ${e.msg_id}`)
