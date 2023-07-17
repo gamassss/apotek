@@ -74,35 +74,65 @@
                 if (currentValue !== previousValue) {
 
                     delayTimer = setTimeout(function() {
-                        console.log('call ajax')
+                        // console.log('call ajax')
 
-                        if ("{{ Auth::user()->username }}" === 'staff') {
-                            $.ajax({
-                                type: "GET",
-                                url: '{{ route('chat.search_nonmember') }}',
-                                data: {
-                                    value: currentValue
-                                },
-                                success: function(response) {
-                                    // console.log("res:" + response)
-                                    // console.log(response)
-                                    $('#list-kontak-member').html(response);
-                                }
-                            });
+                        if (currentValue == '') {
+                            if ("{{ Auth::user()->username }}" === 'staff') {
+                                $.ajax({
+                                    type: "GET",
+                                    url: '{{ route('list_chat_nonmember.update') }}',
+                                    data: "",
+                                    success: function(res) {
+                                        // console.log(res)
+                                        $('#list-kontak-member').html(res);
+                                    },
+                                    error: (err) => {
+                                        console.log(err)
+                                    }
+                                });
+                            } else {
+                                $.ajax({
+                                    type: "GET",
+                                    url: '{{ route('list_chat.update') }}',
+                                    data: "",
+                                    success: function(res) {
+                                        $('#list-kontak-member').html(res);
+                                    },
+                                    error: (err) => {
+                                        console.log(err)
+                                    }
+                                });
+                            }
                         } else {
-                            $.ajax({
-                                type: "GET",
-                                url: '{{ route('chat.search') }}',
-                                data: {
-                                    value: currentValue
-                                },
-                                success: function(response) {
-                                    // console.log("res:" + response)
-                                    // console.log(response)
-                                    $('#list-kontak-member').html(response);
-                                }
-                            });
+                            if ("{{ Auth::user()->username }}" === 'staff') {
+                                $.ajax({
+                                    type: "GET",
+                                    url: '{{ route('chat.search_nonmember') }}',
+                                    data: {
+                                        value: currentValue
+                                    },
+                                    success: function(response) {
+                                        // console.log("res:" + response)
+                                        // console.log(response)
+                                        $('#list-kontak-member').html(response);
+                                    }
+                                });
+                            } else {
+                                $.ajax({
+                                    type: "GET",
+                                    url: '{{ route('chat.search') }}',
+                                    data: {
+                                        value: currentValue
+                                    },
+                                    success: function(response) {
+                                        // console.log("res:" + response)
+                                        // console.log(response)
+                                        $('#list-kontak-member').html(response);
+                                    }
+                                });
+                            }
                         }
+
                     }, 500);
                 }
 

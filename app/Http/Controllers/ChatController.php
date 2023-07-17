@@ -266,22 +266,19 @@ class ChatController extends Controller
             where pengirim = ' . $member->no_telpon . '
             and text LIKE "%' . $passed_data . '%"
             order by created_at desc limit 1');
-
+            // dd($searched_chat);
             // cek chat pegawai
-            if (is_array($searched_chat) && !empty($searched_chat)) {
+            if (is_array($searched_chat) && empty($searched_chat)) {
                 $searched_chat = DB::select('select * from chats
-                    where penerima = 6287822771121
+                    where penerima = ' . $member->no_telpon . '
                     and text LIKE "%' . $passed_data . '%"
                     order by created_at desc limit 1');
+                // dd($searched_chat);
                 $searched_chat[0]->text = 'You: ' . $searched_chat[0]->text;
                 $member['searched_chat'] = $searched_chat;
             } else {
-                // jika yang dicari nomor telpom
-                $latest_chat = DB::select('select * from chats
-                where pengirim = ' . $member->no_telpon . '
-                order by created_at desc limit 1');
-
-                $member['latest_chat'] = $latest_chat;
+                
+                $member['latest_chat'] = $searched_chat;
             }
 
         }
