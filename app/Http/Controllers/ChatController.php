@@ -260,29 +260,36 @@ class ChatController extends Controller
                     });
             })
             ->get();
-
+        
         foreach ($members_pegawai as $member) {
             $searched_chat = DB::select('select * from chats
             where pengirim = ' . $member->no_telpon . '
             and text LIKE "%' . $passed_data . '%"
             order by created_at desc limit 1');
-            // dd($searched_chat);
+
             // cek chat pegawai
             if (is_array($searched_chat) && empty($searched_chat)) {
+                //chat pegawai
                 $searched_chat = DB::select('select * from chats
                     where penerima = ' . $member->no_telpon . '
                     and text LIKE "%' . $passed_data . '%"
                     order by created_at desc limit 1');
-                // dd($searched_chat);
-                $searched_chat[0]->text = 'You: ' . $searched_chat[0]->text;
-                $member['searched_chat'] = $searched_chat;
+                if ($searched_chat) {
+                    $searched_chat[0]->text = 'You: ' . $searched_chat[0]->text;
+                    $member['searched_chat'] = $searched_chat;
+                } else {
+                    // kalau yang dicari nama member
+                    $latest_chat = DB::select('select * from chats
+                    where pengirim = ' . $member->no_telpon . '
+                    order by created_at desc limit 1');
+                    $member['searched_chat'] = $latest_chat;
+                }
             } else {
-                
+                // chat member
                 $member['latest_chat'] = $searched_chat;
             }
 
         }
-        // dd($members_pegawai);
 
         $members_pegawai = $members_pegawai->sortByDesc(function ($member) {
             if (isset($member['searched_chat']) && count($member['searched_chat']) > 0) {
