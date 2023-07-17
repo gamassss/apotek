@@ -40,7 +40,7 @@
             class="list-group-item list-group-item-action flex-column align-items-start list-chat-member"
             style="border: none;" value="{{ $member->pengirim }}">
             <div class="d-flex justify-content-between w-100">
-                <h6>{{ $member->pengirim }}</h6>
+                <h6>{{ $member->pengirim == '6288806388458' ? $member->penerima : $member->pengirim}}</h6>
                 @if ($searched_chat_time)
                     <small class="text-muted">{{ $formattedTime }}</small>
                 @else
@@ -66,5 +66,5 @@
         @endphp
     @endforeach
 @else
-    <p class="text-center text-muted">Tidak ada member</p>
+    <p class="text-center text-muted">Tidak ada pesan</p>
 @endif

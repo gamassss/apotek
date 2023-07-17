@@ -217,8 +217,6 @@
                         rerender_room_chat_box(e.no_telpon)
                         let active_now = e.no_telpon;
 
-                        console.log(`masuk chat sama ${active_now}`)
-
                         $.ajax({
                             type: "POST",
                             url: '{{ route('member_message_status.update') }}',
