@@ -24,20 +24,48 @@ class ChatController extends Controller
                 $query->selectRaw('MAX(id)')
                     ->from('chats')
                     ->whereNotIn('pengirim', $exist_phone_number)
+                    ->whereNot('pengirim', '6288806388458')
                     ->groupBy('pengirim');
             })
                 ->orderBy('created_at', 'DESC')
                 ->get();
-
+            // dd($members_pegawai);
             foreach ($members_pegawai as $member) {
+
                 $latest_chat = DB::select('select * from chats
                 where pengirim = ' . $member->pengirim . '
                 order by created_at desc limit 1');
                 $member['latest_chat'] = $latest_chat;
+                // dd($latest_chat);
+                if (!empty($latest_chat)) {
+                    $latest_chat_id = $latest_chat[0]->id;
+
+                    $newer_chats = DB::select('SELECT * FROM chats
+                                WHERE penerima = ' . $member->pengirim . '
+                                AND id > ' . $latest_chat_id . '
+                                ORDER BY id DESC
+                                LIMIT 1');
+                    // dd($newer_chats, $latest_chat_id, $member->pengirim);
+                    if (!empty($newer_chats)) {
+                        $latest_chat = $newer_chats;
+                        $member['latest_chat'] = $latest_chat;
+
+                        $res_detail = json_decode($latest_chat[0]->res_detail, true);
+                        if ($res_detail['status'] == 'true') {
+                            $latest_chat[0]->text = '<i class="fa-regular fa-clock fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'sent') {
+                            $latest_chat[0]->text = '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'delivered') {
+                            $latest_chat[0]->text = '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'read') {
+                            $latest_chat[0]->text = '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                        }
+                    }
+                }
             }
             // dd($members_pegawai);
             $chats = [];
-            return view('chat', compact('members_pegawai'));
+            return view('chat', compact('members_pegawai', 'chats'));
         }
 
         // chat dengan member
@@ -220,15 +248,44 @@ class ChatController extends Controller
             $query->selectRaw('MAX(id)')
                 ->from('chats')
                 ->whereNotIn('pengirim', $exist_phone_number)
+                ->whereNot('pengirim', '6288806388458')
                 ->groupBy('pengirim');
         })
             ->orderBy('created_at', 'DESC')
             ->get();
 
         foreach ($members_pegawai as $member) {
-            $member['latest_chat'] = DB::select('select * from chats
-            where pengirim = ' . $member->pengirim . '
-            order by created_at desc limit 1');
+
+            $latest_chat = DB::select('select * from chats
+                where pengirim = ' . $member->pengirim . '
+                order by created_at desc limit 1');
+            $member['latest_chat'] = $latest_chat;
+
+            if (!empty($latest_chat)) {
+                $latest_chat_id = $latest_chat[0]->id;
+
+                $newer_chats = DB::select('SELECT * FROM chats
+                            WHERE penerima = ' . $member->pengirim . '
+                            AND id > ' . $latest_chat_id . '
+                            ORDER BY id DESC
+                            LIMIT 1');
+                // dd($newer_chats, $latest_chat_id, $member->pengirim);
+                if (!empty($newer_chats)) {
+                    $latest_chat = $newer_chats;
+                    $member['latest_chat'] = $latest_chat;
+
+                    $res_detail = json_decode($latest_chat[0]->res_detail, true);
+                    if ($res_detail['status'] == 'true') {
+                        $latest_chat[0]->text = '<i class="fa-regular fa-clock fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                    } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'sent') {
+                        $latest_chat[0]->text = '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                    } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'delivered') {
+                        $latest_chat[0]->text = '<i class="fa-solid fa-check-double fa-xs" style="color: rgba(0, 0, 0, .7);"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                    } else if ($res_detail['status'] == 'sent' && $latest_chat[0]->state == 'read') {
+                        $latest_chat[0]->text = '<i class="fa-solid fa-check-double fa-xs" style="color: #3B71CA;"></i>&nbsp;&nbsp;&nbsp;' . $latest_chat[0]->text;
+                    }
+                }
+            }
         }
 
         $chats = [];
@@ -260,7 +317,7 @@ class ChatController extends Controller
                     });
             })
             ->get();
-        
+
         foreach ($members_pegawai as $member) {
             $searched_chat = DB::select('select * from chats
             where pengirim = ' . $member->no_telpon . '

@@ -1,80 +1,70 @@
 @if (count($members_pegawai) > 0)
     @foreach ($members_pegawai as $member)
-        @if (true)
-            @php
-                $latest_chat_text = isset($member->latest_chat[0]->text) ? $member->latest_chat[0]->text : 'Mulai percakapan dengan member anda.';
-                $searched_chat = isset($member->searched_chat[0]->text) ? $member->searched_chat[0]->text : $latest_chat_text;
-                
-                $latest_chat_time = isset($member->latest_chat[0]->created_at) ? $member->latest_chat[0]->created_at : Carbon\Carbon::now();
-                $searched_chat_time = isset($member->searched_chat[0]->created_at) ? $member->searched_chat[0]->created_at : '';
-                $date_latest = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $latest_chat_time, 'Asia/Jakarta');
-                $date_latest->setTimeZone('Asia/Jakarta');
-                $carbonTimestamp = Carbon\Carbon::parse($date_latest);
-                
-                if ($searched_chat_time) {
-                    $date_searched = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $searched_chat_time, 'Asia/Jakarta');
-                    $date_searched->setTimeZone('Asia/Jakarta');
-                    $carbonTimestamp = Carbon\Carbon::parse($date_searched);
-                }
-                
-                $now = Carbon\Carbon::now();
-                
-                // Cek jika timestamp pada hari yang sama dengan hari ini
-                if ($carbonTimestamp->isSameDay($now)) {
-                    $formattedTime = $carbonTimestamp->format('H:i'); // Format jam dan menit (misalnya: 03:58)
-                }
-                // Cek jika timestamp pada hari kemarin
-                elseif ($carbonTimestamp->isYesterday()) {
-                    $formattedTime = 'Yesterday';
-                }
-                // Jika timestamp lebih lama dari hari kemarin
-                else {
-                    $formattedTime = $carbonTimestamp->format('d/m/Y');
-                }
-                // dd($date);
-            @endphp
-            @if ($member->pengirim != '6288806388458')
-                <a href="javascript:void(0);"
-                    class="list-group-item list-group-item-action flex-column align-items-start list-chat-member"
-                    style="border: none;" value="{{ $member->pengirim }}">
-                    <div class="d-flex justify-content-between w-100">
-                        <h6>{{ $member->pengirim }}</h6>
-                        @if ($searched_chat_time)
-                            <small class="text-muted">{{ $formattedTime }}</small>
-                        @else
-                            @if ($member->latest_chat)
-                                <small class="text-muted">{{ $formattedTime }}</small>
-                            @else
-                                <small class="text-muted">{{ '~' }}</small>
-                            @endif
-                        @endif
-                    </div>
-                    <p class="mb-1 text-muted">
-                        {{ $searched_chat }}
-                    </p>
-                </a>
-            @else
-                <a href="javascript:void(0);"
-                    class="list-group-item list-group-item-action flex-column align-items-start list-chat-member"
-                    style="border: none;" value="{{ $member->penerima }}">
-                    <div class="d-flex justify-content-between w-100">
-                        <h6>{{ $member->penerima }}</h6>
-                        @if ($searched_chat_time)
-                            <small class="text-muted">{{ $formattedTime }}</small>
-                        @else
-                            @if ($member->latest_chat)
-                                <small class="text-muted">{{ $formattedTime }}</small>
-                            @else
-                                <small class="text-muted">{{ '~' }}</small>
-                            @endif
-                        @endif
-                    </div>
-                    <p class="mb-1 text-muted">
-                        {{ $searched_chat }}
-                    </p>
-                </a>
-            @endif
-        @endif
+        @php
+            if (isset($member->latest_chat[0]->res_detail)) {
+                $fonnte_chat_id = json_decode($member->latest_chat[0]->res_detail, true)['id'][0] ?? '';
+                echo $fonnte_chat_id;
+            }
+            
+            $latest_chat_text = isset($member->latest_chat[0]->text) ? $member->latest_chat[0]->text : 'Mulai percakapan dengan member anda.';
+            $searched_chat = isset($member->searched_chat[0]->text) ? $member->searched_chat[0]->text : $latest_chat_text;
+            
+            $latest_chat_time = isset($member->latest_chat[0]->created_at) ? $member->latest_chat[0]->created_at : Carbon\Carbon::now();
+            $searched_chat_time = isset($member->searched_chat[0]->created_at) ? $member->searched_chat[0]->created_at : '';
+            $date_latest = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $latest_chat_time, 'Asia/Jakarta');
+            $date_latest->setTimeZone('Asia/Jakarta');
+            $carbonTimestamp = Carbon\Carbon::parse($date_latest);
+            
+            if ($searched_chat_time) {
+                $date_searched = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $searched_chat_time, 'Asia/Jakarta');
+                $date_searched->setTimeZone('Asia/Jakarta');
+                $carbonTimestamp = Carbon\Carbon::parse($date_searched);
+            }
+            
+            $now = Carbon\Carbon::now();
+            
+            // Cek jika timestamp pada hari yang sama dengan hari ini
+            if ($carbonTimestamp->isSameDay($now)) {
+                $formattedTime = $carbonTimestamp->format('H:i'); // Format jam dan menit (misalnya: 03:58)
+            }
+            // Cek jika timestamp pada hari kemarin
+            elseif ($carbonTimestamp->isYesterday()) {
+                $formattedTime = 'Yesterday';
+            }
+            // Jika timestamp lebih lama dari hari kemarin
+            else {
+                $formattedTime = $carbonTimestamp->format('d/m/Y');
+            }
+            // dd($date);
+        @endphp
+        <a href="javascript:void(0);"
+            class="list-group-item list-group-item-action flex-column align-items-start list-chat-member"
+            style="border: none;" value="{{ $member->pengirim }}">
+            <div class="d-flex justify-content-between w-100">
+                <h6>{{ $member->pengirim }}</h6>
+                @if ($searched_chat_time)
+                    <small class="text-muted">{{ $formattedTime }}</small>
+                @else
+                    @if ($member->latest_chat)
+                        <small class="text-muted">{{ $formattedTime }}</small>
+                    @else
+                        <small class="text-muted">{{ '~' }}</small>
+                    @endif
+                @endif
+            </div>
+            <div class="text-field-list-chat">
+                <p class="mb-1 text-muted" data-id-msg="{{ $fonnte_chat_id ?? '0' }}">
+                    {!! $searched_chat !!}
+                </p>
+                {{-- @if ($member->unread_messages > 0)
+                        <div class="text-white" style="background-color: #696CFF;">{{ $member->unread_messages < 100 ? $member->unread_messages : '99+' }}</div>
+                    @endif --}}
+            </div>
+        </a>
+        @php
+            //unset agar tidak dipakai di next loop
+            unset($fonnte_chat_id);
+        @endphp
     @endforeach
 @else
     <p class="text-center text-muted">Tidak ada member</p>

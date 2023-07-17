@@ -323,7 +323,7 @@
                     $(`#${e.msg_id}`).html(
                         '<i class="fa-solid fa-check fa-xs" style="color: rgba(0, 0, 0, .7);"></i>'
                     );
-
+                    console.log(`msg_id = ${e.msg_id}`)
                     // update icon status untuk chat list
                     let targetElement = $('[data-id-msg="' + e.msg_id + '"]');
 
