@@ -40,7 +40,7 @@
             class="list-group-item list-group-item-action flex-column align-items-start list-chat-member"
             style="border: none;" value="{{ $member->pengirim }}">
             <div class="d-flex justify-content-between w-100">
-                <h6>{{ $member->pengirim == '6288806388458' ? $member->penerima : $member->pengirim}}</h6>
+                <h6>{{ $member->pengirim == '6288806388458' ? $member->penerima : $member->pengirim }}</h6>
                 @if ($searched_chat_time)
                     <small class="text-muted">{{ $formattedTime }}</small>
                 @else
@@ -55,9 +55,10 @@
                 <p class="mb-1 text-muted" data-id-msg="{{ $fonnte_chat_id ?? '0' }}">
                     {!! $searched_chat !!}
                 </p>
-                {{-- @if ($member->unread_messages > 0)
-                        <div class="text-white" style="background-color: #696CFF;">{{ $member->unread_messages < 100 ? $member->unread_messages : '99+' }}</div>
-                    @endif --}}
+                @if ($member->unread_messages > 0)
+                    <div class="text-white" style="background-color: #696CFF;">
+                        {{ $member->unread_messages < 100 ? $member->unread_messages : '99+' }}</div>
+                @endif
             </div>
         </a>
         @php

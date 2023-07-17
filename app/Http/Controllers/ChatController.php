@@ -63,6 +63,14 @@ class ChatController extends Controller
                     }
                 }
             }
+
+            foreach ($members_pegawai as $member) {
+                $count = DB::table('chats')
+                    ->where('state', 'delivered')
+                    ->where('pengirim', $member->pengirim)
+                    ->count();
+                $member['unread_messages'] = $count;
+            }
             // dd($members_pegawai);
             $chats = [];
             return view('chat', compact('members_pegawai', 'chats'));
@@ -298,6 +306,14 @@ class ChatController extends Controller
                 return null;
             }
         });
+
+        foreach ($members_pegawai as $member) {
+            $count = DB::table('chats')
+                ->where('state', 'delivered')
+                ->where('pengirim', $member->pengirim)
+                ->count();
+            $member['unread_messages'] = $count;
+        }
 
         return view('list_chat_non_member', compact('members_pegawai', 'chats'))->render();
     }
