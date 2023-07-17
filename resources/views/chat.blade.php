@@ -168,6 +168,48 @@
 
                     if (e.no_telpon == $('#active-telp').attr('data-active-no-telp')) {
                         rerender_room_chat(e.no_telpon)
+                        let active_now = e.no_telpon;
+
+                        console.log(`masuk chat sama ${active_now}`)
+
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ route('member_message_status.update') }}',
+                            data: {
+                                active_now
+                            },
+                            success: function(response) {
+                                console.log(response)
+                                if ("{{ Auth::user()->username }}" === 'staff') {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '{{ route('list_chat_nonmember.update') }}',
+                                        data: "",
+                                        success: function(res) {
+                                            // console.log(res)
+                                            $('#list-kontak-member').html(res);
+                                        },
+                                        error: (err) => {
+                                            console.log(err)
+                                        }
+                                    });
+                                } else {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '{{ route('list_chat.update') }}',
+                                        data: "",
+                                        success: function(res) {
+                                            $('#list-kontak-member').html(res);
+                                        },
+                                        error: (err) => {
+                                            console.log(err)
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+                        return;
                     }
 
                     if ("{{ Auth::user()->username }}" === 'staff') {
