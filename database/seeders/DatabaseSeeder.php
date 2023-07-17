@@ -48,19 +48,19 @@ class DatabaseSeeder extends Seeder
 
         ]);
         
-        // Member::create([
-        //     'user_id' => 1,
-        //     'nama_member' => 'bintang',
-        //     'alamat_member' => 'jember',
-        //     'no_telpon' => '6287822771121',
-        // ]);
+        Member::create([
+            'user_id' => 1,
+            'nama_member' => 'bintang',
+            'alamat_member' => 'jember',
+            'no_telpon' => '6287822771121',
+        ]);
         
-        // Member::create([
-        //     'user_id' => 1,
-        //     'nama_member' => 'gamas',
-        //     'alamat_member' => 'mulyorejo',
-        //     'no_telpon' => '6282232763556',
-        // ]);
+        Member::create([
+            'user_id' => 1,
+            'nama_member' => 'gamas',
+            'alamat_member' => 'mulyorejo',
+            'no_telpon' => '6282232763556',
+        ]);
 
 
         $this->call(ObatSeeder::class);

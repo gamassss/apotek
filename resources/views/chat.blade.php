@@ -174,6 +174,23 @@
 @section('websocket_scripts')
     <script>
         $(document).ready(function() {
+            // rerender chat box only, used only on receive and send message
+            function rerender_room_chat_box(phone_number) {
+                $.ajax({
+                    type: "GET",
+                    url: '{{ route('get_chat_box_by_phone_number') }}',
+                    data: {
+                        'no_telpon': phone_number
+                    },
+                    success: function(response) {
+                        $('#chat-box').html(response);
+                        var chatBox = $('#chat-box');
+                        chatBox.scrollTop(chatBox.prop('scrollHeight'));
+                        $('#chat-first-notif').addClass('d-none');
+                    }
+                });
+            }
+            // rerender entire room chat
             function rerender_room_chat(phone_number) {
                 $.ajax({
                     type: "GET",
@@ -197,7 +214,7 @@
                 .listen('IncomingMessageEvent', (e) => {
 
                     if (e.no_telpon == $('#active-telp').attr('data-active-no-telp')) {
-                        rerender_room_chat(e.no_telpon)
+                        rerender_room_chat_box(e.no_telpon)
                         let active_now = e.no_telpon;
 
                         console.log(`masuk chat sama ${active_now}`)

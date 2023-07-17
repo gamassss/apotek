@@ -3,7 +3,6 @@
         @php
             if (isset($member->latest_chat[0]->res_detail)) {
                 $fonnte_chat_id = json_decode($member->latest_chat[0]->res_detail, true)['id'][0] ?? '';
-                echo $fonnte_chat_id;
             }
             
             $latest_chat_text = isset($member->latest_chat[0]->text) ? $member->latest_chat[0]->text : 'Mulai percakapan dengan member anda.';
