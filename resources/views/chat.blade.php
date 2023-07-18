@@ -255,7 +255,7 @@
                                 }
                             });
                         } else {
-                            let id_pegawai = "{{ $id_pegawai }}"
+                            let id_pegawai = "{{ $id_pegawai ?? '' }}"
                             $.ajax({
                                 type: "GET",
                                 url: '{{ route('list_chat.update') }}',
@@ -332,7 +332,7 @@
                                 });
                             } else {
                                 if ("{{ Auth::user()->jabatan }}" == 'manajemen') {
-                                    let id_pegawai = "{{ $id_pegawai }}";
+                                    let id_pegawai = "{{ $id_pegawai ?? ''}}";
 
                                     $.ajax({
                                         type: "GET",
