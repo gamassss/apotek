@@ -67,6 +67,9 @@ Route::group(['middleware' => ['auth','checkRole:manajemen'], 'prefix' => '/admi
         Route::post('/pegawai/{pegawai}/reset-password', [PegawaiController::class,'resetPassword'])->name('pegawai.reset-password');
         Route::resource('/template-chat', TemplateChatController::class);
     });
+
+    //get detail chat for every pegawai
+    Route::get('/chats/pegawai/{id}', [DashboardController::class, 'showPegawaiChats'])->name('pegawai_chats.show');
 });
 
 Route::get('/login', [AuthenticationController::class, 'login'])->name('login')->middleware('guest');

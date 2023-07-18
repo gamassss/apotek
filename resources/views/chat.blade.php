@@ -217,42 +217,59 @@
                         rerender_room_chat_box(e.no_telpon)
                         let active_now = e.no_telpon;
 
-                        $.ajax({
-                            type: "POST",
-                            url: '{{ route('member_message_status.update') }}',
-                            data: {
-                                active_now
-                            },
-                            success: function(response) {
-                                console.log(response)
-                                if ("{{ Auth::user()->username }}" === 'staff') {
-                                    $.ajax({
-                                        type: "GET",
-                                        url: '{{ route('list_chat_nonmember.update') }}',
-                                        data: "",
-                                        success: function(res) {
-                                            // console.log(res)
-                                            $('#list-kontak-member').html(res);
-                                        },
-                                        error: (err) => {
-                                            console.log(err)
-                                        }
-                                    });
-                                } else {
-                                    $.ajax({
-                                        type: "GET",
-                                        url: '{{ route('list_chat.update') }}',
-                                        data: "",
-                                        success: function(res) {
-                                            $('#list-kontak-member').html(res);
-                                        },
-                                        error: (err) => {
-                                            console.log(err)
-                                        }
-                                    });
+                        if ("{{ Auth::user()->jabatan }}" != 'manajemen') {
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ route('member_message_status.update') }}',
+                                data: {
+                                    active_now
+                                },
+                                success: function(response) {
+                                    console.log(response)
+                                    if ("{{ Auth::user()->username }}" === 'staff') {
+                                        $.ajax({
+                                            type: "GET",
+                                            url: '{{ route('list_chat_nonmember.update') }}',
+                                            data: "",
+                                            success: function(res) {
+                                                // console.log(res)
+                                                $('#list-kontak-member').html(res);
+                                            },
+                                            error: (err) => {
+                                                console.log(err)
+                                            }
+                                        });
+                                    } else {
+                                        $.ajax({
+                                            type: "GET",
+                                            url: '{{ route('list_chat.update') }}',
+                                            data: "",
+                                            success: function(res) {
+                                                $('#list-kontak-member').html(res);
+                                            },
+                                            error: (err) => {
+                                                console.log(err)
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            let id_pegawai = "{{ $id_pegawai }}"
+                            $.ajax({
+                                type: "GET",
+                                url: '{{ route('list_chat.update') }}',
+                                data: {
+                                    id_pegawai
+                                },
+                                success: function(res) {
+                                    $('#list-kontak-member').html(res);
+                                },
+                                error: (err) => {
+                                    console.log(err)
+                                }
+                            });
+                        }
 
                         return;
                     }
@@ -291,42 +308,62 @@
                 let active_now = $('#active-telp').attr('data-active-no-telp');
                 console.log(`active now: ${active_now}`)
 
-                $.ajax({
-                    type: "POST",
-                    url: '{{ route('member_message_status.update') }}',
-                    data: {
-                        active_now
-                    },
-                    success: function(response) {
-                        console.log(response)
-                        if ("{{ Auth::user()->username }}" === 'staff') {
-                            $.ajax({
-                                type: "GET",
-                                url: '{{ route('list_chat_nonmember.update') }}',
-                                data: "",
-                                success: function(res) {
-                                    // console.log(res)
-                                    $('#list-kontak-member').html(res);
-                                },
-                                error: (err) => {
-                                    console.log(err)
+                if ("{{ Auth::user()->jabatan }}" != 'manajemen') {
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ route('member_message_status.update') }}',
+                        data: {
+                            active_now
+                        },
+                        success: function(response) {
+                            console.log(response)
+                            if ("{{ Auth::user()->username }}" === 'staff') {
+                                $.ajax({
+                                    type: "GET",
+                                    url: '{{ route('list_chat_nonmember.update') }}',
+                                    data: "",
+                                    success: function(res) {
+                                        // console.log(res)
+                                        $('#list-kontak-member').html(res);
+                                    },
+                                    error: (err) => {
+                                        console.log(err)
+                                    }
+                                });
+                            } else {
+                                if ("{{ Auth::user()->jabatan }}" == 'manajemen') {
+                                    let id_pegawai = "{{ $id_pegawai }}";
+
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '{{ route('list_chat.update') }}',
+                                        data: {
+                                            id_pegawai
+                                        },
+                                        success: function(res) {
+                                            $('#list-kontak-member').html(res);
+                                        },
+                                        error: (err) => {
+                                            console.log(err)
+                                        }
+                                    });
+                                } else {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '{{ route('list_chat.update') }}',
+                                        data: "",
+                                        success: function(res) {
+                                            $('#list-kontak-member').html(res);
+                                        },
+                                        error: (err) => {
+                                            console.log(err)
+                                        }
+                                    });
                                 }
-                            });
-                        } else {
-                            $.ajax({
-                                type: "GET",
-                                url: '{{ route('list_chat.update') }}',
-                                data: "",
-                                success: function(res) {
-                                    $('#list-kontak-member').html(res);
-                                },
-                                error: (err) => {
-                                    console.log(err)
-                                }
-                            });
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
                 rerender_room_chat(member_no_telpon)
             });

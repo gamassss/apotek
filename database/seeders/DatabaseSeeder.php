@@ -45,7 +45,6 @@ class DatabaseSeeder extends Seeder
             'username' => 'Manajemen',
             'password' => bcrypt('123'),
             'jabatan' => 'manajemen',
-
         ]);
         
         Member::create([
@@ -58,7 +57,7 @@ class DatabaseSeeder extends Seeder
         Member::create([
             'user_id' => 1,
             'nama_member' => 'gamas',
-            'alamat_member' => 'mulyorejo',
+            'alamat_member' => 'sukolilo',
             'no_telpon' => '6282232763556',
         ]);
 

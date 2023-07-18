@@ -164,9 +164,14 @@ class ChatController extends Controller
         return view('chat', compact('members_pegawai', 'chats'));
     }
 
-    public function updateChatList()
+    public function updateChatList(Request $request)
     {
-        $members_pegawai = Member::where('user_id', Auth::user()->id)->get();
+        if (Auth::user()->jabatan == 'manajemen') {
+            $id_pegawai = $request->input('id_pegawai');
+            $members_pegawai = Member::where('user_id', $id_pegawai)->get();
+        } else {
+            $members_pegawai = Member::where('user_id', Auth::user()->id)->get();
+        }
 
         foreach ($members_pegawai as $member) {
             $latest_chat = DB::select('select * from chats

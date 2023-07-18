@@ -3,14 +3,16 @@
         @include('layout.chat_box_content')
 
     </div>
-    <div id="chat-footer" class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-        @csrf
-        <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1" placeholder="Type message"
-            name="message" autocomplete="off">
-        <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
-        <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
-        <a class="ms-3" href="#" id="send-btn"><i class="fas fa-paper-plane"></i></a>
-    </div>
+    @if (Auth::user()->jabatan != 'manajemen')
+        <div id="chat-footer" class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+            @csrf
+            <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
+                placeholder="Type message" name="message" autocomplete="off">
+            <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
+            <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
+            <a class="ms-3" href="#" id="send-btn"><i class="fas fa-paper-plane"></i></a>
+        </div>
+    @endif
 
 
     <script>
