@@ -4,14 +4,26 @@
 
     </div>
     @if (Auth::user()->jabatan != 'manajemen')
-        <div id="chat-footer" class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
-            @csrf
-            <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
-                placeholder="Type message" name="message" autocomplete="off">
-            <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
-            <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
-            <a class="ms-3" href="#" id="send-btn"><i class="fas fa-paper-plane"></i></a>
+        <div>
+            <div class="overflow-auto d-flex" style="height: fit-content;">
+                @foreach ($templateChat as $item)
+                    <div style="border-radius:999px;padding:10px 10px 20px 10px;cursor: pointer;height: 40px" class="mx-1 border border-primary template">
+                        <div class="" style="height: 24px;width:300px;overflow: hidden;">
+                        <p style="white-space: nowrap;text-overflow: ellipsis;">{{ $item->text }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <div id="chat-footer" class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+                @csrf
+                <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
+                    placeholder="Type message" name="message" autocomplete="off">
+                <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
+                <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
+                <a class="ms-3" href="#" id="send-btn"><i class="fas fa-paper-plane"></i></a>
+            </div>
         </div>
+
     @endif
 
 
@@ -36,6 +48,9 @@
             if (event.keyCode === 13) {
                 $('#send-btn').click();
             }
+        });
+        $('.template').on('click', function () {
+            $('input[name="message"]').val($(this).find('div p').html());
         });
 
         $('#send-btn').on('click', function() {

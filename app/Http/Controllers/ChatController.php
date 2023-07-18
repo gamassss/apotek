@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Chat;
 use App\Models\Member;
+use App\Models\TemplateChat;
+use Illuminate\Http\Request;
 use App\Services\FonnteService;
 use App\Services\MemberService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
@@ -161,6 +162,7 @@ class ChatController extends Controller
         }
 
         $chats = [];
+       
         return view('chat', compact('members_pegawai', 'chats'));
     }
 
@@ -451,13 +453,14 @@ class ChatController extends Controller
 
     public function getChatByPhoneNumber(Request $request)
     {
+        $templateChat = TemplateChat::all();
         if (Auth::user()->username != 'staff') {
             $member = Member::where('no_telpon', $request->input('no_telpon'))->first();
             $chats = Chat::where('pengirim', $member->no_telpon)->orWhere('penerima', $member->no_telpon)->select('text', 'pengirim', 'res_detail', 'state', 'created_at')->get();
             $member_name = $member->nama_member;
             $member_no_telpon = $member->no_telpon;
 
-            return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
+            return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon','templateChat'))->render();
         } else {
             //  non member chat
             $member_service = new MemberService();
@@ -480,7 +483,7 @@ class ChatController extends Controller
             $member_name = '';
             $member_no_telpon = $request->input('no_telpon');
 
-            return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon'))->render();
+            return view('layout.room_chat', compact('chats', 'member_name', 'member_no_telpon','templateChat'))->render();
         }
 
     }

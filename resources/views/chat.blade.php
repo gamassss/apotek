@@ -36,6 +36,7 @@
 
         <!-- Room Chat -->
         <div class="card col-md-8" id="chat2" style="max-height: calc(100vh - 128px);">
+
             <div id="chat-box" class="d-none card-body overflow-auto pt-0" data-mdb-perfect-scrollbar="true"
                 style="position: relative; height: 400px">
                 <div
@@ -44,9 +45,19 @@
                 </div>
             </div>
             <div id="chat-footer" class="d-none card-footer text-muted d-flex justify-content-start align-items-center p-3">
-                <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
-                    placeholder="Type message">
-                <a class="ms-1 text-muted" href="#!"><i class="fas fa-paperclip"></i></a>
+                <input type="text" class="form-control form-control-lg" id="inputChats" placeholder="Type message">
+                <a class="ms-1 text-muted"><i class="fas fa-paperclip  dropdown-toggle dropdown-toggle-split"
+                        data-bs-toggle="dropdown" aria-expanded="false"></i>
+                        <ul class="dropdown-menu" style="">
+                            <li><a class="dropdown-item" href="javascript:void(0);">Action</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);">Another action</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);">Something else here</a></li>
+                            <li>
+                              <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="javascript:void(0);">Separated link</a></li>
+                          </ul>
+                </a>
                 <a class="ms-3 text-muted" href="#!"><i class="fas fa-smile"></i></a>
                 <a class="ms-3" href="#!"><i class="fas fa-paper-plane"></i></a>
             </div>
@@ -64,7 +75,14 @@
     </div>
     <script>
         $(document).ready(function() {
-
+            // console.log(templateChat);
+            // $('#chat2').on('click', 'input[name="message"]',function () {
+            //     for (const key of templateChat) {
+            //      $(this).append(
+            //         `<button type="button" class="btn rounded-pill btn-outline-primary template-text">${key.text}</button>`
+            //      );
+            //     }
+            // });
             var previousValue = $('#search-field').val();
             var delayTimer;
 
@@ -332,7 +350,7 @@
                                 });
                             } else {
                                 if ("{{ Auth::user()->jabatan }}" == 'manajemen') {
-                                    let id_pegawai = "{{ $id_pegawai ?? ''}}";
+                                    let id_pegawai = "{{ $id_pegawai ?? '' }}";
 
                                     $.ajax({
                                         type: "GET",
